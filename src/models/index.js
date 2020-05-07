@@ -1,0 +1,93 @@
+import db from "../config/connect";
+
+import { UsuarioModel, UsuarioConfig } from "./usuario";
+import { InfoModel, InfoConfig } from "./infopersonal";
+import { ConsultaModel, ConsultaConfig } from "./consulta";
+import { UsuarioRolModel, UsuarioRolConfig } from "./usuariorol";
+import { RolModel, RolConfig } from "./rol";
+import { DoctorModel, DoctorConfig } from "./doctor";
+import { EspecialidadModel, EspecialidadConfig } from "./especialidad";
+import { DatosConsultaModel, DatosConsultaConfig } from "./datosconsulta";
+import { SalaModel, SalaConfig } from "./sala";
+import { HorarioModel, HorarioConfig } from "./horario";
+
+const Usuario = db.sequelize.define("Usuario", UsuarioModel, UsuarioConfig);
+const InfoPersonal = db.sequelize.define("InfoPersonal", InfoModel, InfoConfig);
+const Consulta = db.sequelize.define("Consulta", ConsultaModel, ConsultaConfig);
+const UsuarioRol = db.sequelize.define(
+  "UsuarioRol",
+  UsuarioRolModel,
+  UsuarioRolConfig
+);
+const Rol = db.sequelize.define("Rol", RolModel, RolConfig);
+const Doctor = db.sequelize.define("Doctor", DoctorModel, DoctorConfig);
+const Especialidad = db.sequelize.define(
+  "Especialidad",
+  EspecialidadModel,
+  EspecialidadConfig
+);
+const DatosConsulta = db.sequelize.define(
+  "DatosConsulta",
+  DatosConsultaModel,
+  DatosConsultaConfig
+);
+const Sala = db.sequelize.define("Sala", SalaModel, SalaConfig);
+const Horario = db.sequelize.define("Horario", HorarioModel, HorarioConfig);
+
+Usuario.hasOne(InfoPersonal, { as: "InfoUsuario", foreignKey: "usuario" });
+InfoPersonal.belongsTo(Usuario, { as: "InfoUsuario", foreignKey: "usuario" });
+
+Usuario.hasOne(Consulta, { as: "ConsultaUsuario", foreignKey: "paciente" });
+Consulta.belongsTo(Usuario, { as: "ConsultaUsuario", foreignKey: "paciente" });
+
+DatosConsulta.hasOne(Consulta, { as: "DatosConsulta", foreignKey: "datos" });
+Consulta.belongsTo(DatosConsulta, { as: "DatosConsulta", foreignKey: "datos" });
+
+Consulta.hasOne(Sala, { as: "Sala", foreignKey: "sala" });
+Sala.belongsTo(Consulta, { as: "Sala", foreignKey: "sala" });
+
+Horario.hasOne(Consulta, { as: "Horario", foreignKey: "horario" });
+Consulta.belongsTo(Horario, { as: "Horario", foreignKey: "horario" });
+
+Usuario.belongsToMany(Rol, {
+  through: UsuarioRol,
+  foreignKey: "usuario"
+});
+Rol.belongsToMany(Usuario, {
+  through: UsuarioRol,
+  foreignKey: "rol"
+});
+
+Usuario.hasMany(UsuarioRol, { as: "UsuarioRol", foreignKey: "usuario" });
+UsuarioRol.belongsTo(Usuario, { as: "UsuarioRol", foreignKey: "usuario" });
+
+Usuario.hasMany(Doctor, { as: "UsuarioDoctor", foreignKey: "usuario" });
+Doctor.belongsTo(Usuario, { as: "UsuarioDoctor", foreignKey: "usuario" });
+
+Doctor.hasMany(Horario, { as: "HorarioDoctor", foreignKey: "doctor" });
+Horario.belongsTo(Doctor, { as: "HorarioDoctor", foreignKey: "doctor" });
+
+Especialidad.hasOne(Doctor, {
+  as: "EspecialidadDoctor",
+  foreignKey: "especialidad"
+});
+Doctor.belongsTo(Especialidad, {
+  as: "EspecialidadDoctor",
+  foreignKey: "especialidad"
+});
+
+const models = {
+  db,
+  Usuario,
+  InfoPersonal,
+  Consulta,
+  Rol,
+  UsuarioRol,
+  Doctor,
+  Horario,
+  Sala,
+  Especialidad,
+  DatosConsulta
+};
+
+export default models;
