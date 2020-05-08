@@ -19,14 +19,12 @@ export const RolModel = {
     type: DataTypes.UUID,
     field: "usuario_actualizacion"
   },
-  fechaCreacion: {
+  fecha_creacion: {
     type: Sequelize.DATE,
-    allowNull: false,
-    field: "fecha_creacion"
+    allowNull: false
   },
-  fechaActualizacion: {
-    type: Sequelize.DATE,
-    field: "fecha_actualizacion"
+  fecha_actualizacion: {
+    type: Sequelize.DATE
   },
   estado: {
     type: Sequelize.ENUM(estado.values),

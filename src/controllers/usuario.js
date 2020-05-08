@@ -15,125 +15,6 @@ export const validarIDUsuario = async (id) => {
 };
 
 export const buscarTodos = async (req, res) => {
-  const ciudades = {
-    "1": {
-      provincia: "AZUAY",
-      cantones: {
-        "101": {
-          canton: "CUENCA"
-        },
-        "102": {
-          canton: "GIRÓN"
-        },
-        "103": {
-          canton: "GUALACEO"
-        },
-        "104": {
-          canton: "NABÓN"
-        },
-        "105": {
-          canton: "PAUTE"
-        },
-        "106": {
-          canton: "PUCARA"
-        },
-        "107": {
-          canton: "SAN FERNANDO"
-        },
-        "108": {
-          canton: "SANTA ISABEL"
-        },
-        "109": {
-          canton: "SIGSIG"
-        },
-        "110": {
-          canton: "OÑA"
-        },
-        "111": {
-          canton: "CHORDELEG"
-        },
-        "112": {
-          canton: "EL PAN"
-        },
-        "113": {
-          canton: "SEVILLA DE ORO"
-        },
-        "114": {
-          canton: "GUACHAPALA"
-        },
-        "115": {
-          canton: "CAMILO PONCE ENRÍQUEZ"
-        }
-      }
-    },
-    "2": {
-      provincia: "BOLIVAR",
-      cantones: {
-        "201": {
-          canton: "GUARANDA"
-        },
-        "202": {
-          canton: "CHILLANES"
-        },
-        "203": {
-          canton: "CHIMBO"
-        },
-        "204": {
-          canton: "ECHEANDÍA"
-        },
-        "205": {
-          canton: "SAN MIGUEL"
-        },
-        "206": {
-          canton: "CALUMA"
-        },
-        "207": {
-          canton: "LAS NAVES"
-        }
-      }
-    },
-    "3": {
-      provincia: "CAÑAR",
-      cantones: {
-        "301": {
-          canton: "AZOGUES"
-        },
-        "302": {
-          canton: "BIBLIÁN"
-        },
-        "303": {
-          canton: "CAÑAR"
-        },
-        "304": {
-          canton: "LA TRONCAL"
-        },
-        "305": {
-          canton: "EL TAMBO"
-        },
-        "306": {
-          canton: "DÉLEG"
-        },
-        "307": {
-          canton: "SUSCAL"
-        }
-      }
-    }
-  };
-
-  _.map(ciudades, (p) => {
-    _.map(p, c => {
-      const cantones = [];
-      _.map(c, u => {
-        if (u.canton != undefined) {
-          cantones.push(u.canton)
-        }
-        console.log(cantones);
-      })
-
-    });
-    
-    
-  });
   const Usuarios = await models.Usuario.findAll({
     where: {
       estado: estado.ACTIVO
@@ -164,7 +45,7 @@ export const buscarPorId = async (req, res) => {
 
 export const crearUsuario = async (req, res) => {
   const id = uuid();
-  const usuario_creacion = adminDefecto;
+  const usuarioCreacion = adminDefecto;
   const {
     nombres,
     apellidos,
@@ -179,7 +60,7 @@ export const crearUsuario = async (req, res) => {
     id,
     nombres,
     apellidos,
-    usuario_creacion,
+    usuarioCreacion,
     InfoUsuario: {
       id: uuid(),
       usuario: id,
@@ -189,7 +70,7 @@ export const crearUsuario = async (req, res) => {
       estatura,
       tipoSangre,
       alergias,
-      usuario_creacion
+      usuarioCreacion
     }
   };
 
@@ -221,7 +102,7 @@ export const actualizarUsuario = async (req, res) => {
 export const eliminarUsuario = async (req, res) => {
   const id = req.params.id;
   const Usuario = await models.Usuario.update(
-    { estado: estado.INACTIVO, usuario_actualizacion: req.usuarioAuth.id },
+    { estado: estado.INACTIVO, usuarioActualizacion: req.usuarioAuth.id },
     {
       where: { id }
     }

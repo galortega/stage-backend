@@ -33,22 +33,22 @@ const DatosConsulta = db.sequelize.define(
 );
 const Sala = db.sequelize.define("Sala", SalaModel, SalaConfig);
 const Horario = db.sequelize.define("Horario", HorarioModel, HorarioConfig);
-
+// USUARIO INFOPERSONAL
 Usuario.hasOne(InfoPersonal, { as: "InfoUsuario", foreignKey: "usuario" });
 InfoPersonal.belongsTo(Usuario, { as: "InfoUsuario", foreignKey: "usuario" });
-
+//USUARIO CONSULTA
 Usuario.hasOne(Consulta, { as: "ConsultaUsuario", foreignKey: "paciente" });
 Consulta.belongsTo(Usuario, { as: "ConsultaUsuario", foreignKey: "paciente" });
-
+// DATOSCONSULTA CONSULTA
 DatosConsulta.hasOne(Consulta, { as: "DatosConsulta", foreignKey: "datos" });
 Consulta.belongsTo(DatosConsulta, { as: "DatosConsulta", foreignKey: "datos" });
-
-Consulta.hasOne(Sala, { as: "Sala", foreignKey: "sala" });
-Sala.belongsTo(Consulta, { as: "Sala", foreignKey: "sala" });
-
+// SALA CONSULTA
+Consulta.hasOne(Sala, { as: "SalaConsulta", foreignKey: "sala" });
+Sala.belongsTo(Consulta, { as: "SalaConsulta", foreignKey: "sala" });
+//HORARIO CONSULTA
 Horario.hasOne(Consulta, { as: "Horario", foreignKey: "horario" });
 Consulta.belongsTo(Horario, { as: "Horario", foreignKey: "horario" });
-
+// USUARIO ROL
 Usuario.belongsToMany(Rol, {
   through: UsuarioRol,
   foreignKey: "usuario"
@@ -57,16 +57,16 @@ Rol.belongsToMany(Usuario, {
   through: UsuarioRol,
   foreignKey: "rol"
 });
-
+// USUARIO USUARIOROL
 Usuario.hasMany(UsuarioRol, { as: "UsuarioRol", foreignKey: "usuario" });
 UsuarioRol.belongsTo(Usuario, { as: "UsuarioRol", foreignKey: "usuario" });
-
+// USUARIO DOCTOR
 Usuario.hasMany(Doctor, { as: "UsuarioDoctor", foreignKey: "usuario" });
 Doctor.belongsTo(Usuario, { as: "UsuarioDoctor", foreignKey: "usuario" });
-
+// HORARIO DOCTOR
 Doctor.hasMany(Horario, { as: "HorarioDoctor", foreignKey: "doctor" });
 Horario.belongsTo(Doctor, { as: "HorarioDoctor", foreignKey: "doctor" });
-
+// ESPECIALIDAD DOCTOR
 Especialidad.hasOne(Doctor, {
   as: "EspecialidadDoctor",
   foreignKey: "especialidad"
@@ -75,6 +75,10 @@ Doctor.belongsTo(Especialidad, {
   as: "EspecialidadDoctor",
   foreignKey: "especialidad"
 });
+// DATOSCONSULTA DOCTOR
+Doctor.hasMany(DatosConsulta, { as: "TratamientoDoctor", foreignKey: "doctor" });
+DatosConsulta.belongsTo(Doctor, { as: "TratamientoDoctor", foreignKey: "doctor" });
+
 
 const models = {
   db,

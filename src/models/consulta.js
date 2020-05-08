@@ -20,7 +20,7 @@ export const ConsultaModel = {
   },
   estadoConsulta: {
     type: Sequelize.ENUM(estadoConsulta.values),
-    defaultValue: estado.ACTIVO,
+    defaultValue: estadoConsulta.PENDIENTE,
     field: "estado_consulta"
   },
   usuarioCreacion: {
@@ -32,14 +32,12 @@ export const ConsultaModel = {
     type: DataTypes.UUID,
     field: "usuario_actualizacion"
   },
-  fechaCreacion: {
+  fecha_creacion: {
     type: Sequelize.DATE,
-    allowNull: false,
-    field: "fecha_creacion"
+    allowNull: false
   },
-  fechaActualizacion: {
-    type: Sequelize.DATE,
-    field: "fecha_actualizacion"
+  fecha_actualizacion: {
+    type: Sequelize.DATE
   },
   estado: {
     type: Sequelize.ENUM(estado.values),

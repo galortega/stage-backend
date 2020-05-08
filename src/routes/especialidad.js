@@ -2,10 +2,10 @@ import express from "express";
 import {
   buscarTodos,
   buscarPorId,
-  crearUsuario,
-  actualizarUsuario,
-  eliminarUsuario
-} from "../controllers/usuario";
+  crearEspecialidad,
+  actualizarEspecialidad,
+  eliminarEspecialidad
+} from "../controllers/especialidad";
 import { allowedMethods, asyncWrapper,  } from "../utils/utils";
 import consultasRutas from "./consulta";
 import doctorRouter from "./doctor";
@@ -16,7 +16,7 @@ router.use("/$", allowedMethods(["GET", "POST"]));
 router.get("/", asyncWrapper(buscarTodos));
 router.post(
   "/",
-  asyncWrapper(crearUsuario)
+  asyncWrapper(crearEspecialidad)
 );
 
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
@@ -26,11 +26,11 @@ router.get(
 );
 router.put(
   "/:id",
-  asyncWrapper(actualizarUsuario)
+  asyncWrapper(actualizarEspecialidad)
 );
 router.delete(
   "/:id",
-  asyncWrapper(eliminarUsuario)
+  asyncWrapper(eliminarEspecialidad)
 );
 
 router.use(consultasRutas);

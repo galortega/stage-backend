@@ -6,4 +6,9 @@ export const routes = {
     consulta: "/:id/consultas",
     infoPersonal: "/:id/infopersonal"  
   },
+  doctorRaiz: `${baseRoute}/doctores`,
+  doctor: {
+    datosConsulta: "/:id/datosConsultas"
+  },
+  especialidad: `${baseRoute}/especialidades`
 };

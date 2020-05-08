@@ -2,7 +2,7 @@ import { DataTypes, Sequelize } from "Sequelize";
 import { estado, estadoConsulta } from "../constants/index"
 
 export const DatosConsultaModel = {
-  id: {
+  iddatos: {
     type: DataTypes.UUID,
     primaryKey: true
   },
@@ -31,14 +31,12 @@ export const DatosConsultaModel = {
     type: DataTypes.UUID,
     field: "usuario_actualizacion"
   },
-  fechaCreacion: {
+  fecha_creacion: {
     type: Sequelize.DATE,
-    allowNull: false,
-    field: "fecha_creacion"
+    allowNull: false
   },
-  fechaActualizacion: {
-    type: Sequelize.DATE,
-    field: "fecha_actualizacion"
+  fecha_actualizacion: {
+    type: Sequelize.DATE
   },
   estado: {
     type: Sequelize.ENUM(estado.values),

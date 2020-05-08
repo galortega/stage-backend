@@ -2,7 +2,7 @@ import { DataTypes, Sequelize } from "Sequelize";
 import { estado, disponibilidad } from "../constants/index"
 
 export const HorarioModel = {
-  id: {
+  idhorario: {
     type: DataTypes.UUID,
     primaryKey: true
   },
@@ -10,15 +10,15 @@ export const HorarioModel = {
     type: DataTypes.UUID,
     allowNull: false
   },
-  fechaInicio: {
-    type: Sequelize.DATE,
+  horaInicio: {
+    type: Sequelize.STRING(36),
     allowNull: false,
-    field: "fecha_inicio"
+    field: "hora_inicio"
   },
-  fechaFin: {
-    type: Sequelize.DATE,
+  horaFin: {
+    type: Sequelize.STRING(36),
     allowNull: false,
-    field: "fecha_fin"
+    field: "hora_fin"
   },
   disponibilidad: {
     type: Sequelize.ENUM(disponibilidad),
@@ -33,14 +33,12 @@ export const HorarioModel = {
     type: DataTypes.UUID,
     field: "usuario_actualizacion"
   },
-  fechaCreacion: {
+  fecha_creacion: {
     type: Sequelize.DATE,
-    allowNull: false,
-    field: "fecha_creacion"
+    allowNull: false
   },
-  fechaActualizacion: {
-    type: Sequelize.DATE,
-    field: "fecha_actualizacion"
+  fecha_actualizacion: {
+    type: Sequelize.DATE
   },
   estado: {
     type: Sequelize.ENUM(estado.values),

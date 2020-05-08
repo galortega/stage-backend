@@ -34,7 +34,11 @@ export const buscarPorId = async (req, res) => {
   const idusuario = req.params.id;
   const Consulta = await models.Consulta.findOne({
     where: {
-      [Op.and]: [{ idconsulta }, { estado: estado.ACTIVO }, {paciente: idusuario}]
+      [Op.and]: [
+        { idconsulta },
+        { estado: estado.ACTIVO },
+        { paciente: idusuario }
+      ]
     },
     atributtes: {
       exclude: atributosExclude
@@ -47,43 +51,51 @@ export const buscarPorId = async (req, res) => {
 
 export const crearConsulta = async (req, res) => {
   const idconsulta = uuid();
-  const usuario_creacion = adminDefecto;
+  const codigoSala = _.replace(uuid(), "-", "");
+  const usuarioCreacion = adminDefecto;
   const paciente = req.params.id;
   const {
-    estado_consulta,
     doctor,
     tipo,
     descripcion,
-    costo,
-    horario,
-    sala
+    precio,
+    horario
   } = req.body;
   const datosConsulta = {
     idconsulta,
     estado_consulta,
-    sala,
     paciente,
     horario,
-    usuario_creacion,
-    DatosConsulta: {
+    usuarioCreacion,
+    SalaConsulta: {
       id: uuid(),
+      consulta: idconsulta,
+      codigo: codigoSala,
+      usuarioCreacion
+    },
+    DatosConsulta: {
+      iddatos: uuid(),
       doctor,
       tipo,
       imagen,
       descripcion,
-      costo,
-      usuario_creacion
+      precio,
+      usuarioCreacion
     }
   };
-  
+
   const Consulta = await models.Consulta.create(datosConsulta, {
     include: [
       {
         model: models.DatosConsulta,
         as: "DatosConsulta"
+      },
+      {
+        model: models.Sala,
+        as: "SalaConsulta"
       }
     ]
-  }); 
+  });
 
   return res.status(201).send({
     Consulta,
