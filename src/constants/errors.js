@@ -45,7 +45,7 @@ const errors = {
     title: "Usuario no existe",
     status: 400,
     detail:
-      "El número de identificación ingresado no le pertenece a un usuario."
+      "Información ingresada no le pertenece a un usuario."
   },
   PRODUCTO_EXISTENTE: {
     title: "Producto ya existe",

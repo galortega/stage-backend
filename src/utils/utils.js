@@ -20,3 +20,13 @@ export const errorStatusHandle = (res, payload, other) => {
   const msg = errors[payload] || errors.INTERNAL_SERVER_ERROR;
   return res.status(msg.status).send({ error: { ...msg, ...other } });
 };
+
+export const clean = (obj) => {
+  var propNames = Object.getOwnPropertyNames(obj);
+  for (var i = 0; i < propNames.length; i++) {
+    var propName = propNames[i];
+    if (obj[propName] === null || obj[propName] === undefined) {
+      delete obj[propName];
+    }
+  }
+};
