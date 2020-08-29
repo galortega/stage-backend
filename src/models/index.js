@@ -31,6 +31,7 @@ const DatosConsulta = db.sequelize.define(
   DatosConsultaModel,
   DatosConsultaConfig
 );
+
 const Sala = db.sequelize.define("Sala", SalaModel, SalaConfig);
 const Horario = db.sequelize.define("Horario", HorarioModel, HorarioConfig);
 // USUARIO INFOPERSONAL
@@ -57,6 +58,7 @@ Rol.belongsToMany(Usuario, {
   through: UsuarioRol,
   foreignKey: "rol"
 });
+
 // USUARIO USUARIOROL
 Usuario.hasMany(UsuarioRol, { as: "UsuarioRol", foreignKey: "usuario" });
 UsuarioRol.belongsTo(Usuario, { as: "UsuarioRol", foreignKey: "usuario" });
