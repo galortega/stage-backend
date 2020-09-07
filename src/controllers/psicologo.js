@@ -25,8 +25,8 @@ export const buscarTodos = async (req, res) => {
     include: [
       {
         model: models.Usuario,
-        as: "PsicologoUsuario",
-        attributes: ["imagen, nombre"]
+        as: "UsuarioPsicologo",
+        attributes: ["imagen", "nombre"]
       }
     ]
   });
