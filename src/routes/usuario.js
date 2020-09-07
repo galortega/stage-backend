@@ -7,8 +7,6 @@ import {
   eliminarUsuario
 } from "../controllers/usuario";
 import { allowedMethods, asyncWrapper,  } from "../utils/utils";
-import consultasRutas from "./consulta";
-import doctorRouter from "./doctor";
 
 const router = express.Router();
 
@@ -32,8 +30,5 @@ router.delete(
   "/:id",
   asyncWrapper(eliminarUsuario)
 );
-
-router.use(consultasRutas);
-router.use(doctorRouter);
 
 export default router;

@@ -11,6 +11,7 @@ import { DatosConsultaModel, DatosConsultaConfig } from "./datosconsulta";
 import { SalaModel, SalaConfig } from "./sala";
 import { HorarioModel, HorarioConfig } from "./horario";
 import { PsicologoModel, PsicologoConfig } from "./psicologo";
+import { TratamientoModel, TratamientoConfig } from "./tratamiento";
 
 const Usuario = db.sequelize.define("Usuario", UsuarioModel, UsuarioConfig);
 const InfoPersonal = db.sequelize.define("InfoPersonal", InfoModel, InfoConfig);
@@ -36,6 +37,11 @@ const Psicologo = db.sequelize.define(
   "Psicologo",
   PsicologoModel,
   PsicologoConfig
+);
+const Tratamiento = db.sequelize.define(
+  "Tratamiento",
+  TratamientoModel,
+  TratamientoConfig
 );
 
 const Sala = db.sequelize.define("Sala", SalaModel, SalaConfig);
@@ -102,6 +108,15 @@ Psicologo.belongsTo(Usuario, {
   foreignKey: "usuario"
 });
 
+Psicologo.hasMany(Tratamiento, {
+  as: "PsicologoTratamiento",
+  foreignKey: "tratamiento"
+});
+Tratamiento.belongsTo(Psicologo, {
+  as: "PsicologoTratamiento",
+  foreignKey: "tratamiento"
+});
+
 const models = {
   db,
   Usuario,
@@ -114,7 +129,8 @@ const models = {
   Sala,
   Especialidad,
   DatosConsulta,
-  Psicologo
+  Psicologo,
+  Tratamiento
 };
 
 export default models;

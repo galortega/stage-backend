@@ -10,9 +10,8 @@ import { routes } from "./constants/common";
 import cacheControl from "express-cache-controller";
 
 import indexRouter from "./routes/index";
+
 import usuariosRouter from "./routes/usuario";
-import doctoresRouter from "./routes/doctor";
-import especialidadesRouter from "./routes/especialidad";
 import psicologosRouter from "./routes/psicologo";
 
 const app = express();
@@ -41,8 +40,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", indexRouter);
 app.use(routes.usuarioRaiz, usuariosRouter);
-app.use(routes.doctorRaiz, doctoresRouter);
-app.use(routes.especialidad, especialidadesRouter);
 app.use(routes.psicologo, psicologosRouter);
 
 // catch 404 and forward to error handler

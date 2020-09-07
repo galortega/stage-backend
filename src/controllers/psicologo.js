@@ -36,7 +36,13 @@ export const buscarPorId = async (req, res) => {
     },
     atributtes: {
       exclude: atributosExclude
-    }
+    },
+    include: [
+      {
+        model: models.Tratamiento,
+        as: "PsicologoTratamiento"
+      }
+    ]
   });
   return res.status(200).send({
     Psicologo: Psicologo || []
