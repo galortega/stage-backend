@@ -21,7 +21,14 @@ export const buscarTodos = async (req, res) => {
     },
     atributtes: {
       exclude: atributosExclude
-    }
+    },
+    include: [
+      {
+        model: models.Usuario,
+        as: "PsicologoUsuario",
+        attributes: ["imagen, nombre"]
+      }
+    ]
   });
   return res.status(200).send({
     Psicologos
