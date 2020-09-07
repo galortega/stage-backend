@@ -1,6 +1,6 @@
 import "dotenv/config";
 import createError from "http-errors";
-import express from "express"
+import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
@@ -12,7 +12,8 @@ import cacheControl from "express-cache-controller";
 import indexRouter from "./routes/index";
 import usuariosRouter from "./routes/usuario";
 import doctoresRouter from "./routes/doctor";
-import especialidadesRouter from "./routes/especialidad"
+import especialidadesRouter from "./routes/especialidad";
+import psicologosRouter from "./routes/psicologo";
 
 const app = express();
 
@@ -42,7 +43,7 @@ app.use("/", indexRouter);
 app.use(routes.usuarioRaiz, usuariosRouter);
 app.use(routes.doctorRaiz, doctoresRouter);
 app.use(routes.especialidad, especialidadesRouter);
-
+app.use(routes.psicologo, psicologosRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
