@@ -1,9 +1,9 @@
 export const methods = ["GET", "POST", "PUT", "DELETE"];
 
 export const estado = {
-  ACTIVO: "AC",
-  INACTIVO: "IN",
-  values: ["AC", "IN"]
+  ACTIVO: "A",
+  INACTIVO: "I",
+  values: ["A", "I"]
 };
 
 export const estadoConsulta = {

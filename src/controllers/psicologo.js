@@ -45,7 +45,17 @@ export const buscarPorId = async (req, res) => {
 
 export const crearPsicologo = async (req, res) => {
   req.body.id = uuid();
-  const Psicologo = await models.Psicologo.create(req.body);
+  req.body.UsuarioPsicologo.id = uuid();
+  req.body.UsuarioPsicologo.usuario = req.body.id;
+
+  const Psicologo = await models.Usuario.create(req.body, {
+    include: [
+      {
+        model: models.Psicologo,
+        as: "UsuarioPsicologo"
+      }
+    ]
+  });
   return res.status(201).send({
     Psicologo,
     msj: "Psicologo ingresado correctamente."

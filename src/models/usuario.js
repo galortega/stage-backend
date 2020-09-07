@@ -16,8 +16,8 @@ export const UsuarioModel = {
   contrasena: {
     type: Sequelize.STRING(50)
   },
-  urlImagen: {
-    type: Sequelize.STRING(50)
+  imagen: {
+    type: Sequelize.STRING(500)
   },
   telefono: {
     type: Sequelize.STRING(10)
@@ -25,6 +25,9 @@ export const UsuarioModel = {
   fecha_creacion: {
     type: Sequelize.DATE,
     allowNull: false
+  },
+  fecha_actualizacion: {
+    type: Sequelize.DATE
   },
   estado: {
     type: Sequelize.ENUM(estado.values),
@@ -34,7 +37,8 @@ export const UsuarioModel = {
 
 export const UsuarioConfig = {
   freezeTableName: true,
-  tableName: "usuario",
+  tableName: "Usuario",
   timestamps: true,
-  createdAt: "fecha_creacion"
+  createdAt: "fecha_creacion",
+  updatedAt: "fecha_actualizacion"
 };
