@@ -10,6 +10,7 @@ import { EspecialidadModel, EspecialidadConfig } from "./especialidad";
 import { DatosConsultaModel, DatosConsultaConfig } from "./datosconsulta";
 import { SalaModel, SalaConfig } from "./sala";
 import { HorarioModel, HorarioConfig } from "./horario";
+import { PsicologoModel, PsicologoConfig } from "./psicologo";
 
 const Usuario = db.sequelize.define("Usuario", UsuarioModel, UsuarioConfig);
 const InfoPersonal = db.sequelize.define("InfoPersonal", InfoModel, InfoConfig);
@@ -30,6 +31,11 @@ const DatosConsulta = db.sequelize.define(
   "DatosConsulta",
   DatosConsultaModel,
   DatosConsultaConfig
+);
+const Psicologo = db.sequelize.define(
+  "Psicologo",
+  PsicologoModel,
+  PsicologoConfig
 );
 
 const Sala = db.sequelize.define("Sala", SalaModel, SalaConfig);
@@ -78,9 +84,23 @@ Doctor.belongsTo(Especialidad, {
   foreignKey: "especialidad"
 });
 // DATOSCONSULTA DOCTOR
-Doctor.hasMany(DatosConsulta, { as: "TratamientoDoctor", foreignKey: "doctor" });
-DatosConsulta.belongsTo(Doctor, { as: "TratamientoDoctor", foreignKey: "doctor" });
+Doctor.hasMany(DatosConsulta, {
+  as: "TratamientoDoctor",
+  foreignKey: "doctor"
+});
+DatosConsulta.belongsTo(Doctor, {
+  as: "TratamientoDoctor",
+  foreignKey: "doctor"
+});
 
+Usuario.hasMany(Psicologo, {
+  as: "UsuarioPsicologo",
+  foreignKey: "usuario"
+});
+Psicologo.belongsTo(Usuario, {
+  as: "UsuarioPsicologo",
+  foreignKey: "usuario"
+});
 
 const models = {
   db,
@@ -93,7 +113,8 @@ const models = {
   Horario,
   Sala,
   Especialidad,
-  DatosConsulta
+  DatosConsulta,
+  Psicologo
 };
 
 export default models;
