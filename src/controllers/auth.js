@@ -27,7 +27,6 @@ export const autenticarUsuario = async (req, res) => {
     return errorStatusHandle(res, "CONTRASENA_INCORRECTA");
 
   const payload = {
-    id: Usuario.id,
     Usuario
   };
 
