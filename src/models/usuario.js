@@ -11,16 +11,12 @@ export const UsuarioModel = {
     allowNull: false
   },
   email: {
-    type: Sequelize.STRING(50)
+    type: Sequelize.STRING(50),
+    allowNull: false
   },
   contrasena: {
-    type: Sequelize.STRING(50)
-  },
-  ciudad: {
-    type: Sequelize.STRING(50)
-  },
-  pais: {
-    type: Sequelize.STRING(50)
+    type: Sequelize.STRING(50),
+    allowNull: false
   },
   imagen: {
     type: Sequelize.STRING(500)

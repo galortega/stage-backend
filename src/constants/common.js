@@ -5,5 +5,6 @@ export const routes = {
   psicologo: {
     tratamiento: "/:id/tratamientos"
   },
-  psicologo: `${baseRoute}/psicologos`
+  psicologo: `${baseRoute}/psicologos`,
+  auth: `${baseRoute}/auth`
 };

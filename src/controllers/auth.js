@@ -1,8 +1,12 @@
 import { errorStatusHandle, clean } from "../utils/utils";
 import _ from "lodash";
+import jwt from "jsonwebtoken";
+import models from "../models/index";
+import { Op } from "sequelize";
+import { estado } from "../constants/index";
 
 export const autenticarUsuario = async (req, res) => {
-  let { email, contrasena, rol } = req.body;
+  let { email, contrasena } = req.body;
   email = _.toLower(email);
 
   const Usuario = await models.Usuario.findOne({
@@ -15,33 +19,15 @@ export const autenticarUsuario = async (req, res) => {
         },
         { estado: estado.ACTIVO }
       ]
-    },
-    include: [
-      {
-        model: models.Administrador,
-        as: "UsuarioAdministrador"
-      },
-      {
-        model: models.Psicologo,
-        as: "UsuarioPsicologo"
-      },
-      {
-        model: models.Paciente,
-        as: "UsuarioPaciente"
-      }
-    ]
-  }).then((u) => {
-    if (_.isEmpty(u)) return errorStatusHandle(res, "USUARIO_INEXISTENTE");
-    else return u.toJSON();
+    }
   });
-  clean(Usuario);
 
-  if (contrasena !== Usuario.contrasena)
+  if (_.isEmpty(Usuario)) return errorStatusHandle(res, "USUARIO_INEXISTENTE");
+  else if (contrasena !== Usuario.contrasena)
     return errorStatusHandle(res, "CONTRASENA_INCORRECTA");
 
   const payload = {
-    id: Usuario.idUsuario,
-    rol,
+    id: Usuario.id,
     Usuario
   };
 
@@ -49,7 +35,7 @@ export const autenticarUsuario = async (req, res) => {
     payload,
     process.env.KEY,
     {
-      expiresIn: tiempoToken
+      expiresIn: "120m"
     },
     async (error, token) => {
       if (error) {

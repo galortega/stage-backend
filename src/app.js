@@ -13,6 +13,7 @@ import indexRouter from "./routes/index";
 
 import usuariosRouter from "./routes/usuario";
 import psicologosRouter from "./routes/psicologo";
+import authRouter from "./routes/auth";
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", indexRouter);
 app.use(routes.usuarioRaiz, usuariosRouter);
 app.use(routes.psicologo, psicologosRouter);
+app.use(routes.auth, authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

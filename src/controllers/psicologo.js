@@ -69,6 +69,24 @@ export const crearPsicologo = async (req, res) => {
       }
     ]
   });
+
+  const payload = {
+    usuario: {
+      id: req.body.id
+    }
+  };
+
+  jwt.sign(
+    payload,
+    process.env.KEY,
+    {
+      expiresIn: "120m"
+    },
+    (error) => {
+      if (error) throw error;
+    }
+  );
+
   return res.status(201).send({
     Psicologo,
     msj: "Psicologo ingresado correctamente."
