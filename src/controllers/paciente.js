@@ -4,18 +4,18 @@ import { Op } from "sequelize";
 import { estado, atributosExclude, adminDefecto } from "../constants/index";
 import _ from "lodash";
 
-export const validarIDPsicologo = async (id) => {
-  return await models.Psicologo.findOne({
+export const validarIDPaciente = async (id) => {
+  return await models.Paciente.findOne({
     where: { [Op.and]: [{ id }, { estado: estado.ACTIVO }] }
-  }).then((psicologo) => {
-    if (!psicologo) {
+  }).then((paciente) => {
+    if (!paciente) {
       return Promise.reject(new Error(`ID ingresado no es válido. ${id}`));
     }
   });
 };
 
 export const buscarTodos = async (req, res) => {
-  const Psicologos = await models.Psicologo.findAll({
+  const Pacientes = await models.Paciente.findAll({
     where: {
       estado: estado.ACTIVO
     },
@@ -25,19 +25,19 @@ export const buscarTodos = async (req, res) => {
     include: [
       {
         model: models.Usuario,
-        as: "UsuarioPsicologo",
+        as: "UsuarioPaciente",
         attributes: ["imagen", "nombre"]
       }
     ]
   });
   return res.status(200).send({
-    Psicologos
+    Pacientes
   });
 };
 
 export const buscarPorId = async (req, res) => {
   const id = req.params.id;
-  const Psicologo = await models.Psicologo.findOne({
+  const Paciente = await models.Paciente.findOne({
     where: {
       [Op.and]: [{ id }, { estado: estado.ACTIVO }]
     },
@@ -47,54 +47,54 @@ export const buscarPorId = async (req, res) => {
     include: [
       {
         model: models.Tratamiento,
-        as: "PsicologoTratamiento"
+        as: "PacienteTratamiento"
       }
     ]
   });
   return res.status(200).send({
-    Psicologo: Psicologo || []
+    Paciente: Paciente || []
   });
 };
 
-export const crearPsicologo = async (req, res) => {
+export const crearPaciente = async (req, res) => {
   req.body.id = uuid();
-  req.body.UsuarioPsicologo.id = uuid();
-  req.body.UsuarioPsicologo.usuario = req.body.id;
+  req.body.UsuarioPaciente.id = uuid();
+  req.body.UsuarioPaciente.usuario = req.body.id;
 
-  const Psicologo = await models.Usuario.create(req.body, {
+  const Paciente = await models.Usuario.create(req.body, {
     include: [
       {
-        model: models.Psicologo,
-        as: "UsuarioPsicologo"
+        model: models.Paciente,
+        as: "UsuarioPaciente"
       }
     ]
   });
 
   return res.status(201).send({
-    Psicologo,
-    msj: "Psicologo ingresado correctamente."
+    Paciente,
+    msj: "Paciente ingresado correctamente."
   });
 };
 
-export const actualizarPsicologo = async (req, res) => {
+export const actualizarPaciente = async (req, res) => {
   const id = req.params.id;
-  const Psicologo = await models.Psicologo.update(req.body, {
+  const Paciente = await models.Paciente.update(req.body, {
     where: { [Op.and]: [{ id }, { estado: estado.ACTIVO }] }
   });
   return res.status(200).send({
-    Psicologo
+    Paciente
   });
 };
 
-export const eliminarPsicologo = async (req, res) => {
+export const eliminarPaciente = async (req, res) => {
   const id = req.params.id;
-  const Psicologo = await models.Psicologo.update(
+  const Paciente = await models.Paciente.update(
     { estado: estado.INACTIVO, usuarioActualizacion: req.doctorAuth.id },
     {
       where: { id }
     }
   );
   return res.status(200).send({
-    Psicologo
+    Paciente
   });
 };

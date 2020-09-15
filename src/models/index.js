@@ -3,6 +3,7 @@ import db from "../config/connect";
 import { UsuarioModel, UsuarioConfig } from "./usuario";
 import { PsicologoModel, PsicologoConfig } from "./psicologo";
 import { TratamientoModel, TratamientoConfig } from "./tratamiento";
+import { PacienteModel, PacienteConfig } from "./paciente";
 
 const Usuario = db.sequelize.define("Usuario", UsuarioModel, UsuarioConfig);
 
@@ -11,6 +12,7 @@ const Psicologo = db.sequelize.define(
   PsicologoModel,
   PsicologoConfig
 );
+const Paciente = db.sequelize.define("Paciente", PacienteModel, PacienteConfig);
 const Tratamiento = db.sequelize.define(
   "Tratamiento",
   TratamientoModel,
@@ -23,6 +25,15 @@ Usuario.hasMany(Psicologo, {
 });
 Psicologo.belongsTo(Usuario, {
   as: "UsuarioPsicologo",
+  foreignKey: "usuario"
+});
+
+Usuario.hasMany(Paciente, {
+  as: "UsuarioPaciente",
+  foreignKey: "usuario"
+});
+Paciente.belongsTo(Usuario, {
+  as: "UsuarioPaciente",
   foreignKey: "usuario"
 });
 
@@ -39,6 +50,7 @@ const models = {
   db,
   Usuario,
   Psicologo,
+  Paciente,
   Tratamiento
 };
 

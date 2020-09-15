@@ -6,5 +6,6 @@ export const routes = {
     tratamiento: "/:id/tratamientos"
   },
   psicologo: `${baseRoute}/psicologos`,
-  auth: `${baseRoute}/auth`
+  auth: `${baseRoute}/auth`,
+  paciente: `${baseRoute}/pacientes`
 };
