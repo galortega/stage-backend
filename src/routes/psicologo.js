@@ -6,18 +6,18 @@ import {
   actualizarPsicologo,
   eliminarPsicologo
 } from "../controllers/psicologo";
-import { allowedMethods, asyncWrapper } from "../utils/utils";
+import { allowedMethods, asyncWrapper } from "../utils/error";
+import auth from "../utils/auth";
 
 const router = express.Router();
 
 router.use("/$", allowedMethods(["GET", "POST"]));
-router.get("/", asyncWrapper(buscarTodos));
-router.post("/", asyncWrapper(crearPsicologo));
+router.get("/", auth, asyncWrapper(buscarTodos));
+router.post("/", auth, asyncWrapper(crearPsicologo));
 
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
-router.get("/:id", asyncWrapper(buscarPorId));
-
-router.put("/:id", asyncWrapper(actualizarPsicologo));
-router.delete("/:id", asyncWrapper(eliminarPsicologo));
+router.get("/:id", auth, asyncWrapper(buscarPorId));
+router.put("/:id", auth, asyncWrapper(actualizarPsicologo));
+router.delete("/:id", auth, asyncWrapper(eliminarPsicologo));
 
 export default router;

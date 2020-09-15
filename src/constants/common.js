@@ -7,5 +7,6 @@ export const routes = {
   },
   psicologo: `${baseRoute}/psicologos`,
   auth: `${baseRoute}/auth`,
-  paciente: `${baseRoute}/pacientes`
+  paciente
+  : `${baseRoute}/pacientes`
 };

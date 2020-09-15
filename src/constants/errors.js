@@ -60,6 +60,21 @@ const errors = {
     title: "Transacción fallida",
     status: 400,
     detail: "La transacción requerida no fue realizada con éxito."
+  },
+  TOKEN_EXPIRADO: {
+    title: "Token expirado",
+    status: 405,
+    detail: "El token de la sesión se encuentra expirado."
+  },
+  TOKEN_ERROR: {
+    title: "Token error",
+    status: 405,
+    detail: "El token de la sesión está malformado o es inválido."
+  },
+  TOKEN_INACTIVO: {
+    title: "Token inactivo",
+    status: 405,
+    detail: "El token de la sesión no se encuentra activo."
   }
 };
 

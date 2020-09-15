@@ -1,6 +1,6 @@
 import express from "express";
 import { autenticarUsuario } from "../controllers/auth";
-import { allowedMethods, asyncWrapper } from "../utils/utils";
+import { allowedMethods, asyncWrapper } from "../utils/error";
 
 const router = express.Router();
 

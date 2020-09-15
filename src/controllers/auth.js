@@ -1,4 +1,4 @@
-import { errorStatusHandle, clean } from "../utils/utils";
+import { errorStatusHandle } from "../utils/error";
 import _ from "lodash";
 import jwt from "jsonwebtoken";
 import models from "../models/index";
@@ -27,7 +27,11 @@ export const autenticarUsuario = async (req, res) => {
     return errorStatusHandle(res, "CONTRASENA_INCORRECTA");
 
   const payload = {
-    Usuario
+    usuario: Usuario.id,
+    nombre: Usuario.nombre,
+    email: Usuario.email,
+    imagen: Usuario.imagen,
+    telefono: Usuario.telefono
   };
 
   jwt.sign(

@@ -14,6 +14,7 @@ export const PacienteModel = {
     type: Sequelize.INTEGER,
     allowNull: false
   },
+
   fecha_creacion: {
     type: Sequelize.DATE,
     allowNull: false

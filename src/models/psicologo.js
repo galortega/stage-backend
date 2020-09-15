@@ -19,6 +19,7 @@ export const PsicologoModel = {
   },
   longitud: {
     type: Sequelize.FLOAT
+    
   },
   latitud: {
     type: Sequelize.FLOAT

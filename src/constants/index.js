@@ -16,6 +16,7 @@ export const estadoConsulta = {
 
 export const estadoHorario = {
   DISPONIBLE: "D",
+  
   RESERVADO: "R",
   CANCELADO: "C",
   TERMINADO: "T",

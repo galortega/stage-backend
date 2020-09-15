@@ -1,6 +1,7 @@
 import { check, param, query } from "express-validator"
 
-export const checkCrearTratamiento = [
+export const checkCrear
+to = [
   check("numero_factura", "Numero de factura inválido.")
     .not()
     .isEmpty()
