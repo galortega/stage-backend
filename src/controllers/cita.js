@@ -51,7 +51,6 @@ export const crearCita = async (req, res) => {
   const { paciente } = req.params;
   req.body.id = uuid();
   req.body.paciente = paciente;
-  console.log(req.body);
 
   const Cita = await models.Cita.create(req.body);
 

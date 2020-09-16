@@ -2,7 +2,7 @@ const errors = {
   // Generals
   UNAUTHORIZED: {
     title: "No autorizado",
-    status: 401,
+    status: 405,
     detail: "Usted no tiene autorización para realizar esta petición."
   },
   NOT_FOUND: {
@@ -32,7 +32,7 @@ const errors = {
   },
   CONTRASENA_INCORRECTA: {
     title: "Parámetros inválidos",
-    status: 400,
+    status: 405,
     detail: "Usuario y/o contraseña no son correctos."
   },
   USUARIO_EXISTENTE: {

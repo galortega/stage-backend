@@ -16,7 +16,7 @@ const handleJWTError = (res, error) => {
 };
 
 module.exports = (req, res, next) => {
-  const token = req.header("x-auth-token");
+  const token = req.header("token");
 
   if (!token) return errorStatusHandle(res, "UNAUTHORIZED");
 
