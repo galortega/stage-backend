@@ -14,6 +14,20 @@ export const validarIDCita = async (id) => {
   });
 };
 
+export const buscarTodosAdmin = async (req, res) => {
+  const Citas = await models.Cita.findAll({
+    where: {
+      estado: estado.ACTIVO
+    },
+    atributtes: {
+      exclude: atributosExclude
+    }
+  });
+  return res.status(200).send({
+    Citas
+  });
+};
+
 export const buscarTodos = async (req, res) => {
   const { paciente } = req.params;
   const Citas = await models.Cita.findAll({

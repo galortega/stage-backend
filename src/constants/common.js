@@ -9,6 +9,7 @@ export const routes = {
   paciente: {
     cita: "/:paciente/citas"
   },
+  cita: `${baseRoute}/citas`,
   auth: `${baseRoute}/auth`,
-  contactanos: `${baseRoute}/contactanos`,
+  contactanos: `${baseRoute}/contactanos`
 };

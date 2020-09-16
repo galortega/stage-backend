@@ -89,7 +89,7 @@ export const actualizarPaciente = async (req, res) => {
 export const eliminarPaciente = async (req, res) => {
   const id = req.params.id;
   const Paciente = await models.Paciente.update(
-    { estado: estado.INACTIVO, usuarioActualizacion: req.doctorAuth.id },
+    { estado: estado.INACTIVO },
     {
       where: { id }
     }

@@ -89,7 +89,7 @@ export const actualizarPsicologo = async (req, res) => {
 export const eliminarPsicologo = async (req, res) => {
   const id = req.params.id;
   const Psicologo = await models.Psicologo.update(
-    { estado: estado.INACTIVO, usuarioActualizacion: req.doctorAuth.id },
+    { estado: estado.INACTIVO },
     {
       where: { id }
     }
