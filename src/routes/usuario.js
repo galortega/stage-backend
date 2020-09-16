@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.use("/$", allowedMethods(["GET", "POST"]));
 router.get("/", auth, asyncWrapper(buscarTodos));
-router.post("/", auth, asyncWrapper(crearUsuario));
+router.post("/", asyncWrapper(crearUsuario));
 
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
 router.get("/:id", auth, asyncWrapper(buscarPorId));

@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.use("/$", allowedMethods(["GET", "POST"]));
 router.get("/", auth, asyncWrapper(buscarTodos));
-router.post("/", auth, asyncWrapper(crearPaciente));
+router.post("/", asyncWrapper(crearPaciente));
 
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
 router.get("/:id", auth, asyncWrapper(buscarPorId));
