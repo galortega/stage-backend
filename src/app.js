@@ -11,7 +11,6 @@ import cacheControl from "express-cache-controller";
 
 import indexRouter from "./routes/index";
 
-import usuariosRouter from "./routes/usuario";
 import psicologosRouter from "./routes/psicologo";
 import pacientesRouter from "./routes/paciente";
 import authRouter from "./routes/auth";
@@ -41,7 +40,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", indexRouter);
-app.use(routes.usuarioRaiz, usuariosRouter);
 app.use(routes.psicologo, psicologosRouter);
 app.use(routes.paciente, pacientesRouter);
 app.use(routes.auth, authRouter);
