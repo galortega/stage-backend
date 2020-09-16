@@ -14,7 +14,10 @@ export const PacienteModel = {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-
+  pais: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
   fecha_creacion: {
     type: Sequelize.DATE,
     allowNull: false
