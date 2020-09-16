@@ -61,7 +61,7 @@ export const crearPaciente = async (req, res) => {
   req.body.UsuarioPaciente.id = uuid();
   req.body.UsuarioPaciente.usuario = req.body.id;
 
-  const Paciente = await models.Usuario.create(req.body, {
+  const Paciente = await models.Paciente.create(req.body, {
     include: [
       {
         model: models.Paciente,

@@ -4,7 +4,6 @@ import { estado } from "../constants/index";
 export const TratamientoModel = {
   id: {
     type: DataTypes.UUID,
-    
     primaryKey: true
   },
   psicologo: {

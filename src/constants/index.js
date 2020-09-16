@@ -16,11 +16,17 @@ export const estadoConsulta = {
 
 export const estadoHorario = {
   DISPONIBLE: "D",
-  
   RESERVADO: "R",
   CANCELADO: "C",
   TERMINADO: "T",
   values: ["D", "R", "C", "T"]
+};
+
+export const estadoCita = {
+  PENDIENTE: "P",
+  APROBADA: "A",
+  CANCELADA: "C",
+  values: ["P", "A", "C"]
 };
 
 export const tipoDePago = {

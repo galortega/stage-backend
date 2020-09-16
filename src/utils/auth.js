@@ -18,7 +18,7 @@ const handleJWTError = (res, error) => {
 module.exports = (req, res, next) => {
   const token = req.header("x-auth-token");
 
-  if (!token) errorStatusHandle(res, "UNAUTHORIZED");
+  if (!token) return errorStatusHandle(res, "UNAUTHORIZED");
 
   let error;
   const cifrado = jwt.verify(token, process.env.KEY, (err, decoded) => {

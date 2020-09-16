@@ -8,6 +8,7 @@ import {
 } from "../controllers/paciente";
 import { allowedMethods, asyncWrapper } from "../utils/error";
 import auth from "../utils/auth";
+import citasRouter from "./cita";
 
 const router = express.Router();
 
@@ -20,5 +21,7 @@ router.get("/:id", auth, asyncWrapper(buscarPorId));
 
 router.put("/:id", asyncWrapper(actualizarPaciente));
 router.delete("/:id", auth, asyncWrapper(eliminarPaciente));
+
+router.use(citasRouter);
 
 export default router;

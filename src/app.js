@@ -40,8 +40,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", indexRouter);
-app.use(routes.psicologo, psicologosRouter);
-app.use(routes.paciente, pacientesRouter);
+app.use(routes.psicologoRaiz, psicologosRouter);
+app.use(routes.pacienteRaiz, pacientesRouter);
 app.use(routes.auth, authRouter);
 
 // catch 404 and forward to error handler

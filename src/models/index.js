@@ -4,9 +4,9 @@ import { UsuarioModel, UsuarioConfig } from "./usuario";
 import { PsicologoModel, PsicologoConfig } from "./psicologo";
 import { TratamientoModel, TratamientoConfig } from "./tratamiento";
 import { PacienteModel, PacienteConfig } from "./paciente";
+import { CitaModel, CitaConfig } from "./cita";
 
 const Usuario = db.sequelize.define("Usuario", UsuarioModel, UsuarioConfig);
-
 const Psicologo = db.sequelize.define(
   "Psicologo",
   PsicologoModel,
@@ -18,6 +18,7 @@ const Tratamiento = db.sequelize.define(
   TratamientoModel,
   TratamientoConfig
 );
+const Cita = db.sequelize.define("Cita", CitaModel, CitaConfig);
 
 Usuario.hasMany(Psicologo, {
   as: "UsuarioPsicologo",
@@ -37,12 +38,30 @@ Paciente.belongsTo(Usuario, {
   foreignKey: "usuario"
 });
 
+Paciente.hasOne(Cita, {
+  as: "PacienteCita",
+  foreignKey: "paciente"
+});
+Cita.belongsTo(Paciente, {
+  as: "PacienteCita",
+  foreignKey: "paciente"
+});
+
 Psicologo.hasMany(Tratamiento, {
   as: "PsicologoTratamiento",
-  foreignKey: "tratamiento"
+  foreignKey: "psicologo"
 });
 Tratamiento.belongsTo(Psicologo, {
   as: "PsicologoTratamiento",
+  foreignKey: "psicologo"
+});
+
+Tratamiento.hasOne(Cita, {
+  as: "TratamientoCita",
+  foreignKey: "tratamiento"
+});
+Cita.belongsTo(Tratamiento, {
+  as: "TratamientoCita",
   foreignKey: "tratamiento"
 });
 
@@ -51,7 +70,8 @@ const models = {
   Usuario,
   Psicologo,
   Paciente,
-  Tratamiento
+  Tratamiento,
+  Cita
 };
 
 export default models;

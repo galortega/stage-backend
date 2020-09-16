@@ -1,36 +1,37 @@
 import { DataTypes, Sequelize } from "Sequelize";
-import { estado, estadoConsulta } from "../constants/index"
+import { estado, estadoCita } from "../constants/index";
 
-export const ConsultaModel = {
-  idconsulta: {
+export const CitaModel = {
+  id: {
     type: DataTypes.UUID,
     primaryKey: true
   },
-  datos: {
-    type: DataTypes.UUID,
-    allowNull: false
-  },
-  horario: {
-    type: DataTypes.UUID,
-    allowNull: false
+  tratamiento: {
+    type: DataTypes.UUID
   },
   paciente: {
     type: DataTypes.UUID,
     allowNull: false
   },
-  estadoConsulta: {
-    type: Sequelize.ENUM(estadoConsulta.values),
-    defaultValue: estadoConsulta.PENDIENTE,
-    field: "estado_consulta"
+  total: {
+    type: DataTypes.FLOAT,
+    allowNull: false
   },
-  usuarioCreacion: {
-    type: DataTypes.UUID,
-    allowNull: false,
-    field: "usuario_creacion"
+  fecha: {
+    type: Sequelize.DATE
   },
-  usuarioActualizacion: {
-    type: DataTypes.UUID,
-    field: "usuario_actualizacion"
+  motivo: {
+    type: DataTypes.STRING
+  },
+  observacion: {
+    type: DataTypes.STRING
+  },
+  resena: {
+    type: DataTypes.STRING
+  },
+  estado_cita: {
+    type: Sequelize.ENUM(estadoCita.values),
+    defaultValue: estadoCita.PENDIENTE
   },
   fecha_creacion: {
     type: Sequelize.DATE,
@@ -45,9 +46,9 @@ export const ConsultaModel = {
   }
 };
 
-export const ConsultaConfig = {
+export const CitaConfig = {
   freezeTableName: true,
-  tableName: "consulta",
+  tableName: "Cita",
   timestamps: true,
   createdAt: "fecha_creacion",
   updatedAt: "fecha_actualizacion"

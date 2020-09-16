@@ -15,20 +15,17 @@ export const validarIDTratamiento = async (id) => {
 };
 
 export const buscarTodos = async (req, res) => {
+  const { psicologo } = req.params;
   const Tratamientos = await models.Tratamiento.findAll({
-    where: {
-      estado: estado.ACTIVO
-    },
+    where: [
+      { psicologo },
+      {
+        estado: estado.ACTIVO
+      }
+    ],
     atributtes: {
       exclude: atributosExclude
-    },
-    include: [
-      {
-        model: models.Usuario,
-        as: "UsuarioTratamiento",
-        attributes: ["imagen", "nombre"]
-      }
-    ]
+    }
   });
   return res.status(200).send({
     Tratamientos
@@ -57,18 +54,11 @@ export const buscarPorId = async (req, res) => {
 };
 
 export const crearTratamiento = async (req, res) => {
+  const { psicologo } = req.params;
   req.body.id = uuid();
-  req.body.UsuarioTratamiento.id = uuid();
-  req.body.UsuarioTratamiento.usuario = req.body.id;
+  req.body.psicologo = psicologo;
 
-  const Tratamiento = await models.Usuario.create(req.body, {
-    include: [
-      {
-        model: models.Tratamiento,
-        as: "UsuarioTratamiento"
-      }
-    ]
-  });
+  const Tratamiento = await models.Tratamiento.create(req.body);
 
   return res.status(201).send({
     Tratamiento,
@@ -89,7 +79,7 @@ export const actualizarTratamiento = async (req, res) => {
 export const eliminarTratamiento = async (req, res) => {
   const id = req.params.id;
   const Tratamiento = await models.Tratamiento.update(
-    { estado: estado.INACTIVO, usuarioActualizacion: req.doctorAuth.id },
+    { estado: estado.INACTIVO },
     {
       where: { id }
     }
