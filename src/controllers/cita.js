@@ -1,9 +1,8 @@
 import models from "../models/index";
 import { uuid } from "uuidv4";
 import { Op } from "sequelize";
-import { estado, atributosExclude } from "../constants/index";
+import { estado, atributosExclude, estadoCita } from "../constants/index";
 import _ from "lodash";
-import moment from "moment";
 
 export const validarIDCita = async (id) => {
   return await models.Cita.findOne({
@@ -47,26 +46,53 @@ export const buscarTodos = async (req, res) => {
   });
 };
 
-export const buscarTodosPorDia = async (req, res) => {
+export const reporteEstado = async (req, res) => {
   const { dias } = req.query;
-  const fecha = moment().subtract(!_.isEmpty(dias) ? dias : 10, "days");
-  const Citas = await models.Cita.findAll({
+
+  const Aprobadas = await models.Cita.findAll({
     where: [
       {
-        fecha: {
-          [Op.gte]: fecha
-        }
+        estado_cita: estadoCita.APROBADA
       },
       {
         estado: estado.ACTIVO
       }
     ],
-    atributtes: {
-      exclude: atributosExclude
-    }
+    atributtes: ["id"]
+  }).then((c) => {
+    return !_.isEmpty(c) ? c.length : 0;
   });
+  const Canceladas = await models.Cita.findAll({
+    where: [
+      {
+        estado_cita: estadoCita.CANCELADA
+      },
+      {
+        estado: estado.ACTIVO
+      }
+    ],
+    atributtes: ["id"]
+  }).then((c) => {
+    return !_.isEmpty(c) ? c.length : 0;
+  });
+  const Pendientes = await models.Cita.findAll({
+    where: [
+      {
+        estado_cita: estadoCita.PENDIENTE
+      },
+      {
+        estado: estado.ACTIVO
+      }
+    ],
+    atributtes: ["id"]
+  }).then((c) => {
+    return !_.isEmpty(c) ? c.length : 0;
+  });
+
   return res.status(200).send({
-    Citas
+    Aprobadas,
+    Canceladas,
+    Pendientes
   });
 };
 

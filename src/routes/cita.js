@@ -6,7 +6,7 @@ import {
   crearCita,
   actualizarCita,
   eliminarCita,
-  buscarTodosPorDia
+  reporteEstado
 } from "../controllers/cita";
 import { allowedMethods, asyncWrapper } from "../utils/error";
 import { routes } from "../constants/common";
@@ -17,8 +17,8 @@ const router = express.Router();
 router.use("/$", allowedMethods(["GET"]));
 router.get("/", auth, buscarTodosAdmin);
 
-router.use("/buscarPorDia$", allowedMethods(["GET"]));
-router.get("/buscarPorDia", buscarTodosPorDia);
+router.use("/reporteEstado$", allowedMethods(["GET"]));
+router.get("/reporteEstado", reporteEstado);
 
 router.use("/:id$", allowedMethods(["PUT"]));
 router.put("/:id$", auth, actualizarCita);
