@@ -1,6 +1,6 @@
 import models from "../models/index";
 import { uuid } from "uuidv4";
-import { Op } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import { estado, atributosExclude, adminDefecto } from "../constants/index";
 import _ from "lodash";
 
@@ -146,7 +146,6 @@ export const reporteRating = async (req, res) => {
   return res.status(200).send({
     Ratings
   });
-
 };
 
 export const reportePais = async (req, res) => {
@@ -154,7 +153,7 @@ export const reportePais = async (req, res) => {
     where: {
       estado: estado.ACTIVO
     },
-    group: ["pais"]
+    //attributes: ["pais", [Sequelize.fn("COUNT", "pais"), "PostCount"]]
   });
 
   return res.status(200).send({
@@ -168,19 +167,17 @@ export const buscarPorPais = async (req, res) => {
     include: [
       {
         model: models.Usuario,
-        as: "UsuarioPsicologo",
+        as: "UsuarioPsicologo"
         //attributes: ['pais', ['Usuario.nombre','UsuarioPsicologo']]
       }
     ],
-    attributes: ['pais']
-
+    attributes: ["pais"]
   });
   if (Psicologo === null) {
-    console.log('Not found!');
+    console.log("Not found!");
   } else {
     return res.status(200).send({
       Psicologo: Psicologo || []
     });
   }
-
 };

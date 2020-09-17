@@ -15,7 +15,7 @@ import auth from "../utils/auth";
 const router = express.Router();
 
 router.use("/$", allowedMethods(["GET"]));
-router.get("/", auth, buscarTodosAdmin);
+router.get("/", buscarTodosAdmin);
 
 router.use("/reporteEstado$", allowedMethods(["GET"]));
 router.get("/reporteEstado", reporteEstado);
