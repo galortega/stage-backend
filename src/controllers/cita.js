@@ -69,6 +69,8 @@ export const buscarTodos = async (req, res) => {
 };
 
 export const reporteEstado = async (req, res) => {
+  const { porcentual } = req.query;
+
   const Aprobadas = await models.Cita.findAll({
     where: [
       {
@@ -109,10 +111,18 @@ export const reporteEstado = async (req, res) => {
     return !_.isEmpty(c) ? c.length : 0;
   });
 
+  const total = Aprobadas + Canceladas + Pendientes;
+
   return res.status(200).send({
-    Aprobadas,
-    Canceladas,
-    Pendientes
+    Aprobadas: !_.isEmpty(porcentual)
+      ? ((Aprobadas / total) * 100).toFixed(2)
+      : Aprobadas,
+    Canceladas: !_.isEmpty(porcentual)
+      ? ((Canceladas / total) * 100).toFixed(2)
+      : Canceladas,
+    Pendientes: !_.isEmpty(porcentual)
+      ? ((Pendientes / total) * 100).toFixed(2)
+      : Pendientes
   });
 };
 

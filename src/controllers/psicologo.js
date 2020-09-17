@@ -4,7 +4,6 @@ import { Op, Sequelize } from "sequelize";
 import { estado, atributosExclude, adminDefecto } from "../constants/index";
 import _ from "lodash";
 import { paises } from "../constants/paises";
-import { count } from "../utils/count";
 
 export const validarIDPsicologo = async (id) => {
   return await models.Psicologo.findOne({
@@ -149,16 +148,25 @@ export const reporteRating = async (req, res) => {
 };
 
 export const reportePais = async (req, res) => {
-  const Psicologos = await models.Psicologo.findAll({
+  const reporte = paises;
+  const Psicologos = [];
+  await models.Psicologo.findAll({
     where: {
       estado: estado.ACTIVO
     },
     attributes: ["pais"]
+  }).then((psicologos) => {
+    _.map(psicologos, (p) => {
+      if (p.pais === paises.p) {
+        console.log(p);
+      }
+    });
   });
-
-  const Paises = count(Object.values(Psicologos));
-
-  console.log(Paises.values);
+  const Paises = Psicologos.reduce(
+    (a, c) => ((a[c] = (a[c] || 0) + 1), a),
+    Object.create(null)
+  );
+  console.log(Paises);
 
   return res.status(200).send({ Paises, Psicologos });
 };
