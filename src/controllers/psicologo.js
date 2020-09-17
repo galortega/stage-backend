@@ -30,7 +30,6 @@ export const buscarTodos = async (req, res) => {
       }
     ]
   });
-  // await reporteRating();
   return res.status(200).send({
     Psicologos
   });
@@ -106,7 +105,45 @@ export const reporteRating = async (req, res) => {
       estado: estado.ACTIVO
     }
   }).then((psicologos) => {
-    
-    return _.map(psicologos, calcularProporciones);
+    let total = 0;
+    let uno = 0;
+    let dos = 0;
+    let tres = 0;
+    let cuatro = 0;
+    let cinco = 0;
+    _.forEach(psicologos, (psicologo) => {
+      const rating = Math.floor(psicologo.rating);
+      total += rating;
+      switch (rating) {
+        case 1:
+          uno += rating;
+          break;
+        case 2:
+          dos += rating;
+          break;
+        case 3:
+          tres += rating;
+          break;
+        case 4:
+          cuatro += rating;
+          break;
+        case 5:
+          cinco += rating;
+          break;
+        default:
+          break;
+      }
+    });
+    return {
+      1: ((uno / total) * 100).toFixed(2),
+      2: ((dos / total) * 100).toFixed(2),
+      3: ((tres / total) * 100).toFixed(2),
+      4: ((cuatro / total) * 100).toFixed(2),
+      5: ((cinco / total) * 100).toFixed(2)
+    };
+  });
+
+  return res.status(200).send({
+    Ratings
   });
 };

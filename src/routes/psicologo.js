@@ -4,7 +4,8 @@ import {
   buscarPorId,
   crearPsicologo,
   actualizarPsicologo,
-  eliminarPsicologo
+  eliminarPsicologo,
+  reporteRating
 } from "../controllers/psicologo";
 import { allowedMethods, asyncWrapper } from "../utils/error";
 import auth from "../utils/auth";
@@ -15,6 +16,9 @@ const router = express.Router();
 router.use("/$", allowedMethods(["GET", "POST"]));
 router.get("/", auth, asyncWrapper(buscarTodos));
 router.post("/", asyncWrapper(crearPsicologo));
+
+router.use("/reporteRating$", allowedMethods(["GET"]));
+router.get("/reporteRating", auth, asyncWrapper(reporteRating));
 
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
 router.get("/:id", auth, asyncWrapper(buscarPorId));
