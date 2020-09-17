@@ -3,6 +3,7 @@ import { uuid } from "uuidv4";
 import { Op } from "sequelize";
 import { estado, atributosExclude } from "../constants/index";
 import _ from "lodash";
+import moment from "moment";
 
 export const validarIDCita = async (id) => {
   return await models.Cita.findOne({
@@ -46,7 +47,32 @@ export const buscarTodos = async (req, res) => {
   });
 };
 
+export const buscarTodosPorDia = async (req, res) => {
+  const { dias } = req.query;
+  const fecha = moment().subtract(!_.isEmpty(dias) ? dias : 10, "days");
+  const Citas = await models.Cita.findAll({
+    where: [
+      {
+        fecha: {
+          [Op.gte]: fecha
+        }
+      },
+      {
+        estado: estado.ACTIVO
+      }
+    ],
+    atributtes: {
+      exclude: atributosExclude
+    }
+  });
+  return res.status(200).send({
+    Citas
+  });
+};
+
 export const buscarPorId = async (req, res) => {
+  const t = await models.db.sequelize.transaction();
+
   const id = req.params.id;
   const Cita = await models.Cita.findOne({
     where: {
@@ -66,12 +92,20 @@ export const crearCita = async (req, res) => {
   req.body.id = uuid();
   req.body.paciente = paciente;
 
-  const Cita = await models.Cita.create(req.body);
-
-  return res.status(201).send({
-    Cita,
-    msj: "Cita ingresado correctamente."
-  });
+  try {
+    const Cita = await models.Cita.create(req.body, {
+      transaction: t
+    });
+    await t.commit();
+    return res.status(201).send({
+      Cita,
+      msj: "Cita ingresado correctamente."
+    });
+  } catch (error) {
+    console.log(error);
+    await t.rollback();
+    return errorStatusHandle(res, "INTERNAL_SERVER_ERROR");
+  }
 };
 
 export const actualizarCita = async (req, res) => {

@@ -5,6 +5,7 @@ export const routes = {
   psicologo: {
     tratamiento: "/:psicologo/tratamientos"
   },
+  tratamiento: `${baseRoute}/tratamientos`,
   pacienteRaiz: `${baseRoute}/pacientes`,
   paciente: {
     cita: "/:paciente/citas"

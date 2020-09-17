@@ -41,12 +41,6 @@ export const buscarPorId = async (req, res) => {
     atributtes: {
       exclude: atributosExclude
     },
-    include: [
-      {
-        model: models.Tratamiento,
-        as: "TratamientoTratamiento"
-      }
-    ]
   });
   return res.status(200).send({
     Tratamiento: Tratamiento || []
@@ -68,9 +62,11 @@ export const crearTratamiento = async (req, res) => {
 
 export const actualizarTratamiento = async (req, res) => {
   const id = req.params.id;
+
   const Tratamiento = await models.Tratamiento.update(req.body, {
     where: { [Op.and]: [{ id }, { estado: estado.ACTIVO }] }
   });
+
   return res.status(200).send({
     Tratamiento
   });

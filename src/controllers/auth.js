@@ -34,7 +34,9 @@ export const autenticarUsuario = async (req, res) => {
     return errorStatusHandle(res, "CONTRASENA_INCORRECTA");
 
   const payload = {
-    usuario: Usuario.id,
+    usuario: !_.isEmpty(Usuario.UsuarioPaciente)
+      ? Usuario.UsuarioPaciente.id
+      : Usuario.id,
     nombre: Usuario.nombre,
     email: Usuario.email,
     imagen: Usuario.imagen,
