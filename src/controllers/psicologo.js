@@ -153,7 +153,7 @@ export const reportePais = async (req, res) => {
     where: {
       estado: estado.ACTIVO
     },
-    attributes: ["pais", [Sequelize.fn("COUNT", "pais"), "PaisesCount"]]
+    attributes: ["pais"]
   });
 
   return res.status(200).send({

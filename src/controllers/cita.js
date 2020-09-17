@@ -37,7 +37,7 @@ export const buscarTodosAdmin = async (req, res) => {
               {
                 model: models.Usuario,
                 as: "UsuarioPsicologo",
-                attributes: ["nombre"]
+                attributes: ["nombre", "telefono", "email"]
               }
             ]
           }

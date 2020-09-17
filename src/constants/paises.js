@@ -1,0 +1,23 @@
+export const paises = {
+  Argentina: 0,
+  Bolivia: 0,
+  Brasil: 0,
+  Chile: 0,
+  Colombia: 0,
+  Cuba: 0,
+  Ecuador: 0,
+  Granada: 0,
+  Guatemala: 0,
+  Guayana: 0,
+  Haití: 0,
+  Honduras: 0,
+  Jamaica: 0,
+  México: 0,
+  Nicaragua: 0,
+  Paraguay: 0,
+  Panamá: 0,
+  Perú: 0,
+  Surinam: 0,
+  Uruguay: 0,
+  Venezuela: 0
+};
