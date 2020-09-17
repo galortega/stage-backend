@@ -19,7 +19,7 @@ export const buscarTodos = async (req, res) => {
     where: {
       estado: estado.ACTIVO
     },
-    atributtes: {
+    attributes: {
       exclude: atributosExclude
     },
     include: [
@@ -41,7 +41,7 @@ export const buscarPorId = async (req, res) => {
     where: {
       [Op.and]: [{ id }, { estado: estado.ACTIVO }]
     },
-    atributtes: {
+    attributtes: {
       exclude: atributosExclude
     },
     include: [
@@ -146,6 +146,7 @@ export const reporteRating = async (req, res) => {
   return res.status(200).send({
     Ratings
   });
+
 };
 
 export const reportePais = async (req, res) => {
@@ -159,4 +160,27 @@ export const reportePais = async (req, res) => {
   return res.status(200).send({
     Psicologos
   });
+};
+export const buscarPorPais = async (req, res) => {
+  const pais = req.params.pais;
+  const Psicologo = await models.Psicologo.findAll({
+    where: { pais },
+    include: [
+      {
+        model: models.Usuario,
+        as: "UsuarioPsicologo",
+        //attributes: ['pais', ['Usuario.nombre','UsuarioPsicologo']]
+      }
+    ],
+    attributes: ['pais']
+
+  });
+  if (Psicologo === null) {
+    console.log('Not found!');
+  } else {
+    return res.status(200).send({
+      Psicologo: Psicologo || []
+    });
+  }
+
 };

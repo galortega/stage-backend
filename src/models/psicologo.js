@@ -42,6 +42,10 @@ export const PsicologoModel = {
   estado: {
     type: Sequelize.ENUM(estado.values),
     defaultValue: estado.ACTIVO
+  },
+  pais:{
+    type: Sequelize.STRING(36),
+    allowNull: false
   }
 };
 
