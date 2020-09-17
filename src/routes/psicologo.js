@@ -5,7 +5,8 @@ import {
   crearPsicologo,
   actualizarPsicologo,
   eliminarPsicologo,
-  reporteRating
+  reporteRating,
+  reportePais
 } from "../controllers/psicologo";
 import { allowedMethods, asyncWrapper } from "../utils/error";
 import auth from "../utils/auth";
@@ -18,7 +19,10 @@ router.get("/", auth, asyncWrapper(buscarTodos));
 router.post("/", asyncWrapper(crearPsicologo));
 
 router.use("/reporteRating$", allowedMethods(["GET"]));
-router.get("/reporteRating", auth, asyncWrapper(reporteRating));
+router.get("/reporteRating", asyncWrapper(reporteRating));
+
+router.use("/reportePais$", allowedMethods(["GET"]));
+router.get("/reportePais", asyncWrapper(reportePais));
 
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
 router.get("/:id", auth, asyncWrapper(buscarPorId));

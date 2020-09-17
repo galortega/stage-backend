@@ -18,7 +18,7 @@ router.use("/$", allowedMethods(["GET"]));
 router.get("/", auth, buscarTodosAdmin);
 
 router.use("/buscarPorDia$", allowedMethods(["GET"]));
-router.get("/buscarPorDia", auth, buscarTodosPorDia);
+router.get("/buscarPorDia", buscarTodosPorDia);
 
 router.use("/:id$", allowedMethods(["PUT"]));
 router.put("/:id$", auth, actualizarCita);

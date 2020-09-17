@@ -147,3 +147,16 @@ export const reporteRating = async (req, res) => {
     Ratings
   });
 };
+
+export const reportePais = async (req, res) => {
+  const Psicologos = await models.Psicologo.findAll({
+    where: {
+      estado: estado.ACTIVO
+    },
+    group: ["pais"]
+  });
+
+  return res.status(200).send({
+    Psicologos
+  });
+};
