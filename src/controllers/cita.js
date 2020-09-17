@@ -97,8 +97,6 @@ export const reporteEstado = async (req, res) => {
 };
 
 export const buscarPorId = async (req, res) => {
-  const t = await models.db.sequelize.transaction();
-
   const id = req.params.id;
   const Cita = await models.Cita.findOne({
     where: {
@@ -114,6 +112,8 @@ export const buscarPorId = async (req, res) => {
 };
 
 export const crearCita = async (req, res) => {
+  const t = await models.db.sequelize.transaction();
+
   const { paciente } = req.params;
   req.body.id = uuid();
   req.body.paciente = paciente;
