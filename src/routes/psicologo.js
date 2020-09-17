@@ -29,6 +29,8 @@ router.get("/:id", auth, asyncWrapper(buscarPorId));
 router.put("/:id", auth, asyncWrapper(actualizarPsicologo));
 router.delete("/:id", auth, asyncWrapper(eliminarPsicologo));
 
+router.use("/:pais$", allowedMethods(["GET"]));
+router.get("/buscarPais/:pais",auth,asyncWrapper(buscarPorPais));
 router.use(tratamientosRouter);
 
 export default router;

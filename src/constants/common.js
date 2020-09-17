@@ -12,5 +12,7 @@ export const routes = {
   },
   cita: `${baseRoute}/citas`,
   auth: `${baseRoute}/auth`,
-  contactanos: `${baseRoute}/contactanos`
+  contactanos: `${baseRoute}/contactanos`,
+  paises: `${baseRoute}/paises`
+
 };

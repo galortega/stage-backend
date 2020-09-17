@@ -16,7 +16,7 @@ import pacientesRouter from "./routes/paciente";
 import contactanosRouter from "./routes/contactanos";
 import citasRouter from "./routes/cita";
 import authRouter from "./routes/auth";
-
+import paisesRouter from "./routes/paises";
 const app = express();
 
 app.use(cors());
@@ -47,6 +47,7 @@ app.use(routes.pacienteRaiz, pacientesRouter);
 app.use(routes.contactanos, contactanosRouter);
 app.use(routes.cita, citasRouter);
 app.use(routes.auth, authRouter);
+app.use(routes.paises,paisesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

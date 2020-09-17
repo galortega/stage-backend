@@ -19,7 +19,7 @@ export const buscarTodos = async (req, res) => {
     where: {
       estado: estado.ACTIVO
     },
-    atributtes: {
+    attributes: {
       exclude: atributosExclude
     },
     include: [
@@ -41,7 +41,7 @@ export const buscarPorId = async (req, res) => {
     where: {
       [Op.and]: [{ id }, { estado: estado.ACTIVO }]
     },
-    atributtes: {
+    attributes: {
       exclude: atributosExclude
     },
     include: [
