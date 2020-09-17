@@ -22,7 +22,28 @@ export const buscarTodosAdmin = async (req, res) => {
     },
     attributes: {
       exclude: atributosExclude
-    }
+    },
+    include: [
+      {
+        model: models.Tratamiento,
+        as: "TratamientoCita",
+        attributes: ["id"],
+        include: [
+          {
+            model: models.Psicologo,
+            as: "PsicologoTratamiento",
+            attributes: ["id"],
+            include: [
+              {
+                model: models.Usuario,
+                as: "UsuarioPsicologo",
+                attributes: ["nombre"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
   });
   return res.status(200).send({
     Citas
