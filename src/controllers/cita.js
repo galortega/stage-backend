@@ -3,6 +3,7 @@ import { uuid } from "uuidv4";
 import { Op } from "sequelize";
 import { estado, atributosExclude, estadoCita } from "../constants/index";
 import _ from "lodash";
+import { errorStatusHandle } from "../utils/error";
 
 export const validarIDCita = async (id) => {
   return await models.Cita.findOne({
