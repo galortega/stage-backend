@@ -48,8 +48,6 @@ export const buscarTodos = async (req, res) => {
 };
 
 export const reporteEstado = async (req, res) => {
-  const { dias } = req.query;
-
   const Aprobadas = await models.Cita.findAll({
     where: [
       {

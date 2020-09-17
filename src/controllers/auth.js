@@ -24,7 +24,7 @@ export const autenticarUsuario = async (req, res) => {
       {
         model: models.Paciente,
         as: "UsuarioPaciente",
-        attributes: ["edad"]
+        attributes: ["id", "edad"]
       }
     ]
   });
