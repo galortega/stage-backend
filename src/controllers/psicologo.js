@@ -148,7 +148,6 @@ export const reporteRating = async (req, res) => {
   });
 
 };
-<<<<<<< Updated upstream
 
 export const reportePais = async (req, res) => {
   const Psicologos = await models.Psicologo.findAll({
@@ -162,7 +161,6 @@ export const reportePais = async (req, res) => {
     Psicologos
   });
 };
-=======
 export const buscarPorPais = async (req, res) => {
   const pais = req.params.pais;
   const Psicologo = await models.Psicologo.findAll({
@@ -186,4 +184,3 @@ export const buscarPorPais = async (req, res) => {
   }
 
 };
->>>>>>> Stashed changes

@@ -6,7 +6,7 @@ import {
   actualizarPsicologo,
   eliminarPsicologo,
   reporteRating,
-  reportePais
+  reportePais,buscarPorPais
 } from "../controllers/psicologo";
 import { allowedMethods, asyncWrapper } from "../utils/error";
 import auth from "../utils/auth";
