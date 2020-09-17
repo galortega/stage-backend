@@ -1,4 +1,4 @@
-import { DataTypes, Sequelize } from "Sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { estado } from "../constants/index";
 
 export const PsicologoModel = {
@@ -19,7 +19,6 @@ export const PsicologoModel = {
   },
   longitud: {
     type: Sequelize.FLOAT
-    
   },
   latitud: {
     type: Sequelize.FLOAT
@@ -27,12 +26,18 @@ export const PsicologoModel = {
   descripcion: {
     type: Sequelize.STRING(100)
   },
+  rating: {
+    type: DataTypes.VIRTUAL,
+    get() {
+      return (Math.random() * 4 + 1).toFixed(1);
+    }
+  },
   fecha_creacion: {
     type: Sequelize.DATE,
     allowNull: false
   },
   fecha_actualizacion: {
-    type: Sequelize.DATE,
+    type: Sequelize.DATE
   },
   estado: {
     type: Sequelize.ENUM(estado.values),

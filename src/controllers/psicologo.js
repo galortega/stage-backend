@@ -30,6 +30,7 @@ export const buscarTodos = async (req, res) => {
       }
     ]
   });
+  // await reporteRating();
   return res.status(200).send({
     Psicologos
   });
@@ -96,5 +97,16 @@ export const eliminarPsicologo = async (req, res) => {
   );
   return res.status(200).send({
     Psicologo
+  });
+};
+
+export const reporteRating = async (req, res) => {
+  const Ratings = await models.Psicologo.findAll({
+    where: {
+      estado: estado.ACTIVO
+    }
+  }).then((psicologos) => {
+    
+    return _.map(psicologos, calcularProporciones);
   });
 };

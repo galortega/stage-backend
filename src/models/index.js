@@ -20,7 +20,7 @@ const Tratamiento = db.sequelize.define(
 );
 const Cita = db.sequelize.define("Cita", CitaModel, CitaConfig);
 
-Usuario.hasMany(Psicologo, {
+Usuario.hasOne(Psicologo, {
   as: "UsuarioPsicologo",
   foreignKey: "usuario"
 });
@@ -29,7 +29,7 @@ Psicologo.belongsTo(Usuario, {
   foreignKey: "usuario"
 });
 
-Usuario.hasMany(Paciente, {
+Usuario.hasOne(Paciente, {
   as: "UsuarioPaciente",
   foreignKey: "usuario"
 });

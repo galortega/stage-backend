@@ -19,7 +19,14 @@ export const autenticarUsuario = async (req, res) => {
         },
         { estado: estado.ACTIVO }
       ]
-    }
+    },
+    include: [
+      {
+        model: models.Paciente,
+        as: "UsuarioPaciente",
+        attributes: ["edad"]
+      }
+    ]
   });
 
   if (_.isEmpty(Usuario)) return errorStatusHandle(res, "USUARIO_INEXISTENTE");
@@ -31,7 +38,10 @@ export const autenticarUsuario = async (req, res) => {
     nombre: Usuario.nombre,
     email: Usuario.email,
     imagen: Usuario.imagen,
-    telefono: Usuario.telefono
+    telefono: Usuario.telefono,
+    edad: !_.isEmpty(Usuario.UsuarioPaciente)
+      ? Usuario.UsuarioPaciente.edad
+      : null
   };
 
   jwt.sign(
