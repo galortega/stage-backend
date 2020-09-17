@@ -3,6 +3,7 @@ import { uuid } from "uuidv4";
 import { Op, Sequelize } from "sequelize";
 import { estado, atributosExclude, adminDefecto } from "../constants/index";
 import _ from "lodash";
+import { paises } from "../constants/paises";
 
 export const validarIDPsicologo = async (id) => {
   return await models.Psicologo.findOne({
@@ -155,9 +156,14 @@ export const reportePais = async (req, res) => {
     },
     attributes: ["pais"]
   });
+  const reporte = paises;
+  _.forEach(Psicologos, (p) => {
+    if (p.pais === reporte.p) reporte.p += 1;
+  });
 
   return res.status(200).send({
-    Psicologos
+    Psicologos,
+    reporte
   });
 };
 export const buscarPorPais = async (req, res) => {

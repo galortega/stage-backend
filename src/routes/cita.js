@@ -21,7 +21,7 @@ router.use("/reporteEstado$", allowedMethods(["GET"]));
 router.get("/reporteEstado", reporteEstado);
 
 router.use("/:id$", allowedMethods(["PUT"]));
-router.put("/:id$", auth, actualizarCita);
+router.put("/:id$", actualizarCita);
 
 router.use(`${routes.paciente.cita}/$`, allowedMethods(["GET", "POST"]));
 router.get(`${routes.paciente.cita}/`, auth, asyncWrapper(buscarTodos));
