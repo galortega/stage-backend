@@ -6,7 +6,7 @@ import {
   actualizarPsicologo,
   eliminarPsicologo,
   reporteRating,
-  reportePais,buscarPorPais
+  reportePais,buscarPorPais, download
 } from "../controllers/psicologo";
 import { allowedMethods, asyncWrapper } from "../utils/error";
 import auth from "../utils/auth";
@@ -24,13 +24,16 @@ router.get("/reporteRating", asyncWrapper(reporteRating));
 router.use("/reportePais$", allowedMethods(["GET"]));
 router.get("/reportePais", asyncWrapper(reportePais));
 
+router.use("/download/:pais$", allowedMethods(["GET"]));
+router.get('/download/:pais', asyncWrapper(download));
+
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
 router.get("/:id", auth, asyncWrapper(buscarPorId));
 router.put("/:id", auth, asyncWrapper(actualizarPsicologo));
 router.delete("/:id", auth, asyncWrapper(eliminarPsicologo));
 
-router.use("/:pais$", allowedMethods(["GET"]));
-router.get("/buscarPais/:pais",auth,asyncWrapper(buscarPorPais));
 router.use(tratamientosRouter);
+
+
 
 export default router;

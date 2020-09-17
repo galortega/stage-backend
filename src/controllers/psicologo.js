@@ -4,6 +4,8 @@ import { Op, Sequelize } from "sequelize";
 import { estado, atributosExclude, adminDefecto } from "../constants/index";
 import _ from "lodash";
 import { paises } from "../constants/paises";
+import { downloadResource } from '../utils/util';
+import json2csv from "json2csv";
 
 export const validarIDPsicologo = async (id) => {
   return await models.Psicologo.findOne({
@@ -170,24 +172,46 @@ export const reportePais = async (req, res) => {
 
   return res.status(200).send({ Paises, Psicologos });
 };
-export const buscarPorPais = async (req, res) => {
-  const pais = req.params.pais;
+export const buscarPorPais = async (pais) => {
+  var attributes = ['pais'];
+
   const Psicologo = await models.Psicologo.findAll({
     where: { pais },
+
     include: [
       {
         model: models.Usuario,
-        as: "UsuarioPsicologo"
-        //attributes: ['pais', ['Usuario.nombre','UsuarioPsicologo']]
+        as: 'UsuarioPsicologo',
+        attributes: ['nombre', 'email']
       }
     ],
-    attributes: ["pais"]
+    attributes: attributes,
   });
   if (Psicologo === null) {
     console.log("Not found!");
   } else {
-    return res.status(200).send({
-      Psicologo: Psicologo || []
-    });
+    return Psicologo;
   }
 };
+
+export const download = async (req, res) => {
+  const pais = req.params.pais;
+  const fields = [
+    {
+      label: 'pais',
+      value: 'pais'
+    },
+    {
+      label: 'nombre',
+      value: 'UsuarioPsicologo.nombre'
+    },
+    {
+      label: 'email',
+      value: 'UsuarioPsicologo.email'
+    },
+  ];
+  const data = await buscarPorPais(pais);
+
+  return downloadResource(res, 'psicologoPais.csv', fields, data);
+
+}
