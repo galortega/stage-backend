@@ -47,6 +47,8 @@ export const PsicologoModel = {
     type: Sequelize.STRING(36),
     allowNull: false
   }
+
+
 };
 
 export const PsicologoConfig = {
