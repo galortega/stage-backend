@@ -15,8 +15,7 @@ export const buscarTodos = async (req, res) => {
     include: [
       {
         model: models.Detalle,
-        as: "DetallePedido",
-        attributes: ["imagen", "nombre"]
+        as: "DetallePedido"
       }
     ]
   });
@@ -49,7 +48,6 @@ export const buscarPorId = async (req, res) => {
 export const crearPedido = async (req, res) => {
   req.body.id = uuid();
   req.body.DetallePedido.id = uuid();
-  req.body.DetallePedido.usuario = req.body.id;
 
   const Pedido = await models.Detalle.create(req.body, {
     include: [

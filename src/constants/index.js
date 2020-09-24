@@ -36,6 +36,6 @@ export const tipoDePago = {
   values: ["TC", "T", "D"]
 };
 
-export const atributosExclude = ["fecha_creacion", "estado","fecha_actualizacion"];
+export const atributosExclude = ["fecha_creacion", "fecha_actualizacion"];
 
 export const adminDefecto = "30698c95-3245-49c9-b6e3-2326afc85de1";
