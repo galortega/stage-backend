@@ -6,9 +6,6 @@ import _ from "lodash";
 
 export const buscarTodos = async (req, res) => {
   const Pedidos = await models.Pedido.findAll({
-    where: {
-      estado: estado.ACTIVO
-    },
     attributes: {
       exclude: atributosExclude
     },
@@ -28,15 +25,15 @@ export const buscarPorId = async (req, res) => {
   const id = req.params.id;
   const Pedido = await models.Pedido.findOne({
     where: {
-      [Op.and]: [{ id }, { estado: estado.ACTIVO }]
+      [Op.and]: [{ id }
     },
     attributtes: {
       exclude: atributosExclude
     },
     include: [
       {
-        model: models.Tratamiento,
-        as: "PedidoTratamiento"
+        model: models.Detalle,
+        as: "DetallePedido"
       }
     ]
   });
