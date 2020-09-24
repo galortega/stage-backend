@@ -14,7 +14,8 @@ export const buscarTodos = async (req, res) => {
         model: models.Detalle,
         as: "DetallePedido"
       }
-    ]
+    ],
+    order: [["fecha_creacion", "DESC"]]
   });
   return res.status(200).send({
     Pedidos
@@ -80,7 +81,7 @@ export const crearPedido = async (req, res) => {
 export const actualizarPedido = async (req, res) => {
   const id = req.params.id;
   const Pedido = await models.Pedido.update(req.body, {
-    where: { [Op.and]: [{ id }, { estado: estado.ACTIVO }] }
+    where: { id }
   });
   return res.status(200).send({
     Pedido,
