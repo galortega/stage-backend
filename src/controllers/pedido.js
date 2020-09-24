@@ -48,7 +48,7 @@ export const crearPedido = async (req, res) => {
   const { cliente, pago, tipo, detalles, total } = req.body;
   console.log(detalles);
   _.forEach(detalles, (d) => {
-    d.id = uuid;
+    d.id = id;
     d.pedido = id;
   });
 
@@ -59,7 +59,10 @@ export const crearPedido = async (req, res) => {
     tipo,
     factura: uuid().slice(0, 7),
     total,
+    DetallePedido: detalles
   };
+
+  console.log(datos);
 
   const Pedido = await models.Pedido.create(datos, {
     include: [
