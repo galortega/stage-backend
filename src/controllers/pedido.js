@@ -48,7 +48,7 @@ export const crearPedido = async (req, res) => {
   const { cliente, pago, tipo, detalles, total } = req.body;
 
   _.forEach(detalles, (d) => {
-    d.id = id;
+    d.id = uuid();
     d.pedido = id;
   });
 
