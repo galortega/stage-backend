@@ -46,7 +46,7 @@ export const crearPedido = async (req, res) => {
   const id = uuid();
 
   const { cliente, pago, tipo, detalles, total } = req.body;
-  console.log(detalles);
+
   _.forEach(detalles, (d) => {
     d.id = id;
     d.pedido = id;
@@ -61,8 +61,6 @@ export const crearPedido = async (req, res) => {
     total,
     DetallePedido: detalles
   };
-
-  console.log(datos);
 
   const Pedido = await models.Pedido.create(datos, {
     include: [
@@ -85,19 +83,18 @@ export const actualizarPedido = async (req, res) => {
     where: { [Op.and]: [{ id }, { estado: estado.ACTIVO }] }
   });
   return res.status(200).send({
-    Pedido
+    Pedido,
+    msj: "Pedido actualizado correctamente."
   });
 };
 
 export const eliminarPedido = async (req, res) => {
   const id = req.params.id;
-  const Pedido = await models.Pedido.update(
-    { estado: estado.INACTIVO },
-    {
-      where: { id }
-    }
-  );
+  const Pedido = await models.Pedido.destroy({
+    where: { id }
+  });
   return res.status(200).send({
-    Pedido
+    Pedido,
+    msj: "Pedido eliminado correctamente"
   });
 };
