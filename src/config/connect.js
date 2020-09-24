@@ -24,6 +24,10 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
   timezone: "-05:00" // for writing to database
 });
 
+sequelize.sync({ force: true }).then(() => {
+  console.log("tablas sincronizadas");
+});
+
 export const test = async () => {
   try {
     await sequelize.authenticate();

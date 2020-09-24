@@ -25,7 +25,7 @@ export const buscarPorId = async (req, res) => {
   const id = req.params.id;
   const Pedido = await models.Pedido.findOne({
     where: {
-      [Op.and]: [{ id }
+      [Op.and]: [{ id }]
     },
     attributtes: {
       exclude: atributosExclude
