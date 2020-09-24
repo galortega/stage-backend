@@ -1,28 +1,26 @@
 import { DataTypes, Sequelize } from "Sequelize";
 import { estado } from "../constants/index";
 
-export const UsuarioModel = {
+export const DetalleModel = {
   id: {
     type: DataTypes.UUID,
     primaryKey: true
   },
-  nombre: {
-    type: Sequelize.STRING(50),
+  pedido: {
+    type: DataTypes.UUID,
     allowNull: false
   },
-  email: {
-    type: Sequelize.STRING(50),
+  producto: {
+    type: Sequelize.STRING,
     allowNull: false
   },
-  contrasena: {
-    type: Sequelize.STRING(50),
+  precio: {
+    type: Sequelize.FLOAT,
     allowNull: false
   },
-  imagen: {
-    type: Sequelize.STRING(500)
-  },
-  telefono: {
-    type: Sequelize.STRING(10)
+  cantidad: {
+    type: DataTypes.INTEGER,
+    allowNull: false
   },
   fecha_creacion: {
     type: Sequelize.DATE,
@@ -30,16 +28,12 @@ export const UsuarioModel = {
   },
   fecha_actualizacion: {
     type: Sequelize.DATE
-  },
-  estado: {
-    type: Sequelize.ENUM(estado.values),
-    defaultValue: estado.ACTIVO
   }
 };
 
-export const UsuarioConfig = {
+export const DetalleConfig = {
   freezeTableName: true,
-  tableName: "Usuario",
+  tableName: "detalle",
   timestamps: true,
   createdAt: "fecha_creacion",
   updatedAt: "fecha_actualizacion"

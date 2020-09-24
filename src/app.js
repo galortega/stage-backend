@@ -11,12 +11,8 @@ import cacheControl from "express-cache-controller";
 
 import indexRouter from "./routes/index";
 
-import psicologosRouter from "./routes/psicologo";
-import pacientesRouter from "./routes/paciente";
-import contactanosRouter from "./routes/contactanos";
-import citasRouter from "./routes/cita";
-import authRouter from "./routes/auth";
-import paisesRouter from "./routes/paises";
+import pedidosRouter from "./routes/pedido";
+
 const app = express();
 
 app.use(cors());
@@ -42,12 +38,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", indexRouter);
-app.use(routes.psicologoRaiz, psicologosRouter);
-app.use(routes.pacienteRaiz, pacientesRouter);
-app.use(routes.contactanos, contactanosRouter);
-app.use(routes.cita, citasRouter);
-app.use(routes.auth, authRouter);
-app.use(routes.paises,paisesRouter);
+app.use(routes.pedido, pedidosRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
