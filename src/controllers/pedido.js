@@ -43,13 +43,29 @@ export const buscarPorId = async (req, res) => {
 };
 
 export const crearPedido = async (req, res) => {
-  req.body.id = uuid();
-  req.body.DetallePedido.id = uuid();
+  const id = uuid();
 
-  const Pedido = await models.Detalle.create(req.body, {
+  const { cliente, pago, tipo, detalles, total } = req.body;
+
+  _.forEach(detalles, (d) => {
+    d.id = uuid;
+    d.pedido = id;
+  });
+
+  const datos = {
+    id,
+    cliente,
+    pago,
+    tipo,
+    factura: uuid().slice(0, 7),
+    total,
+    DetallePedido: detalles
+  };
+
+  const Pedido = await models.Pedido.create(datos, {
     include: [
       {
-        model: models.Pedido,
+        model: models.Detalle,
         as: "DetallePedido"
       }
     ]
