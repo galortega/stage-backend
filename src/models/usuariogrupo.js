@@ -1,21 +1,21 @@
 import { DataTypes, Sequelize } from "Sequelize";
-import { estado } from "../constants/index";
+import { estado, rolGrupo } from "../constants/index";
 
-export const UsuarioModel = {
+export const UsuarioGrupoModel = {
   id: {
     type: DataTypes.UUID,
     primaryKey: true
   },
-  nombre: {
-    type: Sequelize.STRING(45),
+  usuario: {
+    type: DataTypes.UUID,
     allowNull: false
   },
-  email: {
-    type: Sequelize.STRING(45),
+  grupo: {
+    type: DataTypes.UUID,
     allowNull: false
   },
-  contrasena: {
-    type: Sequelize.STRING(45),
+  rol: {
+    type: Sequelize.ENUM(rolGrupo.values),
     allowNull: false
   },
   fecha_creacion: {
@@ -31,9 +31,9 @@ export const UsuarioModel = {
   }
 };
 
-export const UsuarioConfig = {
+export const UsuarioGrupoConfig = {
   freezeTableName: true,
-  tableName: "usuario",
+  tableName: "usuariogrupo",
   timestamps: true,
   createdAt: "fecha_creacion",
   updatedAt: "fecha_actualizacion"

@@ -1,21 +1,18 @@
 import { DataTypes, Sequelize } from "Sequelize";
 import { estado } from "../constants/index";
 
-export const UsuarioModel = {
+export const GrupoCoreografiaModel = {
   id: {
     type: DataTypes.UUID,
     primaryKey: true
   },
-  nombre: {
-    type: Sequelize.STRING(45),
-    allowNull: false
+  usuarioGrupo: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    field: "usuariogrupo"
   },
-  email: {
-    type: Sequelize.STRING(45),
-    allowNull: false
-  },
-  contrasena: {
-    type: Sequelize.STRING(45),
+  coreografia: {
+    type: DataTypes.UUID,
     allowNull: false
   },
   fecha_creacion: {
@@ -31,9 +28,9 @@ export const UsuarioModel = {
   }
 };
 
-export const UsuarioConfig = {
+export const GrupoCoreografiaConfig = {
   freezeTableName: true,
-  tableName: "usuario",
+  tableName: "grupocoreografia",
   timestamps: true,
   createdAt: "fecha_creacion",
   updatedAt: "fecha_actualizacion"
