@@ -1,7 +1,7 @@
 import { DataTypes, Sequelize } from "sequelize";
 import { estado } from "../constants/index";
 
-export const PsicologoModel = {
+export const UsuarioRolModel = {
   id: {
     type: DataTypes.UUID,
     primaryKey: true
@@ -10,27 +10,9 @@ export const PsicologoModel = {
     type: DataTypes.UUID,
     allowNull: false
   },
-  edad: {
-    type: Sequelize.INTEGER,
+  rol: {
+    type: DataTypes.UUID,
     allowNull: false
-  },
-  direccion: {
-    type: Sequelize.STRING(50)
-  },
-  longitud: {
-    type: Sequelize.FLOAT
-  },
-  latitud: {
-    type: Sequelize.FLOAT
-  },
-  descripcion: {
-    type: Sequelize.STRING(100)
-  },
-  rating: {
-    type: DataTypes.VIRTUAL,
-    get() {
-      return (Math.random() * 4 + 1).toFixed(1);
-    }
   },
   fecha_creacion: {
     type: Sequelize.DATE,
@@ -42,18 +24,12 @@ export const PsicologoModel = {
   estado: {
     type: Sequelize.ENUM(estado.values),
     defaultValue: estado.ACTIVO
-  },
-  pais:{
-    type: Sequelize.STRING(36),
-    allowNull: false
   }
-
-
 };
 
-export const PsicologoConfig = {
+export const UsuarioRolConfig = {
   freezeTableName: true,
-  tableName: "Psicologo",
+  tableName: "usuariorol",
   timestamps: true,
   createdAt: "fecha_creacion",
   updatedAt: "fecha_actualizacion"

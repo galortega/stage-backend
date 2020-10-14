@@ -1,21 +1,21 @@
-import { DataTypes, Sequelize } from "Sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { estado } from "../constants/index";
 
-export const PacienteModel = {
+export const SubTorneoModel = {
   id: {
     type: DataTypes.UUID,
     primaryKey: true
   },
-  usuario: {
+  torneo: {
     type: DataTypes.UUID,
     allowNull: false
   },
-  edad: {
-    type: Sequelize.INTEGER,
+  division: {
+    type: DataTypes.UUID,
     allowNull: false
   },
-  pais: {
-    type: DataTypes.STRING,
+  modalidad: {
+    type: DataTypes.UUID,
     allowNull: false
   },
   fecha_creacion: {
@@ -31,9 +31,9 @@ export const PacienteModel = {
   }
 };
 
-export const PacienteConfig = {
+export const SubTorneoConfig = {
   freezeTableName: true,
-  tableName: "Paciente",
+  tableName: "subtorneo",
   timestamps: true,
   createdAt: "fecha_creacion",
   updatedAt: "fecha_actualizacion"

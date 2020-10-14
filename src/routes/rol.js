@@ -1,11 +1,10 @@
 import express from "express";
-import { enviarCorreoContactanos } from "../controllers/contactanos";
+import { nuevoRol } from "../controllers/rol";
 import { allowedMethods, asyncWrapper } from "../utils/error";
-import auth from "../utils/auth";
 
 const router = express.Router();
 
 router.use("/$", allowedMethods(["POST"]));
-router.post("/", asyncWrapper(enviarCorreoContactanos));
+router.post("/", asyncWrapper(nuevoRol));
 
 export default router;

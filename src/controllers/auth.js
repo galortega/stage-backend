@@ -6,7 +6,7 @@ import { Op } from "sequelize";
 import { estado } from "../constants/index";
 
 export const autenticarUsuario = async (req, res) => {
-  let { email, contrasena } = req.body;
+  let { email, contrasena, rol } = req.body;
   email = _.toLower(email);
 
   const Usuario = await models.Usuario.findOne({
@@ -22,9 +22,17 @@ export const autenticarUsuario = async (req, res) => {
     },
     include: [
       {
-        model: models.Paciente,
-        as: "UsuarioPaciente",
-        attributes: ["id", "edad"]
+        model: models.UsuarioRol,
+        as: "RolUsuario",
+        attributes: ["rol"],
+        where: { rol },
+        include: [
+          {
+            model: models.Atributos,
+            as: "AtributosUsuario",
+            attributes: ["clave", "valor"]
+          }
+        ]
       }
     ]
   });
@@ -34,16 +42,11 @@ export const autenticarUsuario = async (req, res) => {
     return errorStatusHandle(res, "CONTRASENA_INCORRECTA");
 
   const payload = {
-    usuario: !_.isEmpty(Usuario.UsuarioPaciente)
-      ? Usuario.UsuarioPaciente.id
-      : Usuario.id,
+    usuario: Usuario.id,
     nombre: Usuario.nombre,
     email: Usuario.email,
-    imagen: Usuario.imagen,
-    telefono: Usuario.telefono,
-    edad: !_.isEmpty(Usuario.UsuarioPaciente)
-      ? Usuario.UsuarioPaciente.edad
-      : null
+    rol: Usuario.RolUsuario[0].id,
+    atributos: Usuario.RolUsuario[0].AtributosUsuario
   };
 
   jwt.sign(

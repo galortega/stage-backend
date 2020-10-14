@@ -1,77 +1,194 @@
 import db from "../config/connect";
 
 import { UsuarioModel, UsuarioConfig } from "./usuario";
-import { PsicologoModel, PsicologoConfig } from "./psicologo";
-import { TratamientoModel, TratamientoConfig } from "./tratamiento";
-import { PacienteModel, PacienteConfig } from "./paciente";
-import { CitaModel, CitaConfig } from "./cita";
+import { UsuarioRolModel, UsuarioRolConfig } from "./usuariorol";
+import { RolModel, RolConfig } from "./rol";
+import { UsuarioGrupoModel, UsuarioGrupoConfig } from "./usuariogrupo";
+import { AtributosModel, AtributosConfig } from "./atributos";
+import { GrupoModel, GrupoConfig } from "./grupo";
+import {
+  GrupoCoreografiaModel,
+  GrupoCoreografiaConfig
+} from "./grupocoreografia";
+import { CoreografiaModel, CoreografiaConfig } from "./coreografia";
+import { SubTorneoModel, SubTorneoConfig } from "./subTorneo";
+import { TorneoModel, TorneoConfig } from "./torneo";
+import { DivisionModel, DivisionConfig } from "./division";
+import { ModalidadModel, ModalidadConfig } from "./modalidad";
 
 const Usuario = db.sequelize.define("Usuario", UsuarioModel, UsuarioConfig);
-const Psicologo = db.sequelize.define(
-  "Psicologo",
-  PsicologoModel,
-  PsicologoConfig
+const UsuarioRol = db.sequelize.define(
+  "UsuarioRol",
+  UsuarioRolModel,
+  UsuarioRolConfig
 );
-const Paciente = db.sequelize.define("Paciente", PacienteModel, PacienteConfig);
-const Tratamiento = db.sequelize.define(
-  "Tratamiento",
-  TratamientoModel,
-  TratamientoConfig
+const Rol = db.sequelize.define("Rol", RolModel, RolConfig);
+const Atributos = db.sequelize.define(
+  "Atributos",
+  AtributosModel,
+  AtributosConfig
 );
-const Cita = db.sequelize.define("Cita", CitaModel, CitaConfig);
+const UsuarioGrupo = db.sequelize.define(
+  "UsuarioGrupo",
+  UsuarioGrupoModel,
+  UsuarioGrupoConfig
+);
+const Grupo = db.sequelize.define("Grupo", GrupoModel, GrupoConfig);
+const Coreografia = db.sequelize.define(
+  "Coreografia",
+  CoreografiaModel,
+  CoreografiaConfig
+);
+const GrupoCoreografia = db.sequelize.define(
+  "GrupoCoreografia",
+  GrupoCoreografiaModel,
+  GrupoCoreografiaConfig
+);
+const SubTorneo = db.sequelize.define(
+  "SubTorneo",
+  SubTorneoModel,
+  SubTorneoConfig
+);
+const Torneo = db.sequelize.define("Torneo", TorneoModel, TorneoConfig);
+const Division = db.sequelize.define("Division", DivisionModel, DivisionConfig);
+const Modalidad = db.sequelize.define(
+  "Modalidad",
+  ModalidadModel,
+  ModalidadConfig
+);
 
-Usuario.hasOne(Psicologo, {
-  as: "UsuarioPsicologo",
+//USUARIO y ROL
+Usuario.belongsToMany(Rol, {
+  through: UsuarioRol,
   foreignKey: "usuario"
 });
-Psicologo.belongsTo(Usuario, {
-  as: "UsuarioPsicologo",
+Rol.belongsToMany(Usuario, {
+  through: UsuarioRol,
+  foreignKey: "rol"
+});
+
+Usuario.hasMany(UsuarioRol, {
+  as: "UsuarioRol",
+  foreignKey: "usuario"
+});
+UsuarioRol.belongsTo(Usuario, {
+  as: "UsuarioRol",
   foreignKey: "usuario"
 });
 
-Usuario.hasOne(Paciente, {
-  as: "UsuarioPaciente",
+Usuario.belongsToMany(Grupo, {
+  through: UsuarioGrupo,
   foreignKey: "usuario"
 });
-Paciente.belongsTo(Usuario, {
-  as: "UsuarioPaciente",
+Grupo.belongsToMany(Usuario, {
+  through: UsuarioGrupo,
+  foreignKey: "grupo"
+});
+
+Usuario.hasMany(UsuarioGrupo, {
+  as: "GrupoUsuario",
+  foreignKey: "usuario"
+});
+UsuarioGrupo.belongsTo(Usuario, {
+  as: "GrupoUsuario",
   foreignKey: "usuario"
 });
 
-Paciente.hasOne(Cita, {
-  as: "PacienteCita",
-  foreignKey: "paciente"
+//USUARIOROL
+UsuarioRol.hasMany(Atributos, {
+  as: "AtributosUsuario",
+  foreignKey: "usuarioRol"
 });
-Cita.belongsTo(Paciente, {
-  as: "PacienteCita",
-  foreignKey: "paciente"
-});
-
-Psicologo.hasMany(Tratamiento, {
-  as: "PsicologoTratamiento",
-  foreignKey: "psicologo"
-});
-Tratamiento.belongsTo(Psicologo, {
-  as: "PsicologoTratamiento",
-  foreignKey: "psicologo"
+Atributos.belongsTo(UsuarioRol, {
+  as: "AtributosUsuario",
+  foreignKey: "usuarioRol"
 });
 
-Tratamiento.hasOne(Cita, {
-  as: "TratamientoCita",
-  foreignKey: "tratamiento"
+//COREOGRAFIA y USUARIOGRUPO
+Coreografia.belongsToMany(UsuarioGrupo, {
+  through: GrupoCoreografia,
+  as: "ParticipantesCoreografia",
+  foreignKey: "coreografia"
 });
-Cita.belongsTo(Tratamiento, {
-  as: "TratamientoCita",
-  foreignKey: "tratamiento"
+UsuarioGrupo.belongsToMany(Coreografia, {
+  through: GrupoCoreografia,
+  as: "ParticipantesCoreografia",
+  foreignKey: "usuarioGrupo"
+});
+
+UsuarioGrupo.hasMany(GrupoCoreografia, {
+  as: "CoreografiaParticipante",
+  foreignKey: "usuarioGrupo"
+});
+GrupoCoreografia.belongsTo(UsuarioGrupo, {
+  as: "CoreografiaParticipante",
+  foreignKey: "usuarioGrupo"
+});
+
+//GRUPO
+Grupo.hasMany(Coreografia, {
+  as: "CoreografiaGrupo",
+  foreignKey: "grupo"
+});
+Coreografia.belongsTo(Grupo, {
+  as: "CoreografiaGrupo",
+  foreignKey: "grupo"
+});
+
+//MODALIDAD
+Modalidad.hasMany(SubTorneo, {
+  as: "ModalidadSubTorneo",
+  foreignKey: "modalidad"
+});
+SubTorneo.belongsTo(Modalidad, {
+  as: "ModalidadSubTorneo",
+  foreignKey: "modalidad"
+});
+
+//DIVISION
+Division.hasMany(SubTorneo, {
+  as: "DivisionSubTorneo",
+  foreignKey: "division"
+});
+SubTorneo.belongsTo(Division, {
+  as: "DivisionSubTorneo",
+  foreignKey: "division"
+});
+
+//SUBTORNEO
+SubTorneo.hasMany(Coreografia, {
+  as: "CoreografiaSubTorneo",
+  foreignKey: "subTorneo"
+});
+Coreografia.belongsTo(SubTorneo, {
+  as: "CoreografiaSubTorneo",
+  foreignKey: "subTorneo"
+});
+
+//TORNEO
+Torneo.hasMany(SubTorneo, {
+  as: "SubTorneo",
+  foreignKey: "torneo"
+});
+SubTorneo.belongsTo(Torneo, {
+  as: "SubTorneo",
+  foreignKey: "torneo"
 });
 
 const models = {
   db,
   Usuario,
-  Psicologo,
-  Paciente,
-  Tratamiento,
-  Cita
+  UsuarioRol,
+  Rol,
+  Atributos,
+  UsuarioGrupo,
+  Grupo,
+  GrupoCoreografia,
+  Coreografia,
+  SubTorneo,
+  Modalidad,
+  Division,
+  Torneo
 };
 
 export default models;

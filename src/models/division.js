@@ -1,7 +1,7 @@
-import { DataTypes, Sequelize } from "Sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { estado } from "../constants/index";
 
-export const UsuarioModel = {
+export const DivisionModel = {
   id: {
     type: DataTypes.UUID,
     primaryKey: true
@@ -10,13 +10,15 @@ export const UsuarioModel = {
     type: Sequelize.STRING(45),
     allowNull: false
   },
-  email: {
-    type: Sequelize.STRING(45),
-    allowNull: false
+  edadInicio: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    field: "edad_inicio"
   },
-  contrasena: {
-    type: Sequelize.STRING(45),
-    allowNull: false
+  edadFin: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    field: "edad_fin"
   },
   fecha_creacion: {
     type: Sequelize.DATE,
@@ -31,9 +33,9 @@ export const UsuarioModel = {
   }
 };
 
-export const UsuarioConfig = {
+export const DivisionConfig = {
   freezeTableName: true,
-  tableName: "usuario",
+  tableName: "division",
   timestamps: true,
   createdAt: "fecha_creacion",
   updatedAt: "fecha_actualizacion"

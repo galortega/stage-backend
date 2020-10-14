@@ -1,20 +1,12 @@
 import { DataTypes, Sequelize } from "Sequelize";
 import { estado } from "../constants/index";
 
-export const UsuarioModel = {
+export const RolModel = {
   id: {
     type: DataTypes.UUID,
     primaryKey: true
   },
-  nombre: {
-    type: Sequelize.STRING(45),
-    allowNull: false
-  },
-  email: {
-    type: Sequelize.STRING(45),
-    allowNull: false
-  },
-  contrasena: {
+  rol: {
     type: Sequelize.STRING(45),
     allowNull: false
   },
@@ -31,9 +23,9 @@ export const UsuarioModel = {
   }
 };
 
-export const UsuarioConfig = {
+export const RolConfig = {
   freezeTableName: true,
-  tableName: "usuario",
+  tableName: "rol",
   timestamps: true,
   createdAt: "fecha_creacion",
   updatedAt: "fecha_actualizacion"

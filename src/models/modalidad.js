@@ -1,21 +1,14 @@
-import { DataTypes, Sequelize } from "Sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { estado } from "../constants/index";
 
-export const TratamientoModel = {
+export const ModalidadModel = {
   id: {
     type: DataTypes.UUID,
     primaryKey: true
   },
-  psicologo: {
-    type: DataTypes.UUID,
+  nombre: {
+    type: Sequelize.STRING(45),
     allowNull: false
-  },
-  descripcion: {
-    type: Sequelize.STRING(50),
-    allowNull: false
-  },
-  precio: {
-    type: Sequelize.FLOAT
   },
   fecha_creacion: {
     type: Sequelize.DATE,
@@ -30,9 +23,9 @@ export const TratamientoModel = {
   }
 };
 
-export const TratamientoConfig = {
+export const ModalidadConfig = {
   freezeTableName: true,
-  tableName: "Tratamiento",
+  tableName: "modalidad",
   timestamps: true,
   createdAt: "fecha_creacion",
   updatedAt: "fecha_actualizacion"
