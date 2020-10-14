@@ -3,10 +3,10 @@ import _ from "lodash";
 import jwt from "jsonwebtoken";
 import models from "../models/index";
 import { Op } from "sequelize";
-import { atributosExclude, estado } from "../constants/index";
+import { atributosExclude, estado, rolesId } from "../constants/index";
 
-export const autenticarUsuario = async (req, res) => {
-  let { email, contrasena, rol } = req.body;
+export const autenticarParticipante = async (req, res) => {
+  let { email, contrasena } = req.body;
   email = _.toLower(email);
 
   const Usuario = await models.Usuario.findOne({
@@ -24,7 +24,7 @@ export const autenticarUsuario = async (req, res) => {
       {
         model: models.UsuarioRol,
         as: "UsuarioRol",
-        where: { rol },
+        where: { rol: rolesId.PARTICIPANTE },
         attributes: ["rol"],
         include: [
           {

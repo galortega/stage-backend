@@ -41,8 +41,16 @@ export const rolGrupo = {
   COREOGRAFO: "C",
   DIRECTOR: "D",
   values: ["B", "C", "D"]
-}
+};
 
-export const atributosExclude = ["fecha_creacion", "estado","fecha_actualizacion"];
+export const rolesId = {
+  PARTICIPANTE: "947aa7d3-17f5-4ab2-897e-ea97598cda96"
+};
+
+export const atributosExclude = [
+  "fecha_creacion",
+  "estado",
+  "fecha_actualizacion"
+];
 
 export const adminDefecto = "30698c95-3245-49c9-b6e3-2326afc85de1";
