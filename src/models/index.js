@@ -60,24 +60,38 @@ const Modalidad = db.sequelize.define(
 //USUARIO y ROL
 Usuario.belongsToMany(Rol, {
   through: UsuarioRol,
-  as: "RolUsuario",
   foreignKey: "usuario"
 });
 Rol.belongsToMany(Usuario, {
   through: UsuarioRol,
-  as: "RolUsuario",
   foreignKey: "rol"
+});
+
+Usuario.hasMany(UsuarioRol, {
+  as: "UsuarioRol",
+  foreignKey: "usuario"
+});
+UsuarioRol.belongsTo(Usuario, {
+  as: "UsuarioRol",
+  foreignKey: "usuario"
 });
 
 Usuario.belongsToMany(Grupo, {
   through: UsuarioGrupo,
-  as: "GrupoUsuario",
   foreignKey: "usuario"
 });
 Grupo.belongsToMany(Usuario, {
   through: UsuarioGrupo,
-  as: "GrupoUsuario",
   foreignKey: "grupo"
+});
+
+Usuario.hasMany(UsuarioGrupo, {
+  as: "GrupoUsuario",
+  foreignKey: "usuario"
+});
+UsuarioGrupo.belongsTo(Usuario, {
+  as: "GrupoUsuario",
+  foreignKey: "usuario"
 });
 
 //USUARIOROL
@@ -93,20 +107,31 @@ Atributos.belongsTo(UsuarioRol, {
 //COREOGRAFIA y USUARIOGRUPO
 Coreografia.belongsToMany(UsuarioGrupo, {
   through: GrupoCoreografia,
-  as: "CoreografiaGrupo",
+  as: "ParticipantesCoreografia",
   foreignKey: "coreografia"
 });
 UsuarioGrupo.belongsToMany(Coreografia, {
   through: GrupoCoreografia,
-  as: "CoreografiaGrupo",
+  as: "ParticipantesCoreografia",
+  foreignKey: "usuarioGrupo"
+});
+
+UsuarioGrupo.hasMany(GrupoCoreografia, {
+  as: "CoreografiaParticipante",
+  foreignKey: "usuarioGrupo"
+});
+GrupoCoreografia.belongsTo(UsuarioGrupo, {
+  as: "CoreografiaParticipante",
   foreignKey: "usuarioGrupo"
 });
 
 //GRUPO
 Grupo.hasMany(Coreografia, {
+  as: "CoreografiaGrupo",
   foreignKey: "grupo"
 });
 Coreografia.belongsTo(Grupo, {
+  as: "CoreografiaGrupo",
   foreignKey: "grupo"
 });
 
@@ -133,11 +158,11 @@ SubTorneo.belongsTo(Division, {
 //SUBTORNEO
 SubTorneo.hasMany(Coreografia, {
   as: "CoreografiaSubTorneo",
-  foreignKey: "subtorneo"
+  foreignKey: "subTorneo"
 });
 Coreografia.belongsTo(SubTorneo, {
   as: "CoreografiaSubTorneo",
-  foreignKey: "subtorneo"
+  foreignKey: "subTorneo"
 });
 
 //TORNEO
@@ -149,7 +174,6 @@ SubTorneo.belongsTo(Torneo, {
   as: "SubTorneo",
   foreignKey: "torneo"
 });
-
 
 const models = {
   db,

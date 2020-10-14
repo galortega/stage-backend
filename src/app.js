@@ -12,6 +12,7 @@ import cacheControl from "express-cache-controller";
 import indexRouter from "./routes/index";
 
 import usuariosRouter from "./routes/usuario";
+import rolesRouter from "./routes/rol";
 import authRouter from "./routes/auth";
 const app = express();
 
@@ -39,6 +40,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", indexRouter);
 app.use(routes.usuarioRaiz, usuariosRouter);
+app.use(routes.rol, rolesRouter);
 app.use(routes.auth, authRouter);
 
 // catch 404 and forward to error handler

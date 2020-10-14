@@ -19,6 +19,18 @@ export const buscarTodos = async (req, res) => {
     where: {
       estado: estado.ACTIVO
     },
+    include: [
+      {
+        model: models.UsuarioRol,
+        as: "UsuarioRol",
+        include: [
+          {
+            model: models.Atributos,
+            as: "AtributosUsuario"
+          }
+        ]
+      }
+    ],
     attributes: {
       exclude: atributosExclude
     }
@@ -34,6 +46,18 @@ export const buscarPorId = async (req, res) => {
     where: {
       [Op.and]: [{ id }, { estado: estado.ACTIVO }]
     },
+    include: [
+      {
+        model: models.UsuarioRol,
+        as: "UsuarioRol",
+        include: [
+          {
+            model: models.Atributos,
+            as: "AtributosUsuario"
+          }
+        ]
+      }
+    ],
     attributtes: {
       exclude: atributosExclude
     }
@@ -44,10 +68,41 @@ export const buscarPorId = async (req, res) => {
 };
 
 export const crearUsuario = async (req, res) => {
-  req.body.id = uuid();
+  const { nombre, email, contrasena, rol, atributos } = req.body;
+  const id = uuid();
+  const idRol = uuid();
+  console.log(atributos.edad);
+  const AtributosUsuario = _.map(Object.keys(atributos), (a) => {
+    return { id: uuid(), usuarioRol: idRol, clave: a, valor: atributos[a] };
+  });
 
-  const Usuario = await models.Usuario.create(req.body, {});
+  const datosUsuario = {
+    id,
+    nombre,
+    email,
+    contrasena,
+    UsuarioRol: {
+      id: idRol,
+      usuario: id,
+      rol,
+      AtributosUsuario
+    }
+  };
 
+  const Usuario = await models.Usuario.create(datosUsuario, {
+    include: [
+      {
+        model: models.UsuarioRol,
+        as: "UsuarioRol",
+        include: [
+          {
+            model: models.Atributos,
+            as: "AtributosUsuario"
+          }
+        ]
+      }
+    ]
+  });
   return res.status(201).send({
     Usuario,
     msj: "Usuario ingresado correctamente."

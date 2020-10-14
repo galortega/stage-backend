@@ -1,5 +1,5 @@
 import { DataTypes, Sequelize } from "Sequelize";
-import { estado } from "../constants/index";
+import { estado, rolGrupo } from "../constants/index";
 
 export const GrupoCoreografiaModel = {
   id: {
@@ -13,6 +13,10 @@ export const GrupoCoreografiaModel = {
   },
   coreografia: {
     type: DataTypes.UUID,
+    allowNull: false
+  },
+  rol: {
+    type: Sequelize.ENUM(rolGrupo.values),
     allowNull: false
   },
   fecha_creacion: {

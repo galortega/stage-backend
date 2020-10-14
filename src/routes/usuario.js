@@ -12,13 +12,13 @@ import auth from "../utils/auth";
 const router = express.Router();
 
 router.use("/$", allowedMethods(["GET", "POST"]));
-router.get("/", auth, asyncWrapper(buscarTodos));
+router.get("/", asyncWrapper(buscarTodos));
 router.post("/", asyncWrapper(crearUsuario));
 
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
-router.get("/:id", auth, asyncWrapper(buscarPorId));
+router.get("/:id", asyncWrapper(buscarPorId));
 
-router.put("/:id", auth, asyncWrapper(actualizarUsuario));
-router.delete("/:id", auth, asyncWrapper(eliminarUsuario));
+router.put("/:id", asyncWrapper(actualizarUsuario));
+router.delete("/:id", asyncWrapper(eliminarUsuario));
 
 export default router;
