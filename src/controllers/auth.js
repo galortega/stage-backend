@@ -23,9 +23,9 @@ export const autenticarUsuario = async (req, res) => {
     include: [
       {
         model: models.UsuarioRol,
-        as: "RolUsuario",
-        attributes: ["rol"],
+        as: "UsuarioRol",
         where: { rol },
+        attributes: ["rol"],
         include: [
           {
             model: models.Atributos,
@@ -35,7 +35,7 @@ export const autenticarUsuario = async (req, res) => {
         ]
       }
     ]
-  });
+  }).then((u) => u.toJSON());
 
   if (_.isEmpty(Usuario)) return errorStatusHandle(res, "USUARIO_INEXISTENTE");
   else if (contrasena !== Usuario.contrasena)
@@ -45,8 +45,8 @@ export const autenticarUsuario = async (req, res) => {
     usuario: Usuario.id,
     nombre: Usuario.nombre,
     email: Usuario.email,
-    rol: Usuario.RolUsuario[0].id,
-    atributos: Usuario.RolUsuario[0].AtributosUsuario
+    rol: Usuario.UsuarioRol[0].rol,
+    atributos: Usuario.UsuarioRol[0].AtributosUsuario
   };
 
   jwt.sign(
