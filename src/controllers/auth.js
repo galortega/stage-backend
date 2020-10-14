@@ -3,7 +3,7 @@ import _ from "lodash";
 import jwt from "jsonwebtoken";
 import models from "../models/index";
 import { Op } from "sequelize";
-import { estado } from "../constants/index";
+import { atributosExclude, estado } from "../constants/index";
 
 export const autenticarUsuario = async (req, res) => {
   let { email, contrasena, rol } = req.body;
@@ -35,7 +35,7 @@ export const autenticarUsuario = async (req, res) => {
         ]
       }
     ]
-  }).then((u) => u.toJSON());
+  });
 
   if (_.isEmpty(Usuario)) return errorStatusHandle(res, "USUARIO_INEXISTENTE");
   else if (contrasena !== Usuario.contrasena)
@@ -46,7 +46,12 @@ export const autenticarUsuario = async (req, res) => {
     nombre: Usuario.nombre,
     email: Usuario.email,
     rol: Usuario.UsuarioRol[0].rol,
-    atributos: Usuario.UsuarioRol[0].AtributosUsuario
+    atributos: _.map(Usuario.UsuarioRol[0].AtributosUsuario, (atributo) => {
+      const { clave, valor } = atributo;
+      const object = {};
+      object[clave] = valor;
+      return object;
+    })
   };
 
   jwt.sign(
