@@ -134,6 +134,14 @@ Coreografia.belongsTo(Grupo, {
   as: "CoreografiaGrupo",
   foreignKey: "grupo"
 });
+Grupo.hasMany(UsuarioGrupo, {
+  as: "UsuarioGrupo",
+  foreignKey: "grupo"
+});
+UsuarioGrupo.belongsTo(Grupo, {
+  as: "UsuarioGrupo",
+  foreignKey: "grupo"
+});
 
 //MODALIDAD
 Modalidad.hasMany(SubTorneo, {

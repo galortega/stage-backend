@@ -6,4 +6,5 @@ export const routes = {
   usuarioRaiz: `${baseRoute}/usuarios`,
   rol: `${baseRoute}/roles`,
   auth: `${baseRoute}/auth`,
+  grupos: `${baseRoute}/grupos`,
 };

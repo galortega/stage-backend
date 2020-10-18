@@ -43,6 +43,12 @@ export const rolGrupo = {
   values: ["B", "C", "D"]
 };
 
+export const tipoGrupo = {
+  ACADEMIA: "A",
+  GRUPOINDEPENDIENTE: "GI",
+  values: ["A", "GI"]
+};
+
 export const rolesId = {
   PARTICIPANTE: "947aa7d3-17f5-4ab2-897e-ea97598cda96"
 };

@@ -18,6 +18,10 @@ export const UsuarioGrupoModel = {
     type: Sequelize.ENUM(rolGrupo.values),
     allowNull: false
   },
+  email: {
+    type: Sequelize.STRING(45),
+    allowNull: false
+  },
   fecha_creacion: {
     type: Sequelize.DATE,
     allowNull: false

@@ -1,5 +1,5 @@
 import { DataTypes, Sequelize } from "Sequelize";
-import { estado } from "../constants/index";
+import { estado, tipoGrupo } from "../constants/index";
 
 export const GrupoModel = {
   id: {
@@ -7,6 +7,14 @@ export const GrupoModel = {
     primaryKey: true
   },
   nombre: {
+    type: Sequelize.STRING(45),
+    allowNull: false
+  },
+  tipo: {
+    type: Sequelize.STRING(15),
+    allowNull: false
+  },
+  pais: {
     type: Sequelize.STRING(45),
     allowNull: false
   },
