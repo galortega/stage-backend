@@ -58,7 +58,7 @@ export const buscarPorId = async (req, res) => {
         ]
       }
     ],
-    attributtes: {
+    attributes: {
       exclude: atributosExclude
     }
   });
@@ -71,7 +71,6 @@ export const crearUsuario = async (req, res) => {
   const { nombre, email, contrasena, rol, atributos } = req.body;
   const id = uuid();
   const idRol = uuid();
-  console.log(atributos.edad);
   const AtributosUsuario = _.map(Object.keys(atributos), (a) => {
     return { id: uuid(), usuarioRol: idRol, clave: a, valor: atributos[a] };
   });

@@ -17,7 +17,6 @@ const handleJWTError = (res, error) => {
 
 module.exports = (req, res, next) => {
   const token = req.header("token");
-
   if (!token) return errorStatusHandle(res, "UNAUTHORIZED");
 
   let error;
@@ -28,7 +27,7 @@ module.exports = (req, res, next) => {
 
   if (error) return handleJWTError(res, error);
   else {
-    req.usuario = cifrado.usuario;
+    req.token = cifrado;
     next();
   }
 };

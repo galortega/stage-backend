@@ -49,6 +49,12 @@ export const tipoGrupo = {
   values: ["A", "GI"]
 };
 
+export const estadoAprobado = {
+  APROBADO: "AP",
+  PENDIENTE: "P",
+  values: ["AP", "P"]
+};
+
 export const rolesId = {
   PARTICIPANTE: "947aa7d3-17f5-4ab2-897e-ea97598cda96"
 };

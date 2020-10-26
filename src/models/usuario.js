@@ -12,11 +12,15 @@ export const UsuarioModel = {
   },
   email: {
     type: Sequelize.STRING(45),
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   contrasena: {
     type: Sequelize.STRING(45),
     allowNull: false
+  },
+  telefono: {
+    type: Sequelize.STRING(45)
   },
   fecha_creacion: {
     type: Sequelize.DATE,

@@ -1,5 +1,5 @@
 import { DataTypes, Sequelize } from "Sequelize";
-import { estado, rolGrupo } from "../constants/index";
+import { estado, estadoAprobado, rolGrupo } from "../constants/index";
 
 export const UsuarioGrupoModel = {
   id: {
@@ -21,6 +21,13 @@ export const UsuarioGrupoModel = {
   email: {
     type: Sequelize.STRING(45),
     allowNull: false
+  },
+  aprobacion: {
+    type: Sequelize.ENUM(estadoAprobado.values),
+    defaultValue: estadoAprobado.PENDIENTE
+  },
+  fecha_aprobado: {
+    type: Sequelize.DATE
   },
   fecha_creacion: {
     type: Sequelize.DATE,

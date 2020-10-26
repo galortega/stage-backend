@@ -1,11 +1,27 @@
 import models from "../models/index";
 import { uuid } from "uuidv4";
 import { Op } from "sequelize";
-import { estado, atributosExclude } from "../constants/index";
+import {
+  estado,
+  atributosExclude,
+  rolGrupo,
+  estadoAprobado
+} from "../constants/index";
 import _ from "lodash";
+import { GrupoConfig } from "../models/grupo";
 
 export const crearGrupo = async (req, res) => {
-  const { nombre, pais, tipo, miembros } = req.body;
+  const {
+    nombre,
+    pais,
+    direccion,
+    logo,
+    instagram,
+    facebook,
+    email,
+    tipo,
+    miembros
+  } = req.body;
   const id = uuid();
 
   const datos = {
@@ -13,6 +29,11 @@ export const crearGrupo = async (req, res) => {
     nombre,
     tipo,
     pais,
+    direccion,
+    logo,
+    instagram,
+    facebook,
+    email,
     UsuarioGrupo: await Promise.all(
       _.map(miembros, async (miembro) => {
         const { email, rol } = miembro;
@@ -34,7 +55,7 @@ export const crearGrupo = async (req, res) => {
     include: [
       {
         model: models.UsuarioGrupo,
-        as: "UsuarioGrupo"
+        as: "MiembrosGrupo"
       }
     ]
   });
@@ -57,7 +78,7 @@ export const buscarTodos = async (req, res) => {
         include: [
           {
             model: models.Usuario,
-            as: "GrupoUsuario"
+            as: "MiembroUsuario"
           }
         ]
       }
@@ -73,6 +94,10 @@ export const buscarTodos = async (req, res) => {
 
 export const buscarPorId = async (req, res) => {
   const id = req.params.id;
+  const { usuario } = req.token;
+
+  const aprobados = [];
+  const pendientes = [];
   const Grupo = await models.Grupo.findOne({
     where: {
       [Op.and]: [{ id }, { estado: estado.ACTIVO }]
@@ -80,18 +105,75 @@ export const buscarPorId = async (req, res) => {
     include: [
       {
         model: models.UsuarioGrupo,
-        as: "UsuarioGrupo",
+        as: "MiembrosGrupo",
+        attributes: {
+          exclude: atributosExclude
+        },
         include: [
           {
             model: models.Usuario,
-            as: "GrupoUsuario"
+            as: "MiembroUsuario",
+            attributes: {
+              exclude: atributosExclude
+            }
           }
         ]
       }
     ],
-    attributtes: {
+    attributes: {
       exclude: atributosExclude
     }
+  }).then((grupo) => {
+    const {
+      MiembrosGrupo,
+      id,
+      nombre,
+      tipo,
+      pais,
+      direccion,
+      logo,
+      instagram,
+      facebook,
+      email
+    } = grupo;
+    const miembroToken = _.find(MiembrosGrupo, { usuario });
+    _.forEach(MiembrosGrupo, (miembro) => {
+      const {
+        usuario,
+        rol,
+        fecha_aprobado,
+        aprobacion,
+        email,
+        MiembroUsuario
+      } = miembro;
+      const datos = {
+        id: usuario,
+        nombre: !MiembroUsuario ? null : MiembroUsuario.nombres,
+        correo: email,
+        telefono: !MiembroUsuario ? null : MiembroUsuario.telefono,
+        rol,
+        fechaUnion: fecha_aprobado,
+        existe: !_.isEmpty(MiembroUsuario)
+      };
+      if (aprobacion === estadoAprobado.APROBADO) aprobados.push(datos);
+      else pendientes.push(datos);
+    });
+    return {
+      id,
+      nombre,
+      tipo,
+      pais,
+      direccion,
+      logo,
+      instagram,
+      facebook,
+      email,
+      esDirector: miembroToken.rol === rolGrupo.DIRECTOR,
+      miembros: {
+        aprobados,
+        pendientes
+      }
+    };
   });
   return res.status(200).send({
     Grupo: Grupo || []

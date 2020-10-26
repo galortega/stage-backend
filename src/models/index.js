@@ -86,11 +86,11 @@ Grupo.belongsToMany(Usuario, {
 });
 
 Usuario.hasMany(UsuarioGrupo, {
-  as: "GrupoUsuario",
+  as: "MiembroUsuario",
   foreignKey: "usuario"
 });
 UsuarioGrupo.belongsTo(Usuario, {
-  as: "GrupoUsuario",
+  as: "MiembroUsuario",
   foreignKey: "usuario"
 });
 
@@ -135,11 +135,11 @@ Coreografia.belongsTo(Grupo, {
   foreignKey: "grupo"
 });
 Grupo.hasMany(UsuarioGrupo, {
-  as: "UsuarioGrupo",
+  as: "MiembrosGrupo",
   foreignKey: "grupo"
 });
 UsuarioGrupo.belongsTo(Grupo, {
-  as: "UsuarioGrupo",
+  as: "MiembrosGrupo",
   foreignKey: "grupo"
 });
 

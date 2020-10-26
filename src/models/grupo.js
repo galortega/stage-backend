@@ -11,10 +11,27 @@ export const GrupoModel = {
     allowNull: false
   },
   tipo: {
-    type: Sequelize.STRING(15),
+    type: Sequelize.ENUM(tipoGrupo.values),
     allowNull: false
   },
   pais: {
+    type: Sequelize.STRING(45),
+    allowNull: false
+  },
+  direccion: {
+    type: Sequelize.STRING(45),
+    allowNull: false
+  },
+  logo: {
+    type: Sequelize.STRING(200)
+  },
+  instagram: {
+    type: Sequelize.STRING(45)
+  },
+  facebook: {
+    type: Sequelize.STRING(45)
+  },
+  email: {
     type: Sequelize.STRING(45),
     allowNull: false
   },
