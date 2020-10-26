@@ -15,13 +15,14 @@ export const getGrupos = async (req, res) => {
       {
         model: models.Grupo,
         as: "MiembrosGrupo",
-        attributes: ["nombre", "tipo"]
+        attributes: ["nombre", "tipo", "id"]
       }
     ]
   }).then((grupos) => {
     return _.forEach(grupos, (g) => {
-      const { tipo, nombre } = g.MiembrosGrupo;
+      const { tipo, nombre, id } = g.MiembrosGrupo;
       const data = {
+        id,
         esDirector: g.rol === rolGrupo.DIRECTOR,
         tipo,
         nombre
