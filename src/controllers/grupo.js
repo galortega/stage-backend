@@ -137,6 +137,7 @@ export const buscarPorId = async (req, res) => {
       email
     } = grupo;
     const miembroToken = _.find(MiembrosGrupo, { usuario });
+    if (!miembroToken) return false;
     _.forEach(MiembrosGrupo, (miembro) => {
       const {
         usuario,
@@ -175,7 +176,12 @@ export const buscarPorId = async (req, res) => {
       }
     };
   });
-  return res.status(200).send({
-    Grupo: Grupo || []
-  });
+  if (!Grupo)
+    return res.status(403).send({
+      msj: "Usuario no válido"
+    });
+  else
+    return res.status(200).send({
+      Grupo: Grupo || []
+    });
 };
