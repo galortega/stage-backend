@@ -37,10 +37,11 @@ export const tipoDePago = {
 };
 
 export const rolGrupo = {
+  LIDER: "L",
   BAILARIN: "B",
   COREOGRAFO: "C",
   DIRECTOR: "D",
-  values: ["B", "C", "D"]
+  values: ["B", "C", "D", "L"]
 };
 
 export const tipoGrupo = {
