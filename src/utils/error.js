@@ -1,4 +1,5 @@
 import errors from "../constants/errors";
+import { validationResult } from "express-validator/check";
 
 export const asyncWrapper = (fn) => async (req, res, next) => {
   try {
@@ -21,3 +22,15 @@ export const errorStatusHandle = (res, payload, other) => {
   return res.status(msg.status).send({ error: { ...msg, ...other } });
 };
 
+export const checkParameters = (validators) => {
+  const validatorFunction = (req, res, next) => {
+    const checks = validationResult(req);
+    if (!checks.isEmpty()) {
+      return errorStatusHandle(res, "INVALID_PARAMS", {
+        issues: checks.array({ onlyFirstError: true })
+      });
+    }
+    return next();
+  };
+  return [...validators, validatorFunction];
+};
