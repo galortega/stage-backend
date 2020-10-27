@@ -160,6 +160,7 @@ export const buscarPorId = async (req, res) => {
       {
         model: models.UsuarioGrupo,
         as: "MiembrosGrupo",
+        where: { estado: estado.ACTIVO },
         attributes: {
           exclude: atributosExclude
         },
@@ -231,8 +232,8 @@ export const buscarPorId = async (req, res) => {
     };
   });
   if (!Grupo)
-    return res.status(403).send({
-      msj: "Usuario no válido"
+    return res.status(400).send({
+      msj: "Usuario no pertenece al grupo."
     });
   else
     return res.status(200).send({

@@ -8,7 +8,11 @@ import {
 } from "../controllers/grupo";
 import { allowedMethods, asyncWrapper, checkParameters } from "../utils/error";
 import auth from "../utils/auth";
-import { agregarMiembros, getGrupos } from "../controllers/usuariogrupo";
+import {
+  agregarMiembros,
+  desactivarMiembro,
+  getGrupos
+} from "../controllers/usuariogrupo";
 import { checkAgregarMiembros, checkCrearGrupo } from "../validations/grupo";
 
 const router = express.Router();
@@ -29,5 +33,8 @@ router.post(
   checkParameters(checkAgregarMiembros),
   asyncWrapper(agregarMiembros)
 );
+
+router.use("/:id/suspenderParticipante$", allowedMethods(["PUT"]));
+router.put("/:id/suspenderParticipante", asyncWrapper(desactivarMiembro));
 
 export default router;

@@ -84,3 +84,19 @@ export const agregarMiembros = async (req, res) => {
     Miembros
   });
 };
+
+export const desactivarMiembro = async (req, res) => {
+  const grupo = req.params.id;
+  const { email } = req.body;
+
+  const UsuarioGrupo = await models.UsuarioGrupo.update(
+    {
+      estado: estado.INACTIVO
+    },
+    { where: [{ email }, { grupo }] }
+  );
+
+  return res.status(200).send({
+    UsuarioGrupo
+  });
+};
