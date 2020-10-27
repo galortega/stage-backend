@@ -3,8 +3,9 @@ import _ from "lodash";
 import jwt from "jsonwebtoken";
 import models from "../models/index";
 import { Op } from "sequelize";
-import { atributosExclude, estado } from "../constants/index";
+import { atributosExclude, estado, rolGrupo } from "../constants/index";
 import { uuid } from "uuidv4";
+import { isValidEmail } from "../utils/util";
 
 export const validarIDRol = async (id) => {
   return await models.Rol.findOne({

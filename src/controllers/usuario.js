@@ -14,7 +14,7 @@ export const validarIDUsuario = async (id) => {
   });
 };
 
-export const validarEmail = async (email) => {
+export const validarEmailUsuario = async (email) => {
   return await models.Usuario.findOne({
     where: { [Op.and]: [{ email }, { estado: estado.ACTIVO }] }
   }).then((usuario) => {
@@ -27,7 +27,6 @@ export const validarEmail = async (email) => {
 };
 
 export const validarAtributos = async (atributos) => {
-  console.log(atributos);
   if (_.isEmpty(atributos)) return true;
   else
     return _.forEach(Object.keys(atributos), (key) => {
@@ -35,7 +34,6 @@ export const validarAtributos = async (atributos) => {
       switch (key) {
         case "edad":
           const edad = parseInt(value);
-          console.log({ key, edad, tof: !_.isNumber(edad) });
           if (!_.isNumber(edad) || !_.inRange(edad, 0, 150) || _.isNaN(edad))
             throw new Error("Edad debe ser un número.");
         case "nivel":

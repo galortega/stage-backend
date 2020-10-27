@@ -9,6 +9,60 @@ import {
 } from "../constants/index";
 import _ from "lodash";
 import { GrupoConfig } from "../models/grupo";
+import { isValidEmail } from "../utils/util";
+
+export const validarIDGrupo = async (id) => {
+  return await models.Grupo.findOne({
+    where: { [Op.and]: [{ id }, { estado: estado.ACTIVO }] }
+  }).then((Grupo) => {
+    if (!Grupo) {
+      return Promise.reject(
+        new Error("El id ingresado no pertenece a un grupo o academia.")
+      );
+    } else return Promise.resolve();
+  });
+};
+
+export const validarNombreGrupo = async (nombre) => {
+  return await models.Grupo.findOne({
+    where: { [Op.and]: [{ nombre }, { estado: estado.ACTIVO }] }
+  }).then((Grupo) => {
+    if (Grupo) {
+      return Promise.reject(
+        new Error("El nombre ingresado ya se encuentra en uso.")
+      );
+    } else return Promise.resolve();
+  });
+};
+
+export const validarMiembros = (miembros) => {
+  if (!_.isEmpty(miembros))
+    try {
+      _.forEach(miembros, (miembro) => {
+        if (miembro) {
+          const { email, rol } = miembro;
+          if (!isValidEmail(email)) throw new Error("Email inválido");
+          if (!_.includes(rolGrupo.values, rol))
+            throw new Error(`Rol inválido. ${rolGrupo.values}`);
+        }
+      });
+      return true;
+    } catch (error) {
+      throw error;
+    }
+};
+
+export const validarEmailGrupo = async (email) => {
+  return await models.Grupo.findOne({
+    where: { [Op.and]: [{ email }, { estado: estado.ACTIVO }] }
+  }).then((Grupo) => {
+    if (Grupo) {
+      return Promise.reject(
+        new Error("El email ingresado ya se encuentra en uso.")
+      );
+    } else return Promise.resolve();
+  });
+};
 
 export const crearGrupo = async (req, res) => {
   const {
@@ -74,7 +128,7 @@ export const buscarTodos = async (req, res) => {
     include: [
       {
         model: models.UsuarioGrupo,
-        as: "UsuarioGrupo",
+        as: "MiembrosGrupo",
         include: [
           {
             model: models.Usuario,
