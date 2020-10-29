@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "set NODE_ENV=production&& npm-run-all pre-start server-prod",
+    "start": "node ./lib/bin/www",
+    "pre-all": "set NODE_ENV=production&& npm-run-all pre-start server-prod",
     "dev": "set NODE_ENV=development&& npm-run-all server-dev",
     "pre-prod": "set NODE_ENV=preproduction&& npm-run-all pre-start server-prod",
     "pre-start": "npm-run-all build",
