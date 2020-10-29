@@ -63,6 +63,6 @@ app.use(function (err, req, res) {
 
 // Mount uploads
 app.use("./public", express.static(path.join(__dirname, "./public")));
-
+app.set('trust proxy', true);
 
 export default app;
