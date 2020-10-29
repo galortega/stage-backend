@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "SET NODE_ENV=production&& npm-run-all pre-start server-prod",
+
+    "start": "export PATH='$PATH:$HOME/npm/bin'&& SET NODE_ENV=production&& npm-run-all pre-start server-prod",
     "dev": "SET NODE_ENV=development&& npm-run-all server-dev",
     "pre-prod": "SET NODE_ENV=preproduction&& npm-run-all pre-start server-prod",
     "pre-start": "npm-run-all clean build",
