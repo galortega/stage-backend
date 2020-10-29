@@ -7,10 +7,9 @@
     "start": "set NODE_ENV=production&& npm-run-all pre-start server-prod",
     "dev": "set NODE_ENV=development&& npm-run-all server-dev",
     "pre-prod": "set NODE_ENV=preproduction&& npm-run-all pre-start server-prod",
-    "pre-start": "npm-run-all clean build",
+    "pre-start": "npm-run-all build",
     "build": "npm-run-all babel",
     "babel": "babel -d lib/ src",
-    "clean": "rimraf lib",
     "server-prod": "node ./lib/bin/www",
     "server-dev": "nodemon --exec babel-node ./src/bin/www"
   },
