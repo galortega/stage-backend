@@ -64,8 +64,5 @@ app.use(function (err, req, res) {
 // Mount uploads
 app.use("./public", express.static(path.join(__dirname, "./public")));
 
-const PORT = process.env.PORT;
-
-app.listen(PORT, () => console.log(`Listening at ${PORT}`));
 
 export default app;
