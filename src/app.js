@@ -1,6 +1,6 @@
 import "dotenv/config";
 import createError from "http-errors";
-import express from "express"
+import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
@@ -10,10 +10,11 @@ import { routes } from "./constants/common";
 import cacheControl from "express-cache-controller";
 
 import indexRouter from "./routes/index";
-import usuariosRouter from "./routes/usuario";
-import doctoresRouter from "./routes/doctor";
-import especialidadesRouter from "./routes/especialidad"
 
+import usuariosRouter from "./routes/usuario";
+import rolesRouter from "./routes/rol";
+import authRouter from "./routes/auth";
+import gruposRouter from "./routes/grupo";
 const app = express();
 
 app.use(cors());
@@ -40,9 +41,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", indexRouter);
 app.use(routes.usuarioRaiz, usuariosRouter);
-app.use(routes.doctorRaiz, doctoresRouter);
-app.use(routes.especialidad, especialidadesRouter);
-
+app.use(routes.rol, rolesRouter);
+app.use(routes.auth, authRouter);
+app.use(routes.grupos, gruposRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -63,8 +64,5 @@ app.use(function (err, req, res) {
 // Mount uploads
 app.use("./public", express.static(path.join(__dirname, "./public")));
 
-const PORT = process.env.PORT;
-
-app.listen(PORT, () => console.log(`Listening at ${PORT}`));
 
 export default app;

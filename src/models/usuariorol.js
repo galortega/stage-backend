@@ -1,4 +1,4 @@
-import { DataTypes, Sequelize } from "Sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { estado } from "../constants/index";
 
 export const UsuarioRolModel = {
@@ -6,22 +6,13 @@ export const UsuarioRolModel = {
     type: DataTypes.UUID,
     primaryKey: true
   },
-  rol: {
-    type: DataTypes.UUID,
-    allowNull: false
-  },
   usuario: {
     type: DataTypes.UUID,
     allowNull: false
   },
-  usuarioCreacion: {
+  rol: {
     type: DataTypes.UUID,
-    allowNull: false,
-    field: "usuario_creacion"
-  },
-  usuarioActualizacion: {
-    type: DataTypes.UUID,
-    field: "usuario_actualizacion"
+    allowNull: false
   },
   fecha_creacion: {
     type: Sequelize.DATE,

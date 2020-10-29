@@ -2,7 +2,7 @@ const errors = {
   // Generals
   UNAUTHORIZED: {
     title: "No autorizado",
-    status: 401,
+    status: 405,
     detail: "Usted no tiene autorización para realizar esta petición."
   },
   NOT_FOUND: {
@@ -32,7 +32,7 @@ const errors = {
   },
   CONTRASENA_INCORRECTA: {
     title: "Parámetros inválidos",
-    status: 400,
+    status: 405,
     detail: "Usuario y/o contraseña no son correctos."
   },
   USUARIO_EXISTENTE: {
@@ -44,8 +44,7 @@ const errors = {
   USUARIO_INEXISTENTE: {
     title: "Usuario no existe",
     status: 400,
-    detail:
-      "El número de identificación ingresado no le pertenece a un usuario."
+    detail: "Información ingresada no le pertenece a un usuario."
   },
   PRODUCTO_EXISTENTE: {
     title: "Producto ya existe",
@@ -61,6 +60,21 @@ const errors = {
     title: "Transacción fallida",
     status: 400,
     detail: "La transacción requerida no fue realizada con éxito."
+  },
+  TOKEN_EXPIRADO: {
+    title: "Token expirado",
+    status: 405,
+    detail: "El token de la sesión se encuentra expirado."
+  },
+  TOKEN_ERROR: {
+    title: "Token error",
+    status: 405,
+    detail: "El token de la sesión está malformado o es inválido."
+  },
+  TOKEN_INACTIVO: {
+    title: "Token inactivo",
+    status: 405,
+    detail: "El token de la sesión no se encuentra activo."
   }
 };
 

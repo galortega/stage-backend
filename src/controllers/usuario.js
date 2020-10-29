@@ -1,7 +1,7 @@
 import models from "../models/index";
 import { uuid } from "uuidv4";
-import { Op, UUID } from "sequelize";
-import { estado, atributosExclude, adminDefecto } from "../constants/index";
+import { Op } from "sequelize";
+import { estado, atributosExclude } from "../constants/index";
 import _ from "lodash";
 
 export const validarIDUsuario = async (id) => {
@@ -14,12 +14,54 @@ export const validarIDUsuario = async (id) => {
   });
 };
 
+export const validarEmailUsuario = async (email) => {
+  return await models.Usuario.findOne({
+    where: { [Op.and]: [{ email }, { estado: estado.ACTIVO }] }
+  }).then((usuario) => {
+    if (usuario) {
+      return Promise.reject(
+        new Error("El email ingresado ya se encuentra en uso.")
+      );
+    } else return Promise.resolve();
+  });
+};
+
+export const validarAtributos = async (atributos) => {
+  if (_.isEmpty(atributos)) return true;
+  else
+    return _.forEach(Object.keys(atributos), (key) => {
+      const value = parseInt(atributos[key]);
+      switch (key) {
+        case "edad":
+          const edad = parseInt(value);
+          if (!_.isNumber(edad) || !_.inRange(edad, 0, 150) || _.isNaN(edad))
+            throw new Error("Edad debe ser un número.");
+        case "nivel":
+          return _.isString(value);
+        default:
+          break;
+      }
+    });
+};
+
 export const buscarTodos = async (req, res) => {
   const Usuarios = await models.Usuario.findAll({
     where: {
       estado: estado.ACTIVO
     },
-    atributtes: {
+    include: [
+      {
+        model: models.UsuarioRol,
+        as: "UsuarioRol",
+        include: [
+          {
+            model: models.Atributos,
+            as: "AtributosUsuario"
+          }
+        ]
+      }
+    ],
+    attributes: {
       exclude: atributosExclude
     }
   });
@@ -34,7 +76,19 @@ export const buscarPorId = async (req, res) => {
     where: {
       [Op.and]: [{ id }, { estado: estado.ACTIVO }]
     },
-    atributtes: {
+    include: [
+      {
+        model: models.UsuarioRol,
+        as: "UsuarioRol",
+        include: [
+          {
+            model: models.Atributos,
+            as: "AtributosUsuario"
+          }
+        ]
+      }
+    ],
+    attributes: {
       exclude: atributosExclude
     }
   });
@@ -44,45 +98,40 @@ export const buscarPorId = async (req, res) => {
 };
 
 export const crearUsuario = async (req, res) => {
+  const { nombre, email, contrasena, rol, atributos } = req.body;
   const id = uuid();
-  const usuarioCreacion = adminDefecto;
-  const {
-    nombres,
-    apellidos,
-    fecha_nacimiento,
-    imagen,
-    peso,
-    estatura,
-    tipoSangre,
-    alergias
-  } = req.body;
+  const idUsuarioRol = uuid();
+  const AtributosUsuario = _.map(Object.keys(atributos), (a) => {
+    return { id: uuid(), usuarioRol: idUsuarioRol, clave: a, valor: atributos[a] };
+  });
+
   const datosUsuario = {
     id,
-    nombres,
-    apellidos,
-    usuarioCreacion,
-    InfoUsuario: {
-      id: uuid(),
+    nombre,
+    email,
+    contrasena,
+    UsuarioRol: {
+      id: idUsuarioRol,
       usuario: id,
-      fecha_nacimiento: Date.now(),
-      imagen,
-      peso,
-      estatura,
-      tipoSangre,
-      alergias,
-      usuarioCreacion
+      rol,
+      AtributosUsuario
     }
   };
 
   const Usuario = await models.Usuario.create(datosUsuario, {
     include: [
       {
-        model: models.InfoPersonal,
-        as: "InfoUsuario"
+        model: models.UsuarioRol,
+        as: "UsuarioRol",
+        include: [
+          {
+            model: models.Atributos,
+            as: "AtributosUsuario"
+          }
+        ]
       }
     ]
   });
-
   return res.status(201).send({
     Usuario,
     msj: "Usuario ingresado correctamente."
@@ -102,7 +151,7 @@ export const actualizarUsuario = async (req, res) => {
 export const eliminarUsuario = async (req, res) => {
   const id = req.params.id;
   const Usuario = await models.Usuario.update(
-    { estado: estado.INACTIVO, usuarioActualizacion: req.usuarioAuth.id },
+    { estado: estado.INACTIVO },
     {
       where: { id }
     }
