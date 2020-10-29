@@ -1,0 +1,9 @@
+steps:
+
+    # Install node packages
+    - name: 'gcr.io/cloud-builders/npm'
+      args: [ 'install' ]
+  
+    # Deploy to google cloud app egnine
+    - name: 'gcr.io/cloud-builders/gcloud'
+      args: ['app', 'deploy', '--version=prod']
