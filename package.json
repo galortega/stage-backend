@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "npm install && node ./lib/bin/www",
+        "start": "node ./lib/bin/www",
         "pre-all": "set NODE_ENV=production&& npm-run-all pre-start server-prod",
         "dev": "set NODE_ENV=development&& npm-run-all server-dev",
         "pre-prod": "set NODE_ENV=preproduction&& npm-run-all pre-start server-prod",
