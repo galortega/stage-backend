@@ -1,4 +1,7 @@
-
-runtime: nodejs10
+env: flex
+runtime: custom
+threadsafe: true
+automatic_scaling:
+  max_num_instances: 1
 service: backenddev
 
