@@ -1,7 +1,4 @@
-env: flex
-runtime: custom
-threadsafe: true
-automatic_scaling:
-  max_num_instances: 1
+
+runtime: nodejs
 service: backenddev
 
