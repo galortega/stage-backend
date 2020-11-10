@@ -1,29 +1,18 @@
-import { DataTypes, Sequelize } from "Sequelize";
-import { estado } from "../constants/index";
+import { DataTypes, Sequelize } from "sequelize";
+import { estado, niveles } from "../constants/index";
 
-export const UsuarioModel = {
+export const PaisModel = {
   id: {
     type: DataTypes.UUID,
     primaryKey: true
   },
   pais: {
-    type: DataTypes.UUID,
-  },
-  nombre: {
-    type: Sequelize.STRING(45),
+    type: Sequelize.STRING(100) ,
     allowNull: false
   },
-  email: {
-    type: Sequelize.STRING(45),
-    allowNull: false,
-    unique: true
-  },
-  contrasena: {
-    type: Sequelize.STRING(45),
+  codigo: {
+    type: Sequelize.STRING(5),
     allowNull: false
-  },
-  telefono: {
-    type: Sequelize.STRING(45)
   },
   fecha_creacion: {
     type: Sequelize.DATE,
@@ -38,9 +27,9 @@ export const UsuarioModel = {
   }
 };
 
-export const UsuarioConfig = {
+export const PaisConfig = {
   freezeTableName: true,
-  tableName: "usuario",
+  tableName: "pais",
   timestamps: true,
   createdAt: "fecha_creacion",
   updatedAt: "fecha_actualizacion"

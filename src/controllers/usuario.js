@@ -1,7 +1,7 @@
 import models from "../models/index";
 import { uuid } from "uuidv4";
 import { Op } from "sequelize";
-import { estado, atributosExclude } from "../constants/index";
+import { estado, atributosExclude, estadoAprobado } from "../constants/index";
 import _ from "lodash";
 
 export const validarIDUsuario = async (id) => {
@@ -98,11 +98,28 @@ export const buscarPorId = async (req, res) => {
 };
 
 export const crearUsuario = async (req, res) => {
-  const { nombre, email, contrasena, rol, atributos } = req.body;
+  const t = await models.db.sequelize.transaction();
+
+  const {
+    nombre,
+    email,
+    contrasena,
+    rol,
+    atributos,
+    usuarioGrupo,
+    aprobacion,
+    pais,
+    telefono
+  } = req.body;
   const id = uuid();
   const idUsuarioRol = uuid();
   const AtributosUsuario = _.map(Object.keys(atributos), (a) => {
-    return { id: uuid(), usuarioRol: idUsuarioRol, clave: a, valor: atributos[a] };
+    return {
+      id: uuid(),
+      usuarioRol: idUsuarioRol,
+      clave: a,
+      valor: atributos[a]
+    };
   });
 
   const datosUsuario = {
@@ -110,6 +127,8 @@ export const crearUsuario = async (req, res) => {
     nombre,
     email,
     contrasena,
+    pais,
+    telefono,
     UsuarioRol: {
       id: idUsuarioRol,
       usuario: id,
@@ -117,25 +136,50 @@ export const crearUsuario = async (req, res) => {
       AtributosUsuario
     }
   };
+  try {
+    const Usuario = await models.Usuario.create(datosUsuario, {
+      include: [
+        {
+          model: models.UsuarioRol,
+          as: "UsuarioRol",
+          include: [
+            {
+              model: models.Atributos,
+              as: "AtributosUsuario"
+            }
+          ]
+        }
+      ],
+      transaction: t
+    });
+    let UsuarioGrupo;
+    if (!_.isEmpty(usuarioGrupo) && !_.isEmpty(aprobacion)) {
+      const datos = {
+        usuario: id,
+        aprobacion,
+        estado:
+          aprobacion === estadoAprobado.PENDIENTE
+            ? estado.INACTIVO
+            : estado.ACTIVO
+      };
+      console.log({ datos, usuarioGrupo });
+      UsuarioGrupo = await models.UsuarioGrupo.update(datos, {
+        where: { id: usuarioGrupo },
+        transaction: t
+      });
+    }
 
-  const Usuario = await models.Usuario.create(datosUsuario, {
-    include: [
-      {
-        model: models.UsuarioRol,
-        as: "UsuarioRol",
-        include: [
-          {
-            model: models.Atributos,
-            as: "AtributosUsuario"
-          }
-        ]
-      }
-    ]
-  });
-  return res.status(201).send({
-    Usuario,
-    msj: "Usuario ingresado correctamente."
-  });
+    await t.commit();
+    return res.status(201).send({
+      Usuario,
+      UsuarioGrupo,
+      msj: "Usuario ingresado correctamente."
+    });
+  } catch (error) {
+    console.log(error);
+    await t.rollback();
+    return errorStatusHandle(res, "TRANSACCION_FALLIDA");
+  }
 };
 
 export const actualizarUsuario = async (req, res) => {

@@ -1,7 +1,10 @@
 import { check, param, query } from "express-validator";
 import { validarAtributos, validarEmailUsuario } from "../controllers/usuario";
+import { validarIDUsuarioGrupo } from "../controllers/usuariogrupo";
 import _ from "lodash";
 import { validarIDRol } from "../controllers/rol";
+import { estadoAprobado } from "../constants";
+import { validarIDPais } from "../controllers/pais";
 
 export const checkCrearUsuario = [
   check(
@@ -27,5 +30,8 @@ export const checkCrearUsuario = [
     .isString()
     .isLength({ min: 5 }, { max: 30 }),
   check("rol").notEmpty().isUUID().custom(validarIDRol),
-  check("atributos", "JSON inválido").notEmpty().custom(validarAtributos)
+  check("atributos", "JSON inválido").notEmpty().custom(validarAtributos),
+  check("usuarioGrupo").optional().isUUID().custom(validarIDUsuarioGrupo),
+  check("aprobacion").optional().isIn(estadoAprobado.values),
+  check("pais", "País inválido").notEmpty().custom(validarIDPais)
 ];

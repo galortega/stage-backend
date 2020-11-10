@@ -4,12 +4,14 @@ import {
   buscarPorId,
   crearGrupo,
   actualizarGrupo,
-  eliminarGrupo
+  eliminarGrupo,
+  obtenerNombreGrupo
 } from "../controllers/grupo";
 import { allowedMethods, asyncWrapper, checkParameters } from "../utils/error";
 import auth from "../utils/auth";
 import {
   agregarMiembros,
+  confirmarMiembro,
   desactivarMiembro,
   getGrupos
 } from "../controllers/usuariogrupo";
@@ -36,5 +38,11 @@ router.post(
 
 router.use("/:id/suspenderParticipante$", allowedMethods(["PUT"]));
 router.put("/:id/suspenderParticipante", asyncWrapper(desactivarMiembro));
+
+router.use("/:id/confirmarParticipante$", allowedMethods(["PUT"]));
+router.put("/:id/confirmarParticipante", asyncWrapper(confirmarMiembro));
+
+router.use("/:id/obtenerNombre$", allowedMethods(["GET"]));
+router.get("/:id/obtenerNombre", asyncWrapper(obtenerNombreGrupo));
 
 export default router;

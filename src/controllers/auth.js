@@ -7,24 +7,14 @@ import { atributosExclude, estado, rolesId } from "../constants/index";
 
 export const autenticarParticipante = async (req, res) => {
   let { email, contrasena } = req.body;
-  email = _.toLower(email);
+  email = _.trim(_.toLower(email));
 
   const Usuario = await models.Usuario.findOne({
-    where: {
-      [Op.and]: [
-        {
-          email: {
-            [Op.like]: "%" + email + "%"
-          }
-        },
-        { estado: estado.ACTIVO }
-      ]
-    },
+    where: [{ email }, { estado: estado.ACTIVO }],
     include: [
       {
         model: models.UsuarioRol,
         as: "UsuarioRol",
-        where: { rol: rolesId.PARTICIPANTE },
         attributes: ["rol"],
         include: [
           {
@@ -36,7 +26,7 @@ export const autenticarParticipante = async (req, res) => {
       }
     ]
   });
-
+  console.log(Usuario);
   if (_.isEmpty(Usuario)) return errorStatusHandle(res, "USUARIO_INEXISTENTE");
   else if (contrasena !== Usuario.contrasena)
     return errorStatusHandle(res, "CONTRASENA_INCORRECTA");

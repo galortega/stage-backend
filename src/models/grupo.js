@@ -22,9 +22,7 @@ export const GrupoModel = {
     type: Sequelize.STRING(45),
     allowNull: false
   },
-  logo: {
-    type: Sequelize.STRING(200)
-  },
+  
   instagram: {
     type: Sequelize.STRING(45)
   },

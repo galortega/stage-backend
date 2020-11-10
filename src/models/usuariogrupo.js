@@ -7,8 +7,7 @@ export const UsuarioGrupoModel = {
     primaryKey: true
   },
   usuario: {
-    type: DataTypes.UUID,
-    allowNull: false
+    type: DataTypes.UUID
   },
   grupo: {
     type: DataTypes.UUID,

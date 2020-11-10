@@ -6,6 +6,12 @@ export const estado = {
   values: ["A", "I"]
 };
 
+export const niveles = {
+  PRINCIPIANTE: "PRI",
+  PROFESIONAL: "PRO",
+  values: ["PRI", "PRO"]
+};
+
 export const estadoConsulta = {
   PENDIENTE: "P",
   TERMINADA: "T",
@@ -44,6 +50,13 @@ export const rolGrupo = {
   values: ["B", "C", "D", "L"]
 };
 
+export const nombreRolGrupo = {
+  B: "Bailarín/a",
+  L: "Líder",
+  C: "Coreógrafo/a",
+  D: "Director/a"
+};
+
 export const tipoGrupo = {
   ACADEMIA: "A",
   GRUPOINDEPENDIENTE: "GI",
@@ -57,7 +70,8 @@ export const estadoAprobado = {
 };
 
 export const rolesId = {
-  PARTICIPANTE: "947aa7d3-17f5-4ab2-897e-ea97598cda96"
+  PARTICIPANTE: "b4c884b9-dc81-44ea-9378-cfa6ca2dd54f",
+  ADMINISTRADOR: "f1826bff-655d-474f-a3ed-d2599de2b101"
 };
 
 export const atributosExclude = [
@@ -67,3 +81,10 @@ export const atributosExclude = [
 ];
 
 export const adminDefecto = "30698c95-3245-49c9-b6e3-2326afc85de1";
+
+export const asuntos = {
+  InvitarParticipante: "Invitación a "
+};
+
+export const urlInvitarParticipante =
+  "http://localhost:4200/#/authentication/invitacion";

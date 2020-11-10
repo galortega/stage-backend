@@ -15,6 +15,11 @@ import usuariosRouter from "./routes/usuario";
 import rolesRouter from "./routes/rol";
 import authRouter from "./routes/auth";
 import gruposRouter from "./routes/grupo";
+import divisionesRouter from "./routes/division";
+import modalidadesRouter from "./routes/modalidad";
+import torneosRouter from "./routes/torneo";
+import paisesRouter from "./routes/pais";
+
 const app = express();
 
 app.use(cors());
@@ -44,6 +49,10 @@ app.use(routes.usuarioRaiz, usuariosRouter);
 app.use(routes.rol, rolesRouter);
 app.use(routes.auth, authRouter);
 app.use(routes.grupos, gruposRouter);
+app.use(routes.divisiones, divisionesRouter);
+app.use(routes.modalidades, modalidadesRouter);
+app.use(routes.torneos, torneosRouter);
+app.use(routes.paises, paisesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -63,6 +72,5 @@ app.use(function (err, req, res) {
 
 // Mount uploads
 app.use("./public", express.static(path.join(__dirname, "./public")));
-
 
 export default app;

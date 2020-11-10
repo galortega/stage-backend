@@ -1,7 +1,5 @@
 import { check, param } from "express-validator";
-import { validarAtributos, validarEmailUsuario } from "../controllers/usuario";
 import _ from "lodash";
-import { validarIDRol } from "../controllers/rol";
 import {
   validarEmailGrupo,
   validarMiembros,
@@ -13,11 +11,11 @@ import { tipoGrupo } from "../constants";
 export const checkCrearGrupo = [
   check(
     "nombre",
-    "Nombre inválido. La longitud mínima es 5 y máximo 30 caracteres"
+    "Nombre inválido. La longitud mínima es 1 y máximo 30 caracteres"
   )
     .notEmpty()
     .isString()
-    .isLength({ min: 7 }, { max: 30 })
+    .isLength({ min: 1 }, { max: 30 })
     .custom(validarNombreGrupo),
   check(
     "email",
@@ -27,21 +25,17 @@ export const checkCrearGrupo = [
     .isEmail()
     .isLength({ min: 5 }, { max: 30 })
     .custom(validarEmailGrupo),
-  check("pais", "País inválido. La longitud mínima es 5 y máximo 30 caracteres")
+  check("pais", "Email inválido. La longitud mínima es 5 y máximo 30 caracteres")
     .notEmpty()
     .isString()
     .isLength({ min: 5 }, { max: 30 }),
   check(
     "direccion",
-    "País inválido. La longitud mínima es 5 y máximo 30 caracteres"
+    "Dirección inválida. La longitud mínima es 5 y máximo 30 caracteres"
   )
     .notEmpty()
     .isString()
-    .isLength({ min: 5 }, { max: 30 }),
-  check("logo", "País inválido. La longitud mínima es 5 y máximo 30 caracteres")
-    .notEmpty()
-    .isString()
-    .isLength({ min: 5 }, { max: 30 }),
+    .isLength({ min: 5 }, { max: 80 }),
   check(
     "instagram",
     "Usuario de Instagram inválido. La longitud mínima es 2 y máximo 30 caracteres"

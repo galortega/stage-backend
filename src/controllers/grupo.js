@@ -5,11 +5,16 @@ import {
   estado,
   atributosExclude,
   rolGrupo,
-  estadoAprobado
+  estadoAprobado,
+  asuntos,
+  nombreRolGrupo,
+  tipoGrupo
 } from "../constants/index";
 import _ from "lodash";
 import { GrupoConfig } from "../models/grupo";
 import { isValidEmail } from "../utils/util";
+import { invitacionParticipante } from "../templates/invitacion";
+import { enviarCorreo } from "../utils/nodemailer";
 
 export const validarIDGrupo = async (id) => {
   return await models.Grupo.findOne({
@@ -65,11 +70,12 @@ export const validarEmailGrupo = async (email) => {
 };
 
 export const crearGrupo = async (req, res) => {
+  const emailLider = req.token;
   const {
     nombre,
     pais,
     direccion,
-    logo,
+    imagen,
     instagram,
     facebook,
     email,
@@ -77,6 +83,10 @@ export const crearGrupo = async (req, res) => {
     miembros
   } = req.body;
   const id = uuid();
+  miembros.push({
+    email: emailLider,
+    rol: tipo === tipoGrupo.ACADEMIA ? rolGrupo.DIRECTOR : rolGrupo.LIDER
+  });
 
   const datos = {
     id,
@@ -84,7 +94,7 @@ export const crearGrupo = async (req, res) => {
     tipo,
     pais,
     direccion,
-    logo,
+    // imagen,
     instagram,
     facebook,
     email,
@@ -94,8 +104,21 @@ export const crearGrupo = async (req, res) => {
         const usuario = await models.Usuario.findOne({
           where: [{ email }, { estado: estado.ACTIVO }]
         });
+        const usuariogrupo = uuid();
+        enviarCorreo(
+          email,
+          `${asuntos.InvitarParticipante}${nombre}`,
+          invitacionParticipante({
+            registrado: !usuario ? false : true,
+            nombreGrupo: nombre,
+            grupo: id,
+            rol: nombreRolGrupo[rol],
+            usuariogrupo,
+            email
+          })
+        );
         return {
-          id: uuid(),
+          id: usuariogrupo,
           usuario: usuario ? usuario.id : null,
           grupo: id,
           email,
@@ -186,15 +209,16 @@ export const buscarPorId = async (req, res) => {
       tipo,
       pais,
       direccion,
-      logo,
+      imagen,
       instagram,
       facebook,
       email
     } = grupo;
-    const miembroToken = _.find(MiembrosGrupo, { usuario });
-    if (!miembroToken) return false;
+    const esMiembroToken = _.find(MiembrosGrupo, { usuario });
+    if (!esMiembroToken) return false;
     _.forEach(MiembrosGrupo, (miembro) => {
       const {
+        id,
         usuario,
         rol,
         fecha_aprobado,
@@ -204,7 +228,8 @@ export const buscarPorId = async (req, res) => {
       } = miembro;
       const datos = {
         id: usuario,
-        nombre: !MiembroUsuario ? null : MiembroUsuario.nombres,
+        usuarioGrupo: id,
+        nombre: !MiembroUsuario ? null : MiembroUsuario.nombre,
         correo: email,
         telefono: !MiembroUsuario ? null : MiembroUsuario.telefono,
         rol,
@@ -220,11 +245,11 @@ export const buscarPorId = async (req, res) => {
       tipo,
       pais,
       direccion,
-      logo,
+      // imagen,
       instagram,
       facebook,
       email,
-      esDirector: miembroToken.rol === rolGrupo.DIRECTOR,
+      esDirector: esMiembroToken.rol === rolGrupo.DIRECTOR,
       miembros: {
         aprobados,
         pendientes
@@ -239,4 +264,16 @@ export const buscarPorId = async (req, res) => {
     return res.status(200).send({
       Grupo: Grupo || []
     });
+};
+
+export const obtenerNombreGrupo = async (req, res) => {
+  const { id } = req.params;
+
+  const Grupo = await models.Grupo.findOne({ where: { id } }).then((g) => {
+    if (g) return g.nombre;
+  });
+
+  return res.status(200).send({
+    Grupo: Grupo || []
+  });
 };
