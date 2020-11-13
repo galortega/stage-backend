@@ -162,7 +162,6 @@ export const crearUsuario = async (req, res) => {
             ? estado.INACTIVO
             : estado.ACTIVO
       };
-      console.log({ datos, usuarioGrupo });
       UsuarioGrupo = await models.UsuarioGrupo.update(datos, {
         where: { id: usuarioGrupo },
         transaction: t
@@ -183,12 +182,23 @@ export const crearUsuario = async (req, res) => {
 };
 
 export const actualizarUsuario = async (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
+  const { rol } = req.body;
+
+  let UsuarioRol;
+  if (!_.isEmpty(rol))
+    UsuarioRol = await models.UsuarioRol.create({
+      id: uuid(),
+      usuario: id,
+      rol
+    });
+
   const Usuario = await models.Usuario.update(req.body, {
-    where: { [Op.and]: [{ id }, { estado: estado.ACTIVO }] }
+    where: [{ id }, { estado: estado.ACTIVO }]
   });
   return res.status(200).send({
-    Usuario
+    Usuario,
+    UsuarioRol
   });
 };
 

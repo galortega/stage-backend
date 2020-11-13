@@ -22,7 +22,6 @@ router.post(
 
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
 router.get("/:id", asyncWrapper(buscarPorId));
-
 router.put("/:id", asyncWrapper(actualizarUsuario));
 router.delete("/:id", asyncWrapper(eliminarUsuario));
 

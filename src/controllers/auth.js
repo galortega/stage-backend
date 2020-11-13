@@ -26,7 +26,6 @@ export const autenticarParticipante = async (req, res) => {
       }
     ]
   });
-  console.log(Usuario);
   if (_.isEmpty(Usuario)) return errorStatusHandle(res, "USUARIO_INEXISTENTE");
   else if (contrasena !== Usuario.contrasena)
     return errorStatusHandle(res, "CONTRASENA_INCORRECTA");

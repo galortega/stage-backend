@@ -13,7 +13,8 @@ import {
   agregarMiembros,
   confirmarMiembro,
   desactivarMiembro,
-  getGrupos
+  getGrupos,
+  getGruposLider
 } from "../controllers/usuariogrupo";
 import { checkAgregarMiembros, checkCrearGrupo } from "../validations/grupo";
 
@@ -25,6 +26,9 @@ router.post("/", checkParameters(checkCrearGrupo), asyncWrapper(crearGrupo));
 
 router.use("/obtenerGrupos$", allowedMethods(["GET"]));
 router.get("/obtenerGrupos", auth, asyncWrapper(getGrupos));
+
+router.use("/obtenerGruposLider$", allowedMethods(["GET"]));
+router.get("/obtenerGruposLider", auth, asyncWrapper(getGruposLider));
 
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
 router.get("/:id", auth, asyncWrapper(buscarPorId));

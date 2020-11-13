@@ -44,7 +44,7 @@ export const getGrupos = async (req, res) => {
       const { tipo, nombre, id } = g.MiembrosGrupo;
       const data = {
         id,
-        esDirector: g.rol === rolGrupo.DIRECTOR,
+        esDirector: _.includes([rolGrupo.DIRECTOR, rolGrupo.LIDER], g.rol),
         tipo,
         nombre
       };
@@ -160,4 +160,24 @@ export const confirmarMiembro = async (req, res) => {
   });
 
   return res.status(200).send(UsuarioGrupo);
+};
+
+export const getGruposLider = async (req, res) => {
+  const { usuario } = req.token;
+
+  const Grupos = await models.UsuarioGrupo.findAll({
+    where: [
+      { usuario },
+      { rol: { [Op.in]: [rolGrupo.DIRECTOR, rolGrupo.LIDER] } }
+    ],
+    include: [
+      {
+        model: models.Grupo,
+        as: "MiembrosGrupo",
+        attributes: ["nombre", "tipo"]
+      }
+    ]
+  }).then((grupos) => grupos);
+
+  return res.status(200).send(Grupos);
 };
