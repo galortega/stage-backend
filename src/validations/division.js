@@ -9,5 +9,5 @@ export const checkCrearDivision = [
     .isString()
     .isLength({ min: 1 }, { max: 30 }),
   check("edadInicio", "Edad de inicio inválida.").notEmpty().isInt(),
-  check("edadFin", "Edad de inicio inválida.").notEmpty().isInt()
+  check("edadFin", "Edad de inicio inválida.").optional().isInt()
 ];

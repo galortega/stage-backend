@@ -1,4 +1,5 @@
 import { uuid } from "uuidv4";
+import { atributosExclude, estado } from "../constants";
 import models from "../models";
 
 export const crearDivision = async (req, res) => {
@@ -17,6 +18,17 @@ export const crearDivision = async (req, res) => {
     Division,
     msj: "Division ingresada correctamente."
   });
+};
+
+export const getDivisiones = async (req, res) => {
+  const Divisiones = await models.Division.findAll({
+    where: { estado: estado.ACTIVO },
+    attributes: {
+      exlude: atributosExclude
+    }
+  });
+
+  return res.status(200).send(Divisiones);
 };
 
 export const buscarDivisionPorNombre = async (nombre) => {
