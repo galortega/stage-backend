@@ -7,7 +7,7 @@ export const UsuarioModel = {
     primaryKey: true
   },
   pais: {
-    type: DataTypes.UUID,
+    type: DataTypes.UUID
   },
   nombre: {
     type: Sequelize.STRING(45),
@@ -24,6 +24,10 @@ export const UsuarioModel = {
   },
   telefono: {
     type: Sequelize.STRING(45)
+  },
+  fechaNacimiento: {
+    type: Sequelize.DATE,
+    field: "fecha_nacimiento"
   },
   fecha_creacion: {
     type: Sequelize.DATE,

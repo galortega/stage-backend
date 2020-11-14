@@ -1,19 +1,23 @@
 import { uuid } from "uuidv4";
 import { estado } from "../constants";
 import models from "../models";
+import _ from "lodash";
 
 export const crearModalidad = async (req, res) => {
-  const { nombre } = req.body;
+  const { modalidades } = req.body;
 
-  const datos = {
-    id: uuid(),
-    nombre
-  };
-
-  const Modalidad = await models.Modalidad.create(datos);
+  const datos = _.map(modalidades, (m) => {
+    const { nombre, precio } = m;
+    return {
+      id: uuid(),
+      nombre,
+      precio
+    };
+  });
+  const Modalidades = await models.Modalidad.bulkCreate(datos);
 
   return res.status(200).send({
-    Modalidad,
+    Modalidades,
     msj: "Modalidad ingresada correctamente."
   });
 };

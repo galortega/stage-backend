@@ -18,6 +18,10 @@ export const CoreografiaModel = {
     type: Sequelize.STRING(10),
     allowNull: false
   },
+  coreografia: {
+    type: Sequelize.FLOAT,
+    allowNull: false
+  },
   fecha_creacion: {
     type: Sequelize.DATE,
     allowNull: false

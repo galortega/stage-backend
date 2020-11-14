@@ -109,7 +109,8 @@ export const crearUsuario = async (req, res) => {
     usuarioGrupo,
     aprobacion,
     pais,
-    telefono
+    telefono,
+    fechaNacimiento
   } = req.body;
   const id = uuid();
   const idUsuarioRol = uuid();
@@ -129,6 +130,7 @@ export const crearUsuario = async (req, res) => {
     contrasena,
     pais,
     telefono,
+    fechaNacimiento,
     UsuarioRol: {
       id: idUsuarioRol,
       usuario: id,
@@ -181,24 +183,72 @@ export const crearUsuario = async (req, res) => {
   }
 };
 
+const actualizarAtributos = async (atributos, usuario, idUsuarioRol) => {
+  const AtributosUsuario = await Promise.all(
+    _.map(Object.keys(atributos), async (a) => {
+      const atributo = await models.UsuarioRol.findOne({
+        where: { usuario },
+        include: [
+          {
+            model: models.Atributos,
+            as: "AtributosUsuario",
+            where: { clave: a }
+          }
+        ]
+      });
+      if (!_.isEmpty(atributo))
+        return {
+          id: atributo.AtributosUsuario[0].id,
+          usuarioRol: atributo.id,
+          clave: a,
+          valor: atributos[a]
+        };
+      else
+        return {
+          id: uuid(),
+          usuarioRol: idUsuarioRol,
+          clave: a,
+          valor: atributos[a]
+        };
+    })
+  );
+  return AtributosUsuario;
+};
+
 export const actualizarUsuario = async (req, res) => {
   const { id } = req.params;
-  const { rol } = req.body;
+  const { rol, atributos } = req.body;
+
+  let idUsuarioRol;
+  if (!_.isEmpty(rol))
+    idUsuarioRol = await models.UsuarioRol.findOne({
+      where: [{ usuario: id, rol }]
+    }).then((u) => u.id);
 
   let UsuarioRol;
-  if (!_.isEmpty(rol))
+  if (!_.isEmpty(rol) && _.isEmpty(idUsuarioRol))
     UsuarioRol = await models.UsuarioRol.create({
       id: uuid(),
       usuario: id,
       rol
     });
 
+  let Atributos;
+  if (!_.isEmpty(atributos)) {
+    datosAtributos = await actualizarAtributos(atributos, id, idUsuarioRol);
+    /* Atributos = await models.Atributos.bulkCreate(datosAtributos, {
+      updateOnDuplicate: ["clave", "valor"]
+    }); */
+  }
+
   const Usuario = await models.Usuario.update(req.body, {
     where: [{ id }, { estado: estado.ACTIVO }]
   });
+
   return res.status(200).send({
     Usuario,
-    UsuarioRol
+    UsuarioRol,
+    Atributos
   });
 };
 

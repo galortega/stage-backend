@@ -1,5 +1,6 @@
 import {
   asuntos,
+  atributosExclude,
   estado,
   estadoAprobado,
   nombreRolGrupo,
@@ -164,8 +165,9 @@ export const confirmarMiembro = async (req, res) => {
 
 export const getGruposLider = async (req, res) => {
   const { usuario } = req.token;
-
-  const Grupos = await models.UsuarioGrupo.findAll({
+  const GI = [];
+  const A = [];
+  await models.UsuarioGrupo.findAll({
     where: [
       { usuario },
       { rol: { [Op.in]: [rolGrupo.DIRECTOR, rolGrupo.LIDER] } }
@@ -176,8 +178,27 @@ export const getGruposLider = async (req, res) => {
         as: "MiembrosGrupo",
         attributes: ["nombre", "tipo"]
       }
-    ]
-  }).then((grupos) => grupos);
+    ],
+    attributes: {
+      exclude: atributosExclude
+    }
+  }).then((grupos) => {
+    if (grupos)
+      return _.map(grupos, (g) => {
+        const { grupo, MiembrosGrupo } = g;
+        const { nombre, tipo } = MiembrosGrupo;
+        switch (tipo) {
+          case tipoGrupo.ACADEMIA:
+            A.push({ grupo, nombre });
+            break;
+          case tipoGrupo.GRUPOINDEPENDIENTE:
+            GI.push({ grupo, nombre });
+            break;
+          default:
+            break;
+        }
+      });
+  });
 
-  return res.status(200).send(Grupos);
+  return res.status(200).send({ A, GI });
 };

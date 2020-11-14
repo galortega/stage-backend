@@ -10,6 +10,10 @@ export const ModalidadModel = {
     type: Sequelize.STRING(45),
     allowNull: false
   },
+  precio: {
+    type: Sequelize.FLOAT,
+    allowNull: false
+  },
   fecha_creacion: {
     type: Sequelize.DATE,
     allowNull: false

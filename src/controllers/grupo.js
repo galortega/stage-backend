@@ -70,7 +70,7 @@ export const validarEmailGrupo = async (email) => {
 };
 
 export const crearGrupo = async (req, res) => {
-  const emailLider = req.token;
+  const emailLider = req.token.email;
   const {
     nombre,
     pais,
@@ -98,9 +98,10 @@ export const crearGrupo = async (req, res) => {
     instagram,
     facebook,
     email,
-    UsuarioGrupo: await Promise.all(
+    MiembrosGrupo: await Promise.all(
       _.map(miembros, async (miembro) => {
         const { email, rol } = miembro;
+        console.log({ email, rol });
         const usuario = await models.Usuario.findOne({
           where: [{ email }, { estado: estado.ACTIVO }]
         });
@@ -127,7 +128,6 @@ export const crearGrupo = async (req, res) => {
       })
     )
   };
-
   const Grupo = await models.Grupo.create(datos, {
     include: [
       {
@@ -202,59 +202,61 @@ export const buscarPorId = async (req, res) => {
       exclude: atributosExclude
     }
   }).then((grupo) => {
-    const {
-      MiembrosGrupo,
-      id,
-      nombre,
-      tipo,
-      pais,
-      direccion,
-      imagen,
-      instagram,
-      facebook,
-      email
-    } = grupo;
-    const esMiembroToken = _.find(MiembrosGrupo, { usuario });
-    if (!esMiembroToken) return false;
-    _.forEach(MiembrosGrupo, (miembro) => {
+    if (grupo) {
       const {
+        MiembrosGrupo,
         id,
-        usuario,
-        rol,
-        fecha_aprobado,
-        aprobacion,
+        nombre,
+        tipo,
+        pais,
+        direccion,
+        imagen,
+        instagram,
+        facebook,
+        email
+      } = grupo;
+      const esMiembroToken = _.find(MiembrosGrupo, { usuario });
+      if (!esMiembroToken) return false;
+      _.forEach(MiembrosGrupo, (miembro) => {
+        const {
+          id,
+          usuario,
+          rol,
+          fecha_aprobado,
+          aprobacion,
+          email,
+          MiembroUsuario
+        } = miembro;
+        const datos = {
+          id: usuario,
+          usuarioGrupo: id,
+          nombre: !MiembroUsuario ? null : MiembroUsuario.nombre,
+          correo: email,
+          telefono: !MiembroUsuario ? null : MiembroUsuario.telefono,
+          rol,
+          fechaUnion: fecha_aprobado,
+          existe: !_.isEmpty(MiembroUsuario)
+        };
+        if (aprobacion === estadoAprobado.APROBADO) aprobados.push(datos);
+        else pendientes.push(datos);
+      });
+      return {
+        id,
+        nombre,
+        tipo,
+        pais,
+        direccion,
+        // imagen,
+        instagram,
+        facebook,
         email,
-        MiembroUsuario
-      } = miembro;
-      const datos = {
-        id: usuario,
-        usuarioGrupo: id,
-        nombre: !MiembroUsuario ? null : MiembroUsuario.nombre,
-        correo: email,
-        telefono: !MiembroUsuario ? null : MiembroUsuario.telefono,
-        rol,
-        fechaUnion: fecha_aprobado,
-        existe: !_.isEmpty(MiembroUsuario)
+        esDirector: esMiembroToken.rol === rolGrupo.DIRECTOR,
+        miembros: {
+          aprobados,
+          pendientes
+        }
       };
-      if (aprobacion === estadoAprobado.APROBADO) aprobados.push(datos);
-      else pendientes.push(datos);
-    });
-    return {
-      id,
-      nombre,
-      tipo,
-      pais,
-      direccion,
-      // imagen,
-      instagram,
-      facebook,
-      email,
-      esDirector: esMiembroToken.rol === rolGrupo.DIRECTOR,
-      miembros: {
-        aprobados,
-        pendientes
-      }
-    };
+    }
   });
   if (!Grupo)
     return res.status(400).send({
@@ -276,4 +278,42 @@ export const obtenerNombreGrupo = async (req, res) => {
   return res.status(200).send({
     Grupo: Grupo || []
   });
+};
+
+export const validarMiembroGrupo = async (req, res) => {
+  const { nivel, division, modalidad } = req.body;
+  const { grupo } = req.params;
+
+  const Division = await models.Division.findOne({
+    where: { id: division }
+  }).then((d) => {
+    const { edadInicio, edadFin } = d;
+    return { edadInicio, edadFin };
+  });
+
+  const ParticipantesValidos = await models.UsuarioGrupo.findAll({
+    where: { grupo },
+    include: [
+      {
+        model: models.UsuarioGrupo,
+        as: "MiembroUsuario",
+        include: [
+          {
+            model: models.Atributos,
+            as: "AtributosUsuario",
+            where: [{ clave: "nivel", valor: nivel }]
+          }
+        ]
+      }
+    ]
+  }).then((usuarios) => {
+    return _.map(usuarios, (u) => {
+      const { fechaNacimiento } = u;
+      const { edadInicio, edadFin } = Division;
+      const edad = moment.duration(moment().diff(fechaNacimiento)).asYears();
+      if (_.inRange(edad, edadInicio, edadFin)) return u;
+    });
+  });
+
+  return res.status(200).send(ParticipantesValidos);
 };

@@ -22,7 +22,12 @@ const router = express.Router();
 
 router.use("/$", allowedMethods(["GET", "POST"]));
 router.get("/", asyncWrapper(buscarTodos));
-router.post("/", checkParameters(checkCrearGrupo), asyncWrapper(crearGrupo));
+router.post(
+  "/",
+  auth,
+  checkParameters(checkCrearGrupo),
+  asyncWrapper(crearGrupo)
+);
 
 router.use("/obtenerGrupos$", allowedMethods(["GET"]));
 router.get("/obtenerGrupos", auth, asyncWrapper(getGrupos));
