@@ -1,7 +1,12 @@
 import models from "../models/index";
 import { uuid } from "uuidv4";
 import { Op } from "sequelize";
-import { estado, atributosExclude, estadoAprobado } from "../constants/index";
+import {
+  estado,
+  atributosExclude,
+  estadoAprobado,
+  niveles
+} from "../constants/index";
 import _ from "lodash";
 
 export const validarIDUsuario = async (id) => {
@@ -114,6 +119,8 @@ export const crearUsuario = async (req, res) => {
   } = req.body;
   const id = uuid();
   const idUsuarioRol = uuid();
+
+  atributos.push({ nivel: niveles.PRINCIPIANTE });
   const AtributosUsuario = _.map(Object.keys(atributos), (a) => {
     return {
       id: uuid(),
@@ -201,14 +208,16 @@ const actualizarAtributos = async (atributos, usuario, idUsuarioRol) => {
           id: atributo.AtributosUsuario[0].id,
           usuarioRol: atributo.id,
           clave: a,
-          valor: atributos[a]
+          valor: atributos[a],
+          existe: true
         };
       else
         return {
           id: uuid(),
           usuarioRol: idUsuarioRol,
           clave: a,
-          valor: atributos[a]
+          valor: atributos[a],
+          existe: false
         };
     })
   );
@@ -223,22 +232,25 @@ export const actualizarUsuario = async (req, res) => {
   if (!_.isEmpty(rol))
     idUsuarioRol = await models.UsuarioRol.findOne({
       where: [{ usuario: id, rol }]
-    }).then((u) => u.id);
+    }).then((u) => (!u ? null : u.id));
 
   let UsuarioRol;
-  if (!_.isEmpty(rol) && _.isEmpty(idUsuarioRol))
+  if (!_.isEmpty(rol) && _.isEmpty(idUsuarioRol)) {
+    idUsuarioRol = uuid();
     UsuarioRol = await models.UsuarioRol.create({
-      id: uuid(),
+      id: idUsuarioRol,
       usuario: id,
       rol
     });
+  }
 
   let Atributos;
+  let datosAtributos;
   if (!_.isEmpty(atributos)) {
     datosAtributos = await actualizarAtributos(atributos, id, idUsuarioRol);
-    /* Atributos = await models.Atributos.bulkCreate(datosAtributos, {
+    Atributos = await models.Atributos.bulkCreate(datosAtributos, {
       updateOnDuplicate: ["clave", "valor"]
-    }); */
+    });
   }
 
   const Usuario = await models.Usuario.update(req.body, {

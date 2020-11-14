@@ -8,13 +8,14 @@ import {
   estadoAprobado,
   asuntos,
   nombreRolGrupo,
-  tipoGrupo
+  tipoGrupo,
+  rolesId
 } from "../constants/index";
 import _ from "lodash";
-import { GrupoConfig } from "../models/grupo";
 import { isValidEmail } from "../utils/util";
 import { invitacionParticipante } from "../templates/invitacion";
 import { enviarCorreo } from "../utils/nodemailer";
+import moment from "moment";
 
 export const validarIDGrupo = async (id) => {
   return await models.Grupo.findOne({
@@ -291,23 +292,38 @@ export const validarMiembroGrupo = async (req, res) => {
     return { edadInicio, edadFin };
   });
 
+  const Modalidad = await models.Modalidad.findOne({
+    where: { id: modalidad },
+    attributes: ["id", "nombre", "precio"]
+  });
+
   const ParticipantesValidos = await models.UsuarioGrupo.findAll({
     where: { grupo },
     include: [
       {
-        model: models.UsuarioGrupo,
+        model: models.Usuario,
         as: "MiembroUsuario",
         include: [
           {
-            model: models.Atributos,
-            as: "AtributosUsuario",
-            where: [{ clave: "nivel", valor: nivel }]
+            model: models.UsuarioRol,
+            as: "UsuarioRol",
+            attributes: ["rol"],
+            where: { rol: rolesId.PARTICIPANTE },
+            include: [
+              {
+                model: models.Atributos,
+                as: "AtributosUsuario",
+                attributes: ["clave", "valor"],
+                where: [{ clave: "nivel", valor: nivel }]
+              }
+            ]
           }
         ]
       }
     ]
   }).then((usuarios) => {
     return _.map(usuarios, (u) => {
+      u = u.toJSON();
       const { fechaNacimiento } = u;
       const { edadInicio, edadFin } = Division;
       const edad = moment.duration(moment().diff(fechaNacimiento)).asYears();
@@ -315,5 +331,7 @@ export const validarMiembroGrupo = async (req, res) => {
     });
   });
 
-  return res.status(200).send(ParticipantesValidos);
+  return res
+    .status(200)
+    .send({ Participantes: _.compact(ParticipantesValidos), Modalidad });
 };

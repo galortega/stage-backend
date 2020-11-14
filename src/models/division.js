@@ -17,7 +17,6 @@ export const DivisionModel = {
   },
   edadFin: {
     type: Sequelize.INTEGER,
-    allowNull: false,
     field: "edad_fin"
   },
   fecha_creacion: {

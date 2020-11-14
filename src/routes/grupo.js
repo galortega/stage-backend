@@ -5,7 +5,8 @@ import {
   crearGrupo,
   actualizarGrupo,
   eliminarGrupo,
-  obtenerNombreGrupo
+  obtenerNombreGrupo,
+  validarMiembroGrupo
 } from "../controllers/grupo";
 import { allowedMethods, asyncWrapper, checkParameters } from "../utils/error";
 import auth from "../utils/auth";
@@ -53,5 +54,8 @@ router.put("/:id/confirmarParticipante", asyncWrapper(confirmarMiembro));
 
 router.use("/:id/obtenerNombre$", allowedMethods(["GET"]));
 router.get("/:id/obtenerNombre", asyncWrapper(obtenerNombreGrupo));
+
+router.use("/:grupo/validarParticipantes$", allowedMethods(["GET"]));
+router.get("/:grupo/validarParticipantes", asyncWrapper(validarMiembroGrupo));
 
 export default router;
