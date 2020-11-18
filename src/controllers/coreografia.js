@@ -55,7 +55,7 @@ export const crearCoreografias = async (req, res) => {
           precio,
           CoreografiaParticipantes: _.map(miembros, (m) => {
             const { usuarioGrupo, rol } = m;
-            return { id: uuid(), coreografia, usuarioGrupo, rol };
+            return { id: uuid(), coreografia, usuarioGrupo, rol, subTorneo };
           })
         };
         return datosCoreografia;
@@ -63,18 +63,15 @@ export const crearCoreografias = async (req, res) => {
     );
     console.log(datos[0]);
 
-    const Coreografias = await models.Coreografia.bulkCreate(
-      datos,
-      {
-        transaction: t,
-        include: [
-          {
-            model: models.GrupoCoreografia,
-            as: "CoreografiaParticipantes"
-          }
-        ]
-      }
-    );
+    const Coreografias = await models.Coreografia.bulkCreate(datos, {
+      transaction: t,
+      include: [
+        {
+          model: models.GrupoCoreografia,
+          as: "CoreografiaParticipantes"
+        }
+      ]
+    });
 
     await t.commit();
 

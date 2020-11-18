@@ -1,4 +1,4 @@
-import { DataTypes, Sequelize } from "Sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { estado, tipoGrupo } from "../constants/index";
 
 export const GrupoModel = {

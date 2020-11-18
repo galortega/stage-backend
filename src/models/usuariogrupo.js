@@ -1,4 +1,4 @@
-import { DataTypes, Sequelize } from "Sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { estado, estadoAprobado, rolGrupo } from "../constants/index";
 
 export const UsuarioGrupoModel = {

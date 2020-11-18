@@ -298,6 +298,18 @@ export const validarMiembroGrupo = async (req, res) => {
     attributes: ["id", "nombre", "precio"]
   });
 
+  const SubTorneo = await validarSubTorneo(torneo, nivel, modalidad, division);
+
+  const InscritosSubTorneo = await models.UsuarioGrupo.findAll({
+    where: { grupo, usuario: { [Op.ne]: null } },
+    include: [
+      {
+        model: models.Coreografia,
+        as: "ParticipantesCoreografia"
+      }
+    ]
+  });
+
   const ParticipantesValidos = await models.UsuarioGrupo.findAll({
     where: { grupo, usuario: { [Op.ne]: null } },
     include: [
@@ -322,21 +334,20 @@ export const validarMiembroGrupo = async (req, res) => {
         ]
       }
     ]
-  }).then((usuarios) => {
-    return _.map(usuarios, (u) => {
+  }).then(async (usuarios) =>
+    _.map(usuarios, (u) => {
       u = u.toJSON();
-      const { fechaNacimiento } = u;
+      const { fechaNacimiento, id } = u;
       const { edadInicio, edadFin } = Division;
       const edad = moment.duration(moment().diff(fechaNacimiento)).asYears();
       if (_.inRange(edad, edadInicio, edadFin)) return u;
-    });
-  });
-
-  const SubTorneo = await validarSubTorneo(torneo, nivel, modalidad, division);
+    })
+  );
 
   return res.status(200).send({
     Participantes: _.compact(ParticipantesValidos),
     Modalidad,
-    SubTorneo
+    SubTorneo,
+    InscritosSubTorneo
   });
 };
