@@ -1,6 +1,19 @@
 import { uuid } from "uuidv4";
 import { atributosExclude, estado } from "../constants";
 import models from "../models";
+import { Op } from "sequelize";
+
+export const validarIDDivision = async (id) => {
+  return await models.Division.findOne({
+    where: { [Op.and]: [{ id }, { estado: estado.ACTIVO }] }
+  }).then((d) => {
+    if (!d) {
+      return Promise.reject(
+        new Error("El id ingresado no pertenece a una división.")
+      );
+    } else return Promise.resolve();
+  });
+};
 
 export const crearDivision = async (req, res) => {
   const { nombre, edadInicio, edadFin } = req.body;

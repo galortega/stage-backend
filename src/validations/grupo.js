@@ -6,7 +6,9 @@ import {
   validarNombreGrupo,
   validarIDGrupo
 } from "../controllers/grupo";
-import { tipoGrupo } from "../constants";
+import { niveles, tipoGrupo } from "../constants";
+import { validarIDDivision } from "../controllers/division";
+import { validarIDTorneo } from "../controllers/torneo";
 
 export const checkCrearGrupo = [
   check(
@@ -25,7 +27,10 @@ export const checkCrearGrupo = [
     .isEmail()
     .isLength({ min: 5 }, { max: 30 })
     .custom(validarEmailGrupo),
-  check("pais", "Email inválido. La longitud mínima es 5 y máximo 30 caracteres")
+  check(
+    "pais",
+    "Email inválido. La longitud mínima es 5 y máximo 30 caracteres"
+  )
     .notEmpty()
     .isString()
     .isLength({ min: 5 }, { max: 30 }),
@@ -58,4 +63,11 @@ export const checkCrearGrupo = [
 export const checkAgregarMiembros = [
   param("id").notEmpty().isUUID().custom(validarIDGrupo),
   check("miembros").notEmpty().custom(validarMiembros)
+];
+
+export const checkValidarParticipantes = [
+  param("grupo").notEmpty().isUUID().custom(validarIDGrupo),
+  check("nivel").notEmpty().isIn(niveles.values),
+  check("division").notEmpty().custom(validarIDDivision),
+  check("torneo").notEmpty().custom(validarIDTorneo)
 ];

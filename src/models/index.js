@@ -137,6 +137,15 @@ GrupoCoreografia.belongsTo(UsuarioGrupo, {
   foreignKey: "usuarioGrupo"
 });
 
+Coreografia.hasMany(GrupoCoreografia, {
+  as: "CoreografiaParticipantes",
+  foreignKey: "coreografia"
+});
+GrupoCoreografia.belongsTo(Coreografia, {
+  as: "CoreografiaParticipantes",
+  foreignKey: "coreografia"
+});
+
 //GRUPO
 Grupo.hasMany(Coreografia, {
   as: "CoreografiaGrupo",

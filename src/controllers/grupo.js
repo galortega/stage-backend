@@ -16,6 +16,7 @@ import { isValidEmail } from "../utils/util";
 import { invitacionParticipante } from "../templates/invitacion";
 import { enviarCorreo } from "../utils/nodemailer";
 import moment from "moment";
+import { validarSubTorneo } from "./subTorneo";
 
 export const validarIDGrupo = async (id) => {
   return await models.Grupo.findOne({
@@ -282,9 +283,9 @@ export const obtenerNombreGrupo = async (req, res) => {
 };
 
 export const validarMiembroGrupo = async (req, res) => {
-  const { nivel, division, modalidad } = req.body;
+  const { nivel, division, modalidad, torneo } = req.query;
   const { grupo } = req.params;
-
+  console.log({ nivel, division, modalidad, torneo, grupo });
   const Division = await models.Division.findOne({
     where: { id: division }
   }).then((d) => {
@@ -298,7 +299,7 @@ export const validarMiembroGrupo = async (req, res) => {
   });
 
   const ParticipantesValidos = await models.UsuarioGrupo.findAll({
-    where: { grupo },
+    where: { grupo, usuario: { [Op.ne]: null } },
     include: [
       {
         model: models.Usuario,
@@ -331,7 +332,11 @@ export const validarMiembroGrupo = async (req, res) => {
     });
   });
 
-  return res
-    .status(200)
-    .send({ Participantes: _.compact(ParticipantesValidos), Modalidad });
+  const SubTorneo = await validarSubTorneo(torneo, nivel, modalidad, division);
+
+  return res.status(200).send({
+    Participantes: _.compact(ParticipantesValidos),
+    Modalidad,
+    SubTorneo
+  });
 };

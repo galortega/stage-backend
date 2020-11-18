@@ -15,10 +15,9 @@ export const CoreografiaModel = {
     allowNull: false
   },
   resultado: {
-    type: Sequelize.STRING(10),
-    allowNull: false
+    type: Sequelize.STRING(10)
   },
-  coreografia: {
+  precio: {
     type: Sequelize.FLOAT,
     allowNull: false
   },

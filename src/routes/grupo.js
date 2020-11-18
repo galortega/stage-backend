@@ -17,7 +17,8 @@ import {
   getGrupos,
   getGruposLider
 } from "../controllers/usuariogrupo";
-import { checkAgregarMiembros, checkCrearGrupo } from "../validations/grupo";
+import { checkAgregarMiembros, checkCrearGrupo, checkValidarParticipantes } from "../validations/grupo";
+import coreografiasRouter from "./coreografia";
 
 const router = express.Router();
 
@@ -56,6 +57,8 @@ router.use("/:id/obtenerNombre$", allowedMethods(["GET"]));
 router.get("/:id/obtenerNombre", asyncWrapper(obtenerNombreGrupo));
 
 router.use("/:grupo/validarParticipantes$", allowedMethods(["GET"]));
-router.get("/:grupo/validarParticipantes", asyncWrapper(validarMiembroGrupo));
+router.get("/:grupo/validarParticipantes", checkParameters(checkValidarParticipantes) ,asyncWrapper(validarMiembroGrupo));
+
+router.use(coreografiasRouter);
 
 export default router;

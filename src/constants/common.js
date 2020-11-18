@@ -1,12 +1,15 @@
 export const baseRoute = "/api/v1";
 
 export const routes = {
-  usuarioRaiz: `${baseRoute}/usuarios`,
+  usuario: `${baseRoute}/usuarios`,
   rol: `${baseRoute}/roles`,
   auth: `${baseRoute}/auth`,
-  grupos: `${baseRoute}/grupos`,
+  gruposRoot: `${baseRoute}/grupos`,
+  grupos: {
+    coreografias: "/:grupo/coreografias"
+  },
   divisiones: `${baseRoute}/divisiones`,
   modalidades: `${baseRoute}/modalidades`,
   torneos: `${baseRoute}/torneos`,
-  paises: `${baseRoute}/paises`,
+  paises: `${baseRoute}/paises`
 };

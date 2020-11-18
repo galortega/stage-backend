@@ -45,10 +45,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", indexRouter);
-app.use(routes.usuarioRaiz, usuariosRouter);
+app.use(routes.usuario, usuariosRouter);
 app.use(routes.rol, rolesRouter);
 app.use(routes.auth, authRouter);
-app.use(routes.grupos, gruposRouter);
+app.use(routes.gruposRoot, gruposRouter);
 app.use(routes.divisiones, divisionesRouter);
 app.use(routes.modalidades, modalidadesRouter);
 app.use(routes.torneos, torneosRouter);

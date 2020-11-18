@@ -2,6 +2,20 @@ import { uuid } from "uuidv4";
 import models from "../models";
 import _ from "lodash";
 import { atributosExclude, estado } from "../constants";
+import { Op } from "sequelize";
+
+
+export const validarIDTorneo = async (id) => {
+  return await models.Torneo.findOne({
+    where: { [Op.and]: [{ id }, { estado: estado.ACTIVO }] }
+  }).then((Torneo) => {
+    if (!Torneo) {
+      return Promise.reject(
+        new Error("El id ingresado no pertenece a un torneo.")
+      );
+    } else return Promise.resolve();
+  });
+};
 
 export const crearTorneo = async (req, res) => {
   const {
@@ -57,7 +71,16 @@ export const crearTorneo = async (req, res) => {
 
 export const buscarTodos = async (req, res) => {
   const Torneos = await models.Torneo.findAll({
-    include: [{ model: models.Pais, as: "Pais", attributes: ["pais"] }],
+    include: [
+      { model: models.Pais, as: "Pais", attributes: ["pais"] },
+      {
+        model: models.SubTorneo,
+        as: "SubTorneos",
+        attributes: {
+          exclude: atributosExclude
+        }
+      }
+    ],
     where: { estado: estado.ACTIVO },
     attributes: {
       exclude: atributosExclude
