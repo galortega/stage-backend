@@ -11,7 +11,7 @@
     "build": "npm-run-all babel",
     "babel": "babel -d lib/ src",
     "clean": "rimraf lib",
-    "server-prod": "node ./lib/bin/www",
+    "server-prod": "sudo nohup node ./lib/bin/www &",
     "server-dev": "nodemon --exec babel-node ./src/bin/www"
   },
   "keywords": [],

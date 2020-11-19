@@ -15,6 +15,10 @@ export const GrupoCoreografiaModel = {
     type: DataTypes.UUID,
     allowNull: false
   },
+  subTorneo: {
+    type: DataTypes.UUID,
+    allowNull: false
+  },
   rol: {
     type: Sequelize.ENUM(rolGrupo.values),
     allowNull: false

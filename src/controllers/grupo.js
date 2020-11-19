@@ -298,20 +298,14 @@ export const validarMiembroGrupo = async (req, res) => {
     attributes: ["id", "nombre", "precio"]
   });
 
-  const SubTorneo = await validarSubTorneo(torneo, nivel, modalidad, division);
-
-  const InscritosSubTorneo = await models.UsuarioGrupo.findAll({
-    where: { grupo, usuario: { [Op.ne]: null } },
-    include: [
-      {
-        model: models.Coreografia,
-        as: "ParticipantesCoreografia"
-      }
-    ]
-  });
+  const subTorneo = await validarSubTorneo(torneo, nivel, modalidad, division);
 
   const ParticipantesValidos = await models.UsuarioGrupo.findAll({
-    where: { grupo, usuario: { [Op.ne]: null } },
+    where: [
+      { grupo },
+      { usuario: { [Op.ne]: null } },
+      { estado: estado.ACTIVO }
+    ],
     include: [
       {
         model: models.Usuario,
@@ -327,27 +321,36 @@ export const validarMiembroGrupo = async (req, res) => {
                 model: models.Atributos,
                 as: "AtributosUsuario",
                 attributes: ["clave", "valor"],
-                where: [{ clave: "nivel", valor: nivel }]
+                where: [{ clave: "nivel" }, { valor: nivel }]
               }
             ]
           }
         ]
+      },
+      {
+        model: models.GrupoCoreografia,
+        as: "CoreografiaParticipante"
       }
     ]
   }).then(async (usuarios) =>
     _.map(usuarios, (u) => {
       u = u.toJSON();
-      const { fechaNacimiento, id } = u;
+      const { fechaNacimiento, MiembroUsuario, CoreografiaParticipante } = u;
       const { edadInicio, edadFin } = Division;
       const edad = moment.duration(moment().diff(fechaNacimiento)).asYears();
-      if (_.inRange(edad, edadInicio, edadFin)) return u;
+      const repiteSubtorneo = _.find(CoreografiaParticipante, { subTorneo });
+      if (
+        _.inRange(edad, edadInicio, edadFin) &&
+        !_.isEmpty(MiembroUsuario) &&
+        _.isEmpty(repiteSubtorneo)
+      )
+        return u;
     })
   );
 
   return res.status(200).send({
     Participantes: _.compact(ParticipantesValidos),
     Modalidad,
-    SubTorneo,
-    InscritosSubTorneo
+    SubTorneo: subTorneo
   });
 };
