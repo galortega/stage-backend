@@ -14,6 +14,9 @@ export const CoreografiaModel = {
     type: DataTypes.UUID,
     allowNull: false
   },
+  nombre: {
+    type: Sequelize.STRING(45)
+  },
   resultado: {
     type: Sequelize.STRING(10)
   },
