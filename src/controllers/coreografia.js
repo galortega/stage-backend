@@ -26,11 +26,11 @@ Se encarga de crear múltiples coregrafías ligadas a un Torneo y Grupo
 */
 export const crearCoreografias = async (req, res) => {
   const { grupo } = req.params;
-  const { torneo, coreografias } = req.body;
+  const { torneo, subtorneos } = req.body;
   const t = await models.db.sequelize.transaction();
   try {
     const datos = await Promise.all(
-      _.map(coreografias, async (c) => {
+      _.map(subtorneos, async (c) => {
         let { subTorneo, precio, miembros, nivel, modalidad, division } = c;
         const coreografia = uuid();
 
