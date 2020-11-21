@@ -28,7 +28,6 @@ export const crearCoreografias = async (req, res) => {
   const { grupo } = req.params;
   const { torneo, coreografias } = req.body;
   const t = await models.db.sequelize.transaction();
-
   try {
     const datos = await Promise.all(
       _.map(coreografias, async (c) => {
@@ -61,7 +60,7 @@ export const crearCoreografias = async (req, res) => {
         return datosCoreografia;
       })
     );
-    console.log(datos[0]);
+    console.log({ body: req.body, datos });
 
     const Coreografias = await models.Coreografia.bulkCreate(datos, {
       transaction: t,
