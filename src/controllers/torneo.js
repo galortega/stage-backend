@@ -4,7 +4,6 @@ import _ from "lodash";
 import { atributosExclude, estado } from "../constants";
 import { Op } from "sequelize";
 
-
 export const validarIDTorneo = async (id) => {
   return await models.Torneo.findOne({
     where: { [Op.and]: [{ id }, { estado: estado.ACTIVO }] }
@@ -14,6 +13,30 @@ export const validarIDTorneo = async (id) => {
         new Error("El id ingresado no pertenece a un torneo.")
       );
     } else return Promise.resolve();
+  });
+};
+
+export const buscarPorId = async (req, res) => {
+  const id = req.params.id;
+  const Toreno = await models.Toreno.findOne({
+    where: {
+      [Op.and]: [{ id }, { estado: estado.ACTIVO }]
+    },
+    include: [
+      {
+        model: models.SubTorneo,
+        as: "SubTorneos",
+        attributes: {
+          exclude: atributosExclude
+        }
+      }
+    ],
+    attributes: {
+      exclude: atributosExclude
+    }
+  });
+  return res.status(200).send({
+    Toreno: Toreno || []
   });
 };
 
