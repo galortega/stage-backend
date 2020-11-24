@@ -18,7 +18,7 @@ export const validarIDTorneo = async (id) => {
 
 export const buscarPorId = async (req, res) => {
   const id = req.params.id;
-  const Toreno = await models.Toreno.findOne({
+  const Torneo = await models.Torneo.findOne({
     where: {
       [Op.and]: [{ id }, { estado: estado.ACTIVO }]
     },
@@ -36,7 +36,7 @@ export const buscarPorId = async (req, res) => {
     }
   });
   return res.status(200).send({
-    Toreno: Toreno || []
+    Torneo: Torneo || []
   });
 };
 
