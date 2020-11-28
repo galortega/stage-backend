@@ -115,6 +115,7 @@ export const invitarMiembros = async (miembros, grupo) => {
             registrado: !u ? false : true,
             nombreGrupo,
             grupo,
+            trayectoria,
             rol: nombreRolGrupo[rol],
             usuariogrupo: id,
             email
