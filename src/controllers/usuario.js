@@ -111,7 +111,7 @@ export const buscarPorCorreo = async (req, res) => {
     }
   });
   return res.status(200).send({
-    Usuario: Usuario || []
+    Usuario: Usuario || null
   });
 };
 
