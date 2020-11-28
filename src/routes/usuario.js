@@ -1,10 +1,11 @@
 import express from "express";
 import {
-    buscarTodos,
-    buscarPorId,
-    crearUsuario,
-    actualizarUsuario,
-    eliminarUsuario
+  buscarTodos,
+  buscarPorId,
+  crearUsuario,
+  actualizarUsuario,
+  eliminarUsuario,
+  buscarPorCorreo
 } from "../controllers/usuario";
 import { checkCrearUsuario } from "../validations/usuario";
 import { allowedMethods, asyncWrapper, checkParameters } from "../utils/error";
@@ -15,10 +16,13 @@ const router = express.Router();
 router.use("/$", allowedMethods(["GET", "POST"]));
 router.get("/", asyncWrapper(buscarTodos));
 router.post(
-    "/",
-    //checkParameters(checkCrearUsuario),
-    asyncWrapper(crearUsuario)
+  "/",
+  //checkParameters(checkCrearUsuario),
+  asyncWrapper(crearUsuario)
 );
+
+router.use("/buscarPorCorreo$", allowedMethods(["GET"]));
+router.get("/buscarPorCorreo", asyncWrapper(buscarPorCorreo));
 
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
 router.get("/:id", asyncWrapper(buscarPorId));

@@ -102,6 +102,19 @@ export const buscarPorId = async (req, res) => {
   });
 };
 
+export const buscarPorCorreo = async (req, res) => {
+  const { email } = req.query;
+  console.log({email});
+  const Usuario = await models.Usuario.findOne({
+    where: {
+      [Op.and]: [{ email }, { estado: estado.ACTIVO }]
+    }
+  });
+  return res.status(200).send({
+    Usuario: Usuario || []
+  });
+};
+
 export const crearUsuario = async (req, res) => {
   const t = await models.db.sequelize.transaction();
 
