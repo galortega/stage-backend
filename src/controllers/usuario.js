@@ -120,7 +120,7 @@ export const crearUsuario = async (req, res) => {
   const id = uuid();
   const idUsuarioRol = uuid();
 
-  atributos.push({ nivel: niveles.PRINCIPIANTE });
+  // atributos.push({ nivel: niveles.PRINCIPIANTE });
   const AtributosUsuario = _.map(Object.keys(atributos), (a) => {
     return {
       id: uuid(),
