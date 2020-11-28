@@ -73,7 +73,7 @@ export const invitarMiembros = async (miembros, grupo) => {
     (g) => g.nombre
   );
   for (const miembro of miembros) {
-    const { email, rol } = miembro;
+    const { email, rol, trayectoria } = miembro;
     await models.Usuario.findOne({
       where: [{ email }, { estado: estado.ACTIVO }],
       include: [
