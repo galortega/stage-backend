@@ -1,8 +1,17 @@
 import { urlInvitarParticipante } from "../constants";
 
 export const invitacionParticipante = (datos) => {
-  const { nombreGrupo, rol, usuariogrupo, grupo, registrado, email, trayectoria } = datos;
-  const url = `${urlInvitarParticipante}/?grupo=${grupo}&usuariogrupo=${usuariogrupo}&rol=${rol}&registrado=${registrado}&email=${email}&trayectoria=${trayectoria}`;
+  const {
+    nombreGrupo,
+    rol,
+    usuariogrupo,
+    grupo,
+    registrado,
+    email,
+    trayectoria,
+    esProfesional
+  } = datos;
+  const url = `${urlInvitarParticipante}/?grupo=${grupo}&usuariogrupo=${usuariogrupo}&rol=${rol}&registrado=${registrado}&email=${email}&trayectoria=${trayectoria}&esProfesional=${esProfesional}`;
   return `<!DOCTYPE html>
   <html>
   

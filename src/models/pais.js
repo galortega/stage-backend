@@ -1,5 +1,5 @@
 import { DataTypes, Sequelize } from "sequelize";
-import { estado, niveles } from "../constants/index";
+import { estado } from "../constants/index";
 
 export const PaisModel = {
   id: {

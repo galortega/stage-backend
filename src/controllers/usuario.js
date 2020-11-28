@@ -5,7 +5,8 @@ import {
   estado,
   atributosExclude,
   estadoAprobado,
-  niveles
+  niveles,
+  nivelesTrayectoria
 } from "../constants/index";
 import _ from "lodash";
 
@@ -104,7 +105,7 @@ export const buscarPorId = async (req, res) => {
 
 export const buscarPorCorreo = async (req, res) => {
   const { email } = req.query;
-  console.log({email});
+  console.log({ email });
   const Usuario = await models.Usuario.findOne({
     where: {
       [Op.and]: [{ email }, { estado: estado.ACTIVO }]
@@ -113,6 +114,16 @@ export const buscarPorCorreo = async (req, res) => {
   return res.status(200).send({
     Usuario: Usuario || null
   });
+};
+
+const validarNivel = (trayectoria, esProfesional, fechaNacimiento) => {
+  if (
+    esProfesional &&
+    moment.duration(moment().diff(fechaNacimiento)).asYears() >= 18 //INCLUIR EN CONSTANTS
+  )
+    return niveles.PROFESIONAL;
+  else if (trayectoria <= nivelesTrayectoria.BEGGINER) return niveles.BEGGINER;
+  else if (trayectoria >= nivelesTrayectoria.ADVANCED) return niveles.ADVANCED;
 };
 
 export const crearUsuario = async (req, res) => {
@@ -133,7 +144,9 @@ export const crearUsuario = async (req, res) => {
   const id = uuid();
   const idUsuarioRol = uuid();
 
-  // atributos.push({ nivel: niveles.PRINCIPIANTE });
+  const { trayectoria, esProfesional, fechaNacimiento } = atributos;
+  atributos.nivel = validarNivel(trayectoria, esProfesional, fechaNacimiento);
+
   const AtributosUsuario = _.map(Object.keys(atributos), (a) => {
     return {
       id: uuid(),

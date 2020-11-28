@@ -7,9 +7,16 @@ export const estado = {
 };
 
 export const niveles = {
-  PRINCIPIANTE: "PRI",
-  PROFESIONAL: "PRO",
-  values: ["PRI", "PRO"]
+  BEGGINER: "B",
+  ADVANCED: "A",
+  PROFESIONAL: "P",
+  values: ["B", "A", "P"]
+};
+
+export const nivelesTrayectoria = {
+  BEGGINER: 3,
+  ADVANCED: 4,
+  values: ["B", "A"]
 };
 
 export const estadoConsulta = {

@@ -73,7 +73,7 @@ export const invitarMiembros = async (miembros, grupo) => {
     (g) => g.nombre
   );
   for (const miembro of miembros) {
-    const { email, rol, trayectoria } = miembro;
+    const { email, rol, trayectoria, esProfesional } = miembro;
     await models.Usuario.findOne({
       where: [{ email }, { estado: estado.ACTIVO }],
       include: [
@@ -99,7 +99,6 @@ export const invitarMiembros = async (miembros, grupo) => {
         );
       // Solo se envía la invitación si el usuario no se encuentra registrado en el grupo o la invitación no ha sido enviada
       const id = uuid();
-      console.log({ validarGrupo });
       if (validarGrupo) {
         datos.push({
           id,
@@ -118,7 +117,8 @@ export const invitarMiembros = async (miembros, grupo) => {
             trayectoria,
             rol: nombreRolGrupo[rol],
             usuariogrupo: id,
-            email
+            email,
+            esProfesional
           })
         );
       }
