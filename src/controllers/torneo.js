@@ -107,7 +107,8 @@ export const buscarTodos = async (req, res) => {
     where: { estado: estado.ACTIVO },
     attributes: {
       exclude: atributosExclude
-    }
+    },
+    order: [["inicioTorneo", "DESC"]]
   }).then((torneos) => {
     return _.groupBy(torneos, "Pais.pais");
   });
