@@ -9,6 +9,8 @@ import {
   nivelesTrayectoria
 } from "../constants/index";
 import _ from "lodash";
+import { errorStatusHandle } from "../utils/error";
+import moment from "moment";
 
 export const validarIDUsuario = async (id) => {
   return await models.Usuario.findOne({
@@ -144,7 +146,7 @@ export const crearUsuario = async (req, res) => {
   const id = uuid();
   const idUsuarioRol = uuid();
 
-  const { trayectoria, esProfesional, fechaNacimiento } = atributos;
+  const { trayectoria, esProfesional } = atributos;
   atributos.nivel = validarNivel(trayectoria, esProfesional, fechaNacimiento);
 
   const AtributosUsuario = _.map(Object.keys(atributos), (a) => {
@@ -155,7 +157,7 @@ export const crearUsuario = async (req, res) => {
       valor: atributos[a]
     };
   });
-
+  console.log(AtributosUsuario);
   const datosUsuario = {
     id,
     nombre,

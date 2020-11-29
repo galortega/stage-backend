@@ -81,3 +81,15 @@ export const crearCoreografias = async (req, res) => {
     return errorStatusHandle(res, "TRANSACCION_FALLIDA");
   }
 };
+
+export const buscarPorGrupo = async (req, res) => {
+  const { grupo } = req.params;
+
+  const Coreografias = await models.Coreografia.findAll({
+    where: [{ grupo }, { estado: estado.ACTIVO }]
+  });
+
+  return res.status(200).send({
+    Coreografias
+  });
+};
