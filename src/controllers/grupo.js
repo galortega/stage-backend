@@ -17,6 +17,7 @@ import { invitacionParticipante } from "../templates/invitacion";
 import { enviarCorreo } from "../utils/nodemailer";
 import moment from "moment";
 import { validarSubTorneo } from "./subTorneo";
+import { categorias } from "../constants/categorias";
 
 export const validarIDGrupo = async (id) => {
   return await models.Grupo.findOne({
@@ -285,7 +286,6 @@ export const obtenerNombreGrupo = async (req, res) => {
 export const validarMiembroGrupo = async (req, res) => {
   const { nivel, division, modalidad, torneo } = req.query;
   const { grupo } = req.params;
-  console.log({ nivel, division, modalidad, torneo, grupo });
   const Division = await models.Division.findOne({
     where: { id: division }
   }).then((d) => {
@@ -351,6 +351,7 @@ export const validarMiembroGrupo = async (req, res) => {
   return res.status(200).send({
     Participantes: _.compact(ParticipantesValidos),
     Modalidad,
-    SubTorneo: subTorneo
+    SubTorneo: subTorneo,
+    categorias
   });
 };

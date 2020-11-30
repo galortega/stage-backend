@@ -47,15 +47,17 @@ export const crearCoreografias = async (req, res) => {
             t
           ).then((s) => (!s ? null : s.id));
 
+        const CoreografiaParticipantes = _.map(miembros, (m) => {
+          const { usuarioGrupo, rol } = m;
+          return { id: uuid(), coreografia, usuarioGrupo, rol, subTorneo };
+        });
+
         const datosCoreografia = {
           id: coreografia,
           subTorneo,
           grupo,
           precio,
-          CoreografiaParticipantes: _.map(miembros, (m) => {
-            const { usuarioGrupo, rol } = m;
-            return { id: uuid(), coreografia, usuarioGrupo, rol, subTorneo };
-          })
+          categoria: CoreografiaParticipantes
         };
         return datosCoreografia;
       })
