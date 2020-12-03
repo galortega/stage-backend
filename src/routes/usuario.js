@@ -17,7 +17,7 @@ router.use("/$", allowedMethods(["GET", "POST"]));
 router.get("/", asyncWrapper(buscarTodos));
 router.post(
   "/",
-  //checkParameters(checkCrearUsuario),
+  checkParameters(checkCrearUsuario),
   asyncWrapper(crearUsuario)
 );
 

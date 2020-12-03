@@ -45,7 +45,16 @@ export const validarAtributos = async (atributos) => {
           if (!_.isNumber(edad) || !_.inRange(edad, 0, 150) || _.isNaN(edad))
             throw new Error("Edad debe ser un número.");
         case "nivel":
-          return _.isString(value);
+          const nivel = value;
+          if (!_.isString(nivel)) throw new Error("Nivel debe ser un string.");
+        case "trayectoria":
+          const trayectoria = value;
+          if (!_.isInteger(trayectoria))
+            throw new Error("Trayectoria debe debe ser un número entero.");
+        case "esProfesional":
+          const esProfesional = value;
+          if (!_.isBoolean(esProfesional))
+            throw new Error("EsProfesional debe debe ser un booleano.");
         default:
           break;
       }
@@ -131,7 +140,7 @@ const validarNivel = (trayectoria, esProfesional, fechaNacimiento) => {
 export const crearUsuario = async (req, res) => {
   const t = await models.db.sequelize.transaction();
 
-  const {
+  let {
     nombre,
     email,
     contrasena,
@@ -147,7 +156,11 @@ export const crearUsuario = async (req, res) => {
   const idUsuarioRol = uuid();
 
   const { trayectoria, esProfesional } = atributos;
-  atributos.nivel = validarNivel(trayectoria, esProfesional, fechaNacimiento);
+  atributos.nivel =
+    _.isEmpty(trayectoria) || _.isEmpty(esProfesional)
+      ? null
+      : validarNivel(trayectoria, esProfesional, fechaNacimiento);
+  atributos = _.compact(atributos);
 
   const AtributosUsuario = _.map(Object.keys(atributos), (a) => {
     return {
@@ -157,7 +170,7 @@ export const crearUsuario = async (req, res) => {
       valor: atributos[a]
     };
   });
-  console.log(AtributosUsuario);
+
   const datosUsuario = {
     id,
     nombre,
