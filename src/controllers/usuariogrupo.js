@@ -62,7 +62,6 @@ export const getGrupos = async (req, res) => {
 export const agregarMiembros = async (req, res) => {
   const { miembros } = req.body;
   const grupo = req.params.id;
-
   const Miembros = await invitarMiembros(miembros, grupo);
   return res.status(200).send(Miembros);
 };

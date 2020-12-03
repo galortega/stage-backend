@@ -35,10 +35,12 @@ export const validarEmailUsuario = async (email) => {
 };
 
 export const validarAtributos = async (atributos) => {
+  console.log(Object.keys(atributos));
   if (_.isEmpty(atributos)) return true;
   else
     return _.forEach(Object.keys(atributos), (key) => {
-      const value = parseInt(atributos[key]);
+      const value = atributos[key];
+      console.log({ value, key, pro: atributos.esProfesional });
       switch (key) {
         case "edad":
           const edad = parseInt(value);
@@ -48,13 +50,9 @@ export const validarAtributos = async (atributos) => {
           const nivel = value;
           if (!_.isString(nivel)) throw new Error("Nivel debe ser un string.");
         case "trayectoria":
-          const trayectoria = value;
+          const trayectoria = parseInt(value);
           if (!_.isInteger(trayectoria))
             throw new Error("Trayectoria debe debe ser un número entero.");
-        case "esProfesional":
-          const esProfesional = value;
-          if (!_.isBoolean(esProfesional))
-            throw new Error("EsProfesional debe debe ser un booleano.");
         default:
           break;
       }
