@@ -47,15 +47,17 @@ export const crearCoreografias = async (req, res) => {
             t
           ).then((s) => (!s ? null : s.id));
 
+        const CoreografiaParticipantes = _.map(miembros, (m) => {
+          const { usuarioGrupo, rol } = m;
+          return { id: uuid(), coreografia, usuarioGrupo, rol, subTorneo };
+        });
+
         const datosCoreografia = {
           id: coreografia,
           subTorneo,
           grupo,
           precio,
-          CoreografiaParticipantes: _.map(miembros, (m) => {
-            const { usuarioGrupo, rol } = m;
-            return { id: uuid(), coreografia, usuarioGrupo, rol, subTorneo };
-          })
+          categoria: CoreografiaParticipantes
         };
         return datosCoreografia;
       })
@@ -80,4 +82,16 @@ export const crearCoreografias = async (req, res) => {
     await t.rollback();
     return errorStatusHandle(res, "TRANSACCION_FALLIDA");
   }
+};
+
+export const buscarPorGrupo = async (req, res) => {
+  const { grupo } = req.params;
+
+  const Coreografias = await models.Coreografia.findAll({
+    where: [{ grupo }, { estado: estado.ACTIVO }]
+  });
+
+  return res.status(200).send({
+    Coreografias
+  });
 };
