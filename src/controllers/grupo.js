@@ -91,75 +91,84 @@ export const crearGrupo = async (req, res) => {
     email: emailLider,
     rol: tipo === tipoGrupo.ACADEMIA ? rolGrupo.DIRECTOR : rolGrupo.LIDER
   });
-  console.log(req.body);
-  const datos = {
-    id,
-    nombre,
-    tipo,
-    pais,
-    direccion,
-    // imagen,
-    instagram,
-    facebook,
-    email,
-    MiembrosGrupo: await Promise.all(
-      _.map(miembros, async (miembro) => {
-        const { email, rol, trayectoria, esProfesional } = miembro;
-        const usuariogrupo = uuid();
+  const t = await models.db.sequelize.transaction();
 
-        if (email !== emailLider) {
-          const usuario = await models.Usuario.findOne({
-            where: [{ email }, { estado: estado.ACTIVO }]
-          });
-          enviarCorreo(
-            email,
-            `${asuntos.InvitarParticipante}${nombre}`,
-            invitacionParticipante({
-              registrado: !usuario ? false : true,
-              nombreGrupo: nombre,
-              grupo: id,
-              rol: nombreRolGrupo[rol],
-              usuariogrupo,
+  try {
+    const datos = {
+      id,
+      nombre,
+      tipo,
+      pais,
+      direccion,
+      // imagen,
+      instagram,
+      facebook,
+      email,
+      MiembrosGrupo: await Promise.all(
+        _.map(miembros, async (miembro) => {
+          const { email, rol, trayectoria, esProfesional } = miembro;
+          const usuariogrupo = uuid();
+
+          if (email !== emailLider) {
+            const usuario = await models.Usuario.findOne({
+              where: [{ email }, { estado: estado.ACTIVO }]
+            });
+            enviarCorreo(
               email,
-              // trayectoria,
-              // esProfesional
-            })
-          );
-          return {
-            id: usuariogrupo,
-            usuario: usuario ? usuario.id : null,
-            grupo: id,
-            email,
-            rol
-          };
-        } else if (
-          email === emailLider &&
-          _.includes([rolGrupo.DIRECTOR, rolGrupo.LIDER], rol)
-        )
-          return {
-            id: usuariogrupo,
-            usuario: lider,
-            grupo: id,
-            email,
-            rol,
-            aprobacion: estadoAprobado.APROBADO
-          };
-      })
-    )
-  };
-  const Grupo = await models.Grupo.create(datos, {
-    include: [
-      {
-        model: models.UsuarioGrupo,
-        as: "MiembrosGrupo"
-      }
-    ]
-  });
+              `${asuntos.InvitarParticipante}${nombre}`,
+              invitacionParticipante({
+                registrado: !usuario ? false : true,
+                nombreGrupo: nombre,
+                grupo: id,
+                rol: nombreRolGrupo[rol],
+                usuariogrupo,
+                email
+                // trayectoria,
+                // esProfesional
+              })
+            );
+            return {
+              id: usuariogrupo,
+              usuario: usuario ? usuario.id : null,
+              grupo: id,
+              email,
+              rol
+            };
+          } else if (
+            email === emailLider &&
+            _.includes([rolGrupo.DIRECTOR, rolGrupo.LIDER], rol)
+          )
+            return {
+              id: usuariogrupo,
+              usuario: lider,
+              grupo: id,
+              email,
+              rol,
+              aprobacion: estadoAprobado.APROBADO
+            };
+        })
+      )
+    };
+    const Grupo = await models.Grupo.create(datos, {
+      include: [
+        {
+          model: models.UsuarioGrupo,
+          as: "MiembrosGrupo"
+        }
+      ],
+      transaction: t
+    });
+    await t.commit();
 
-  return res.status(201).send({
-    Grupo,
-    msj: "Grupo ingresado correctamente."
-  });
+    return res.status(201).send({
+      Grupo,
+      msj: "Grupo ingresado correctamente."
+    });
+  } catch (error) {
+    console.log(error);
+    await t.rollback();
+    return errorStatusHandle(res, "TRANSACCION_FALLIDA");
+  }
 };
 
 export const buscarTodos = async (req, res) => {
