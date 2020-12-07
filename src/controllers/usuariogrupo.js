@@ -61,67 +61,70 @@ export const getGrupos = async (req, res) => {
 
 export const agregarMiembros = async (req, res) => {
   const { miembros } = req.body;
+  const emailLider = req.token.email;
   const grupo = req.params.id;
-  const Miembros = await invitarMiembros(miembros, grupo);
+  const Miembros = await invitarMiembros(miembros, grupo, emailLider);
   return res.status(200).send(Miembros);
 };
 
-export const invitarMiembros = async (miembros, grupo) => {
+export const invitarMiembros = async (miembros, grupo, emailLider) => {
   const datos = [];
   const nombreGrupo = await models.Grupo.findOne({ where: { id: grupo } }).then(
     (g) => g.nombre
   );
   for (const miembro of miembros) {
     const { email, rol, trayectoria, esProfesional } = miembro;
-    await models.Usuario.findOne({
-      where: [{ email }, { estado: estado.ACTIVO }],
-      include: [
-        {
-          model: models.UsuarioGrupo,
-          as: "MiembroUsuario",
-          where: { estado: estado.ACTIVO }
-        }
-      ]
-    }).then(async (u) => {
-      let validarGrupo;
-      // De existir el usuario, se obtiene el id
-      if (!_.isEmpty(u)) {
-        u = u.toJSON();
-        // Si existe el usuario, no se puede ingresar a un grupo donde ya se ingresó
-        validarGrupo = _.isEmpty(_.find(u.MiembroUsuario, { grupo }));
-      } // De no existir, verifico que la invitación no haya sido enviada
-      else
-        validarGrupo = _.isEmpty(
-          await models.UsuarioGrupo.findOne({
-            where: [{ email }, { grupo }, { estado: estado.ACTIVO }]
-          })
-        );
-      // Solo se envía la invitación si el usuario no se encuentra registrado en el grupo o la invitación no ha sido enviada
-      const id = uuid();
-      if (validarGrupo) {
-        datos.push({
-          id,
-          usuario: u ? u.id : null,
-          grupo,
-          email,
-          rol
-        });
-        enviarCorreo(
-          email,
-          `${asuntos.InvitarParticipante}${nombreGrupo}`,
-          invitacionParticipante({
-            registrado: !u ? false : true,
-            nombreGrupo,
+    if (email !== emailLider) {
+      await models.Usuario.findOne({
+        where: [{ email }, { estado: estado.ACTIVO }],
+        include: [
+          {
+            model: models.UsuarioGrupo,
+            as: "MiembroUsuario",
+            where: { estado: estado.ACTIVO }
+          }
+        ]
+      }).then(async (u) => {
+        let validarGrupo;
+        // De existir el usuario, se obtiene el id
+        if (!_.isEmpty(u)) {
+          u = u.toJSON();
+          // Si existe el usuario, no se puede ingresar a un grupo donde ya se ingresó
+          validarGrupo = _.isEmpty(_.find(u.MiembroUsuario, { grupo }));
+        } // De no existir, verifico que la invitación no haya sido enviada
+        else
+          validarGrupo = _.isEmpty(
+            await models.UsuarioGrupo.findOne({
+              where: [{ email }, { grupo }, { estado: estado.ACTIVO }]
+            })
+          );
+        // Solo se envía la invitación si el usuario no se encuentra registrado en el grupo o la invitación no ha sido enviada
+        const id = uuid();
+        if (validarGrupo) {
+          datos.push({
+            id,
+            usuario: u ? u.id : null,
             grupo,
-            trayectoria,
-            rol: nombreRolGrupo[rol],
-            usuariogrupo: id,
             email,
-            esProfesional
-          })
-        );
-      }
-    });
+            rol
+          });
+          enviarCorreo(
+            email,
+            `${asuntos.InvitarParticipante}${nombreGrupo}`,
+            invitacionParticipante({
+              registrado: !u ? false : true,
+              nombreGrupo,
+              grupo,
+              trayectoria,
+              rol: nombreRolGrupo[rol],
+              usuariogrupo: id,
+              email,
+              esProfesional
+            })
+          );
+        }
+      });
+    }
   }
   const Miembros = await models.UsuarioGrupo.bulkCreate(datos, {
     updateOnDuplicate: ["email"]

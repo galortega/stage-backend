@@ -74,6 +74,7 @@ export const validarEmailGrupo = async (email) => {
 
 export const crearGrupo = async (req, res) => {
   const emailLider = req.token.email;
+  const lider = req.token.usuario;
   const {
     nombre,
     pais,
@@ -90,7 +91,7 @@ export const crearGrupo = async (req, res) => {
     email: emailLider,
     rol: tipo === tipoGrupo.ACADEMIA ? rolGrupo.DIRECTOR : rolGrupo.LIDER
   });
-
+  console.log(req.body);
   const datos = {
     id,
     nombre,
@@ -103,31 +104,46 @@ export const crearGrupo = async (req, res) => {
     email,
     MiembrosGrupo: await Promise.all(
       _.map(miembros, async (miembro) => {
-        const { email, rol } = miembro;
-        console.log({ email, rol });
-        const usuario = await models.Usuario.findOne({
-          where: [{ email }, { estado: estado.ACTIVO }]
-        });
+        const { email, rol, trayectoria, esProfesional } = miembro;
         const usuariogrupo = uuid();
-        enviarCorreo(
-          email,
-          `${asuntos.InvitarParticipante}${nombre}`,
-          invitacionParticipante({
-            registrado: !usuario ? false : true,
-            nombreGrupo: nombre,
+
+        if (email !== emailLider) {
+          const usuario = await models.Usuario.findOne({
+            where: [{ email }, { estado: estado.ACTIVO }]
+          });
+          enviarCorreo(
+            email,
+            `${asuntos.InvitarParticipante}${nombre}`,
+            invitacionParticipante({
+              registrado: !usuario ? false : true,
+              nombreGrupo: nombre,
+              grupo: id,
+              rol: nombreRolGrupo[rol],
+              usuariogrupo,
+              email,
+              // trayectoria,
+              // esProfesional
+            })
+          );
+          return {
+            id: usuariogrupo,
+            usuario: usuario ? usuario.id : null,
             grupo: id,
-            rol: nombreRolGrupo[rol],
-            usuariogrupo,
-            email
-          })
-        );
-        return {
-          id: usuariogrupo,
-          usuario: usuario ? usuario.id : null,
-          grupo: id,
-          email,
-          rol
-        };
+            email,
+            rol
+          };
+        } else if (
+          email === emailLider &&
+          _.includes([rolGrupo.DIRECTOR, rolGrupo.LIDER], rol)
+        )
+          return {
+            id: usuariogrupo,
+            usuario: lider,
+            grupo: id,
+            email,
+            rol,
+            aprobacion: estadoAprobado.APROBADO
+          };
       })
     )
   };
