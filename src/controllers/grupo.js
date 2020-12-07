@@ -126,9 +126,9 @@ export const crearGrupo = async (req, res) => {
                     grupo: id,
                     rol: nombreRolGrupo[rol],
                     usuariogrupo,
-                    email
-                    // trayectoria,
-                    // esProfesional
+                    email,
+                    trayectoria,
+                    esProfesional
                   })
                 );
                 return {
