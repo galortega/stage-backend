@@ -59,6 +59,7 @@ export const validarMiembros = (miembros) => {
     } catch (error) {
       throw error;
     }
+  else return true;
 };
 
 export const validarEmailGrupo = async (email) => {
@@ -105,50 +106,52 @@ export const crearGrupo = async (req, res) => {
       instagram,
       facebook,
       email,
-      MiembrosGrupo: await Promise.all(
-        _.map(miembros, async (miembro) => {
-          const { email, rol, trayectoria, esProfesional } = miembro;
-          const usuariogrupo = uuid();
+      MiembrosGrupo: _.isEmpty(miembros)
+        ? null
+        : await Promise.all(
+            _.map(miembros, async (miembro) => {
+              const { email, rol, trayectoria, esProfesional } = miembro;
+              const usuariogrupo = uuid();
 
-          if (email !== emailLider) {
-            const usuario = await models.Usuario.findOne({
-              where: [{ email }, { estado: estado.ACTIVO }]
-            });
-            enviarCorreo(
-              email,
-              `${asuntos.InvitarParticipante}${nombre}`,
-              invitacionParticipante({
-                registrado: !usuario ? false : true,
-                nombreGrupo: nombre,
-                grupo: id,
-                rol: nombreRolGrupo[rol],
-                usuariogrupo,
-                email
-                // trayectoria,
-                // esProfesional
-              })
-            );
-            return {
-              id: usuariogrupo,
-              usuario: usuario ? usuario.id : null,
-              grupo: id,
-              email,
-              rol
-            };
-          } else if (
-            email === emailLider &&
-            _.includes([rolGrupo.DIRECTOR, rolGrupo.LIDER], rol)
+              if (email !== emailLider) {
+                const usuario = await models.Usuario.findOne({
+                  where: [{ email }, { estado: estado.ACTIVO }]
+                });
+                enviarCorreo(
+                  email,
+                  `${asuntos.InvitarParticipante}${nombre}`,
+                  invitacionParticipante({
+                    registrado: !usuario ? false : true,
+                    nombreGrupo: nombre,
+                    grupo: id,
+                    rol: nombreRolGrupo[rol],
+                    usuariogrupo,
+                    email
+                    // trayectoria,
+                    // esProfesional
+                  })
+                );
+                return {
+                  id: usuariogrupo,
+                  usuario: usuario ? usuario.id : null,
+                  grupo: id,
+                  email,
+                  rol
+                };
+              } else if (
+                email === emailLider &&
+                _.includes([rolGrupo.DIRECTOR, rolGrupo.LIDER], rol)
+              )
+                return {
+                  id: usuariogrupo,
+                  usuario: lider,
+                  grupo: id,
+                  email,
+                  rol,
+                  aprobacion: estadoAprobado.APROBADO
+                };
+            })
           )
-            return {
-              id: usuariogrupo,
-              usuario: lider,
-              grupo: id,
-              email,
-              rol,
-              aprobacion: estadoAprobado.APROBADO
-            };
-        })
-      )
     };
     const Grupo = await models.Grupo.create(datos, {
       include: [
