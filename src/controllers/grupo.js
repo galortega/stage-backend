@@ -18,6 +18,7 @@ import { enviarCorreo } from "../utils/nodemailer";
 import moment from "moment";
 import { validarSubTorneo } from "./subTorneo";
 import { categorias } from "../constants/categorias";
+import { errorStatusHandle } from "../utils/error";
 
 export const validarIDGrupo = async (id) => {
   return await models.Grupo.findOne({
