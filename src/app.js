@@ -42,7 +42,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 // Routes
 app.use(bodyParser.json({ limit: "10mb", extended: true }));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 
 app.use("/", indexRouter);
 app.use(routes.usuario, usuariosRouter);
