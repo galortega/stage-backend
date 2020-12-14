@@ -16,6 +16,7 @@ import { TorneoModel, TorneoConfig } from "./torneo";
 import { DivisionModel, DivisionConfig } from "./division";
 import { ModalidadModel, ModalidadConfig } from "./modalidad";
 import { PaisModel, PaisConfig } from "./pais";
+import { ContactoModel, ContactoConfig } from "./contacto";
 
 const Usuario = db.sequelize.define("Usuario", UsuarioModel, UsuarioConfig);
 const UsuarioRol = db.sequelize.define(
@@ -58,6 +59,7 @@ const Modalidad = db.sequelize.define(
   ModalidadConfig
 );
 const Pais = db.sequelize.define("Pais", PaisModel, PaisConfig);
+const Contacto = db.sequelize.define("Contacto", ContactoModel, ContactoConfig);
 
 //USUARIO y ROL
 Usuario.belongsToMany(Rol, {
@@ -213,6 +215,16 @@ Torneo.belongsTo(Pais, {
   foreignKey: "pais"
 });
 
+// CONTACTO
+Pais.hasOne(Contacto, {
+  as: "ContactoPais",
+  foreignKey: "pais"
+});
+Contacto.belongsTo(Pais, {
+  as: "ContactoPais",
+  foreignKey: "pais"
+});
+
 const models = {
   db,
   Usuario,
@@ -227,7 +239,8 @@ const models = {
   Modalidad,
   Division,
   Torneo,
-  Pais
+  Pais,
+  Contacto
 };
 
 export default models;

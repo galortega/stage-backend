@@ -8,7 +8,6 @@ import { atributosExclude, estado, rolesId } from "../constants/index";
 export const autenticarParticipante = async (req, res) => {
   let { email, contrasena } = req.body;
   email = _.trim(_.toLower(email));
-
   const Usuario = await models.Usuario.findOne({
     where: [{ email }, { estado: estado.ACTIVO }],
     include: [

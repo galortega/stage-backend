@@ -5,6 +5,7 @@ const config = {
   HOST: process.env.HOST,
   USER: process.env.USER,
   PASSWORD: process.env.PASSWORD,
+  PORT: process.env.DBPORT,
   DB: process.env.DB,
   dialect: process.env.DIALECT,
   pool: {
@@ -14,9 +15,9 @@ const config = {
     idle: 10000
   }
 };
-
 const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
   host: config.HOST,
+  port: config.PORT,
   dialect: config.dialect,
   dialectOptions: {
     useUTC: false // for reading from database
@@ -25,7 +26,7 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
 });
 /*
 sequelize.sync({ force: false }).then(() => {
-  console.log("tablas sincronizadas");
+console.log("tablas sincronizadas");
 });
 */
 export const test = async () => {
@@ -37,10 +38,7 @@ export const test = async () => {
     console.error("----------------------", error);
   }
 };
-
 const db = {};
-
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-
 export default db;
