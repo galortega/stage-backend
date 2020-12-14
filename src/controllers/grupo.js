@@ -332,6 +332,7 @@ export const validarMiembroGrupo = async (req, res) => {
   const ParticipantesValidos = await models.UsuarioGrupo.findAll({
     where: [
       { grupo },
+      { aprobacion: estadoAprobado.APROBADO },
       { usuario: { [Op.ne]: null } },
       { estado: estado.ACTIVO }
     ],
