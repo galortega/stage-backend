@@ -205,7 +205,52 @@ export const buscarPorGrupo = async (req, res) => {
   const { grupo } = req.params;
 
   const Coreografias = await models.Coreografia.findAll({
-    where: [{ grupo }, { estado: estado.ACTIVO }]
+    where: [{ grupo }, { estado: estado.ACTIVO }],
+    include: [
+      {
+        model: models.SubTorneo,
+        as: "CoreografiaSubTorneo",
+        attributes: ["division", "modalidad", "nivel"],
+        include: [
+          {
+            model: models.Division,
+            as: "DivisionSubTorneo",
+            attributes: ["nombre"]
+          },
+          {
+            model: models.Modalidad,
+            as: "ModalidadSubTorneo",
+            attributes: ["nombre"]
+          },
+          {
+            model: models.Torneo,
+            as: "SubTorneos"
+          }
+        ]
+      }
+    ],
+    order: [["fecha_creacion", "DESC"]]
+  }).then((c) => {
+    return _.map(c, (coreografia) => {
+      const { id, nombre, precio, CoreografiaSubTorneo } = coreografia;
+      const {
+        SubTorneos,
+        ModalidadSubTorneo,
+        DivisionSubTorneo,
+        nivel
+      } = CoreografiaSubTorneo;
+      const torneo = SubTorneos.nombre;
+
+      return {
+        id,
+        nombre,
+        precio,
+        modalidad: ModalidadSubTorneo.nombre,
+        division: DivisionSubTorneo.nombre,
+        nivel,
+        torneo
+      };
+    });
   });
 
   return res.status(200).send({
