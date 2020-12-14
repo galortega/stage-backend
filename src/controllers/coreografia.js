@@ -7,7 +7,51 @@ import { errorStatusHandle } from "../utils/error";
 
 export const buscarTodos = async (req, res) => {
   const Coreografias = await models.Coreografia.findAll({
-    where: { estado: estado.ACTIVO }
+    where: { estado: estado.ACTIVO },
+    include: [
+      {
+        model: models.SubTorneo,
+        as: "CoreografiaSubTorneo",
+        attributes: ["division", "modalidad", "nivel"],
+        include: [
+          {
+            model: models.Division,
+            as: "DivisionSubTorneo",
+            attributes: ["nombre"]
+          },
+          {
+            model: models.Modalidad,
+            as: "ModalidadSubTorneo",
+            attributes: ["nombre"]
+          },
+          {
+            model: models.Torneo,
+            as: "SubTorneos"
+          }
+        ]
+      }
+    ]
+  }).then((c) => {
+    return _.map(c, (coreografia) => {
+      const { id, nombre, precio, CoreografiaSubTorneo } = coreografia;
+      const {
+        SubTorneos,
+        ModalidadSubTorneo,
+        DivisionSubTorneo,
+        nivel
+      } = CoreografiaSubTorneo;
+      const torneo = SubTorneos.nombre;
+
+      return {
+        id,
+        nombre,
+        precio,
+        modalidad: ModalidadSubTorneo.nombre,
+        division: DivisionSubTorneo.nombre,
+        nivel,
+        torneo
+      };
+    });
   });
 
   return res.status(200).send({
@@ -31,7 +75,15 @@ export const crearCoreografias = async (req, res) => {
   try {
     const datos = await Promise.all(
       _.map(subtorneos, async (c) => {
-        let { subTorneo, precio, miembros, nivel, modalidad, division } = c;
+        let {
+          subTorneo,
+          precio,
+          miembros,
+          nivel,
+          modalidad,
+          division,
+          nombre
+        } = c;
         const coreografia = uuid();
 
         // Si no viene el id de subTorneo, entonces se valida otra vez por torneo, nivel, modalidad, division. Si no existe, se crea uno nuevo
@@ -54,6 +106,7 @@ export const crearCoreografias = async (req, res) => {
 
         const datosCoreografia = {
           id: coreografia,
+          nombre,
           subTorneo,
           grupo,
           precio,
