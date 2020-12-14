@@ -23,13 +23,6 @@ router.post(
 );
 router.get(`${routes.grupos.coreografias}/`, auth, asyncWrapper(buscarTodos));
 
-router.use(`${routes.grupos.coreografias}/:id$`, auth, allowedMethods(["GET"]));
-router.get(
-  `${routes.grupos.coreografias}/:id`,
-  auth,
-  asyncWrapper(buscarPorId)
-);
-
 router.use(
   `${routes.grupos.coreografias}/buscarPorGrupo$`,
   auth,
@@ -40,5 +33,13 @@ router.get(
   auth,
   buscarPorGrupo
 );
+
+router.use(`${routes.grupos.coreografias}/:id$`, auth, allowedMethods(["GET"]));
+router.get(
+  `${routes.grupos.coreografias}/:id`,
+  auth,
+  asyncWrapper(buscarPorId)
+);
+
 
 export default router;
