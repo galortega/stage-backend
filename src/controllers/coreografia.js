@@ -30,7 +30,8 @@ export const buscarTodos = async (req, res) => {
           }
         ]
       }
-    ]
+    ],
+    order: [["fecha_creacion", "DESC"]]
   }).then((c) => {
     return _.map(c, (coreografia) => {
       const { id, nombre, precio, CoreografiaSubTorneo } = coreografia;
@@ -56,6 +57,69 @@ export const buscarTodos = async (req, res) => {
 
   return res.status(200).send({
     Coreografias
+  });
+};
+
+export const buscarPorId = async (req, res) => {
+  const { id } = req.params;
+  const Coreografia = await models.Coreografia.findOne({
+    where: { id, estado: estado.ACTIVO },
+    include: {
+      model: models.GrupoCoreografia,
+      as: "CoreografiaParticipantes",
+      include: {
+        model: models.UsuarioGrupo,
+        as: "CoreografiaParticipante",
+        include: [
+          {
+            model: models.Usuario,
+            as: "MiembroUsuario"
+          }
+        ]
+      }
+    }
+  }).then((coreografia) => {
+    const {
+      id,
+      subTorneo,
+      grupo,
+      nombre,
+      precio,
+      resultado,
+      fecha_creacion,
+      CoreografiaParticipantes
+    } = coreografia;
+    const participantes = _.map(CoreografiaParticipantes, (participante) => {
+      const { id, rol, usuarioGrupo, CoreografiaParticipante } = participante;
+      const {
+        usuario,
+        email,
+        aprobacion,
+        MiembroUsuario
+      } = CoreografiaParticipante;
+      return {
+        usuarioCoreografia: id,
+        usuarioGrupo,
+        rol,
+        usuario,
+        email,
+        aprobacion,
+        nombre: MiembroUsuario.nombre
+      };
+    });
+    return {
+      id,
+      subTorneo,
+      grupo,
+      nombre,
+      precio,
+      resultado,
+      fecha_creacion,
+      participantes
+    };
+  });
+  return res.status(200).send({
+    Coreografia
   });
 };
 
