@@ -136,6 +136,7 @@ export const crearCoreografias = async (req, res) => {
   const { grupo } = req.params;
   const { torneo, subtorneos } = req.body;
   const t = await models.db.sequelize.transaction();
+  console.log(req.body);
   try {
     const datos = await Promise.all(
       _.map(subtorneos, async (c) => {
@@ -174,13 +175,12 @@ export const crearCoreografias = async (req, res) => {
           subTorneo,
           grupo,
           precio,
-          categoria: CoreografiaParticipantes
+          CoreografiaParticipantes
         };
         return datosCoreografia;
       })
     );
-    console.log({ body: req.body, datos });
-
+    console.log({ datos });
     const Coreografias = await models.Coreografia.bulkCreate(datos, {
       transaction: t,
       include: [
@@ -190,7 +190,6 @@ export const crearCoreografias = async (req, res) => {
         }
       ]
     });
-
     await t.commit();
 
     return res.status(200).send(Coreografias);
@@ -232,7 +231,13 @@ export const buscarPorGrupo = async (req, res) => {
     order: [["fecha_creacion", "DESC"]]
   }).then((c) => {
     return _.map(c, (coreografia) => {
-      const { id, nombre, precio, fecha_creacion, CoreografiaSubTorneo } = coreografia;
+      const {
+        id,
+        nombre,
+        precio,
+        fecha_creacion,
+        CoreografiaSubTorneo
+      } = coreografia;
       const {
         SubTorneos,
         ModalidadSubTorneo,

@@ -40,7 +40,6 @@ export const validarAtributos = async (atributos) => {
   else
     return _.forEach(Object.keys(atributos), (key) => {
       const value = atributos[key];
-      console.log({ value, key, pro: atributos.esProfesional });
       switch (key) {
         case "edad":
           const edad = parseInt(value);
@@ -48,7 +47,8 @@ export const validarAtributos = async (atributos) => {
             throw new Error("Edad debe ser un número.");
         case "nivel":
           const nivel = value;
-          if (!_.isString(nivel)) throw new Error("Nivel debe ser un string.");
+          if (!_.isString(nivel) && _.includes(niveles.values, nivel))
+            throw new Error(`Nivel debe ser un string. ${niveles.values}`);
         case "trayectoria":
           const trayectoria = parseInt(value);
           if (!_.isInteger(trayectoria))

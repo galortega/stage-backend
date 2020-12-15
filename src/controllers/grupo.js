@@ -375,6 +375,7 @@ export const validarMiembroGrupo = async (req, res) => {
         _.isEmpty(repiteSubtorneo)
       )
         return u;
+      else console.log({ u });
     })
   );
 
