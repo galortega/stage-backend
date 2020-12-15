@@ -232,7 +232,7 @@ export const buscarPorGrupo = async (req, res) => {
     order: [["fecha_creacion", "DESC"]]
   }).then((c) => {
     return _.map(c, (coreografia) => {
-      const { id, nombre, precio, CoreografiaSubTorneo } = coreografia;
+      const { id, nombre, precio, fecha_creacion, CoreografiaSubTorneo } = coreografia;
       const {
         SubTorneos,
         ModalidadSubTorneo,
@@ -248,7 +248,8 @@ export const buscarPorGrupo = async (req, res) => {
         modalidad: ModalidadSubTorneo.nombre,
         division: DivisionSubTorneo.nombre,
         nivel,
-        torneo
+        torneo,
+        fecha_creacion
       };
     });
   });
