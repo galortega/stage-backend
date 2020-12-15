@@ -126,10 +126,12 @@ export const invitarMiembros = async (miembros, grupo, emailLider) => {
       });
     }
   }
-  const Miembros = await models.UsuarioGrupo.bulkCreate(datos, {
-    updateOnDuplicate: ["email"]
-  });
-  return Miembros;
+  if (!_.isEmpty(datos)) {
+    const Miembros = await models.UsuarioGrupo.bulkCreate(datos, {
+      updateOnDuplicate: ["email"]
+    });
+    return Miembros;
+  }
 };
 
 export const desactivarMiembro = async (req, res) => {
