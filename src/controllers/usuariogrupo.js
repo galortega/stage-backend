@@ -127,16 +127,13 @@ export const invitarMiembros = async (miembros, grupo, emailLider) => {
     }
   }
   if (!_.isEmpty(datos)) {
-    const Miembros = await models.UsuarioGrupo.bulkCreate(datos, {
-      updateOnDuplicate: ["email"]
-    });
+    const Miembros = await models.UsuarioGrupo.bulkCreate(datos);
     return Miembros;
-  }
+  } else return null;
 };
 
 export const desactivarMiembro = async (req, res) => {
   const usuarioGrupo = req.params.id;
-
   const UsuarioGrupo = await models.UsuarioGrupo.update(
     {
       aprobacion: estadoAprobado.PENDIENTE,
@@ -160,7 +157,6 @@ export const confirmarMiembro = async (req, res) => {
     estado:
       aprobacion === estadoAprobado.PENDIENTE ? estado.INACTIVO : estado.ACTIVO
   };
-
   const UsuarioGrupo = await models.UsuarioGrupo.update(datos, {
     where: { id }
   });

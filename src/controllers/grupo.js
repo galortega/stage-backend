@@ -250,6 +250,7 @@ export const buscarPorId = async (req, res) => {
       const esMiembroToken = _.find(MiembrosGrupo, { usuario });
       if (!esMiembroToken) return false;
       _.forEach(MiembrosGrupo, (miembro) => {
+        miembro = miembro.toJSON();
         const {
           id,
           usuario,
@@ -282,7 +283,10 @@ export const buscarPorId = async (req, res) => {
         instagram,
         facebook,
         email,
-        esDirector: esMiembroToken.rol === rolGrupo.DIRECTOR,
+        esDirector: _.includes(
+        [rolGrupo.DIRECTOR, rolGrupo.LIDER],
+          esMiembroToken.rol
+        ),
         miembros: {
           aprobados,
           pendientes
