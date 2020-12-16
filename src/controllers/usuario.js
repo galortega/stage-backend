@@ -148,10 +148,12 @@ export const crearUsuario = async (req, res) => {
     aprobacion,
     pais,
     telefono,
-    fechaNacimiento
+    fechaNacimiento,
+    representante
   } = req.body;
   const id = uuid();
   const idUsuarioRol = uuid();
+  const idRepresentante = uuid();
 
   const { trayectoria, esProfesional } = atributos;
   atributos.nivel =
@@ -176,6 +178,7 @@ export const crearUsuario = async (req, res) => {
     contrasena,
     pais,
     telefono,
+    representante: idRepresentante,
     fechaNacimiento,
     UsuarioRol: {
       id: idUsuarioRol,
@@ -200,6 +203,43 @@ export const crearUsuario = async (req, res) => {
       ],
       transaction: t
     });
+    let Representante;
+    if (!_.isEmpty(representante)) {
+      const usuarioRol = uuid();
+      Object.assign(representante, {
+        id: idRepresentante,
+        pais,
+        telefono,
+        contrasena,
+        UsuarioRolRepresentante: {
+          id: usuarioRol,
+          usuario: idRepresentante,
+          rol,
+          AtributosUsuario: {
+            id: uuid(),
+            usuarioRol: usuarioRol,
+            clave: "cedula",
+            valor: representante.cedula
+          }
+        }
+      });
+      Representante = await models.Representante.create(representante, {
+        include: [
+          {
+            model: models.UsuarioRol,
+            as: "UsuarioRolRepresentante",
+            include: [
+              {
+                model: models.Atributos,
+                as: "AtributosUsuario"
+              }
+            ]
+          }
+        ],
+        transaction: t
+      });
+    }
+
     let UsuarioGrupo;
     if (!_.isEmpty(usuarioGrupo) && !_.isEmpty(aprobacion)) {
       const datos = {
@@ -220,6 +260,7 @@ export const crearUsuario = async (req, res) => {
     return res.status(201).send({
       Usuario,
       UsuarioGrupo,
+      Representante,
       msj: "Usuario ingresado correctamente."
     });
   } catch (error) {

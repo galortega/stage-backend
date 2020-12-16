@@ -263,3 +263,11 @@ export const buscarPorGrupo = async (req, res) => {
     Coreografias
   });
 };
+/*
+export const actualizarCoreografia = (req, res) => {
+  const { id } = req.params;
+  const { miembros } = req.body;
+
+
+};
+*/

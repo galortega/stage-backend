@@ -1,15 +1,12 @@
 import { DataTypes, Sequelize } from "sequelize";
 import { estado } from "../constants/index";
 
-export const UsuarioModel = {
+export const RepresentanteModel = {
   id: {
     type: DataTypes.UUID,
     primaryKey: true
   },
   pais: {
-    type: DataTypes.UUID
-  },
-  representante: {
     type: DataTypes.UUID
   },
   nombre: {
@@ -24,9 +21,6 @@ export const UsuarioModel = {
   contrasena: {
     type: Sequelize.STRING(45),
     allowNull: false
-  },
-  telefono: {
-    type: Sequelize.STRING(45)
   },
   fechaNacimiento: {
     type: Sequelize.DATE,
@@ -45,7 +39,7 @@ export const UsuarioModel = {
   }
 };
 
-export const UsuarioConfig = {
+export const RepresentanteConfig = {
   freezeTableName: true,
   tableName: "usuario",
   timestamps: true,

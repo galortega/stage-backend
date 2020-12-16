@@ -17,6 +17,7 @@ import { DivisionModel, DivisionConfig } from "./division";
 import { ModalidadModel, ModalidadConfig } from "./modalidad";
 import { PaisModel, PaisConfig } from "./pais";
 import { ContactoModel, ContactoConfig } from "./contacto";
+import { RepresentanteModel, RepresentanteConfig } from "./representante";
 
 const Usuario = db.sequelize.define("Usuario", UsuarioModel, UsuarioConfig);
 const UsuarioRol = db.sequelize.define(
@@ -60,6 +61,11 @@ const Modalidad = db.sequelize.define(
 );
 const Pais = db.sequelize.define("Pais", PaisModel, PaisConfig);
 const Contacto = db.sequelize.define("Contacto", ContactoModel, ContactoConfig);
+const Representante = db.sequelize.define(
+  "Representante",
+  RepresentanteModel,
+  RepresentanteConfig
+);
 
 //USUARIO y ROL
 Usuario.belongsToMany(Rol, {
@@ -80,6 +86,15 @@ UsuarioRol.belongsTo(Usuario, {
   foreignKey: "usuario"
 });
 
+Representante.hasMany(UsuarioRol, {
+  as: "UsuarioRolRepresentante",
+  foreignKey: "usuario"
+});
+UsuarioRol.belongsTo(Representante, {
+  as: "UsuarioRolRepresentante",
+  foreignKey: "usuario"
+});
+
 Usuario.belongsToMany(Grupo, {
   through: UsuarioGrupo,
   foreignKey: "usuario"
@@ -96,6 +111,15 @@ Usuario.hasMany(UsuarioGrupo, {
 UsuarioGrupo.belongsTo(Usuario, {
   as: "MiembroUsuario",
   foreignKey: "usuario"
+});
+
+Usuario.hasOne(Representante, {
+  as: "Representante",
+  foreignKey: "representante"
+});
+Representante.belongsTo(Usuario, {
+  as: "Representante",
+  foreignKey: "representante"
 });
 
 //USUARIO Y PAIS
@@ -240,7 +264,8 @@ const models = {
   Division,
   Torneo,
   Pais,
-  Contacto
+  Contacto,
+  Representante
 };
 
 export default models;
