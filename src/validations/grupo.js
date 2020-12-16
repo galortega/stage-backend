@@ -29,11 +29,10 @@ export const checkCrearGrupo = [
     .custom(validarEmailGrupo),
   check(
     "pais",
-    "Email inválido. La longitud mínima es 5 y máximo 30 caracteres"
+    "Grupo inválido. La longitud mínima es 5 y máximo 30 caracteres"
   )
     .notEmpty()
-    .isString()
-    .isLength({ min: 5 }, { max: 30 }),
+    .isUUID(),
   check(
     "direccion",
     "Dirección inválida. La longitud mínima es 5 y máximo 30 caracteres"
@@ -49,11 +48,11 @@ export const checkCrearGrupo = [
     .isLength({ min: 2 }, { max: 30 }),
   check(
     "facebook",
-    "Usuario de Faceboook inválido. La longitud mínima es 5 y máximo 30 caracteres"
+    "Usuario de Faceboook inválido. La longitud mínima es 2 y máximo 30 caracteres"
   )
     .optional()
     .isString()
-    .isLength({ min: 5 }, { max: 30 }),
+    .isLength({ min: 2 }, { max: 30 }),
   check("tipo", `Tipo de grupo: ${tipoGrupo.values}`)
     .notEmpty()
     .isIn(tipoGrupo.values),
