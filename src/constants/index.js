@@ -94,4 +94,4 @@ export const asuntos = {
 };
 
 export const urlInvitarParticipante =
-  "http://localhost:4200/#/authentication/invitacion";
+  "https://www.stagedanceinternational.com/#/authentication/login";

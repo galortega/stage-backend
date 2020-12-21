@@ -35,7 +35,6 @@ export const validarEmailUsuario = async (email) => {
 };
 
 export const validarAtributos = async (atributos) => {
-  console.log(Object.keys(atributos));
   if (_.isEmpty(atributos)) return true;
   else
     return _.forEach(Object.keys(atributos), (key) => {
