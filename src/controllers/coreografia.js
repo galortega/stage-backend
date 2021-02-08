@@ -1,5 +1,5 @@
 import { uuid } from "uuidv4";
-import { estado } from "../constants";
+import { estado, nivelesNombres } from "../constants";
 import models from "../models";
 import _ from "lodash";
 import { crearSubTorneo, validarSubTorneo } from "./subTorneo";
@@ -64,20 +64,43 @@ export const buscarPorId = async (req, res) => {
   const { id } = req.params;
   const Coreografia = await models.Coreografia.findOne({
     where: { id, estado: estado.ACTIVO },
-    include: {
-      model: models.GrupoCoreografia,
-      as: "CoreografiaParticipantes",
-      include: {
-        model: models.UsuarioGrupo,
-        as: "CoreografiaParticipante",
+    include: [
+      {
+        model: models.GrupoCoreografia,
+        as: "CoreografiaParticipantes",
         include: [
           {
-            model: models.Usuario,
-            as: "MiembroUsuario"
+            model: models.UsuarioGrupo,
+            as: "CoreografiaParticipante",
+            include: [
+              {
+                model: models.Usuario,
+                as: "MiembroUsuario"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        model: models.SubTorneo,
+        as: "CoreografiaSubTorneo",
+        attributes: ["division", "modalidad", "nivel", "torneo"],
+        include: [
+          {
+            model: models.Division,
+            as: "DivisionSubTorneo"
+          },
+          {
+            model: models.Modalidad,
+            as: "ModalidadSubTorneo"
+          },
+          {
+            model: models.Categoria,
+            as: "CategoriaSubTorneo"
           }
         ]
       }
-    }
+    ]
   }).then((coreografia) => {
     const {
       id,
@@ -87,8 +110,29 @@ export const buscarPorId = async (req, res) => {
       precio,
       resultado,
       fecha_creacion,
-      CoreografiaParticipantes
+      CoreografiaParticipantes,
+      CoreografiaSubTorneo
     } = coreografia;
+    let {
+      ModalidadSubTorneo,
+      DivisionSubTorneo,
+      nivel,
+      CategoriaSubTorneo,
+      torneo
+    } = CoreografiaSubTorneo;
+    nivel = { id: nivel, nombre: nivelesNombres[nivel] };
+    const division = {
+      id: DivisionSubTorneo.id,
+      nombre: DivisionSubTorneo.nombre
+    };
+    const modalidad = {
+      id: ModalidadSubTorneo.id,
+      nombre: ModalidadSubTorneo.nombre
+    };
+    const categoria = {
+      id: CategoriaSubTorneo.id,
+      nombre: CategoriaSubTorneo.nombre
+    };
     const participantes = _.map(CoreografiaParticipantes, (participante) => {
       const { id, rol, usuarioGrupo, CoreografiaParticipante } = participante;
       const {
@@ -109,13 +153,18 @@ export const buscarPorId = async (req, res) => {
     });
     return {
       id,
+      torneo,
       subTorneo,
       grupo,
       nombre,
       precio,
       resultado,
       fecha_creacion,
-      participantes
+      participantes,
+      modalidad,
+      division,
+      nivel,
+      categoria
     };
   });
   return res.status(200).send({

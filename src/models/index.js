@@ -18,6 +18,7 @@ import { ModalidadModel, ModalidadConfig } from "./modalidad";
 import { PaisModel, PaisConfig } from "./pais";
 import { ContactoModel, ContactoConfig } from "./contacto";
 import { RepresentanteModel, RepresentanteConfig } from "./representante";
+import { CategoriaModel, CategoriaConfig } from "./categoria";
 
 const Usuario = db.sequelize.define("Usuario", UsuarioModel, UsuarioConfig);
 const UsuarioRol = db.sequelize.define(
@@ -65,6 +66,11 @@ const Representante = db.sequelize.define(
   "Representante",
   RepresentanteModel,
   RepresentanteConfig
+);
+const Categoria = db.sequelize.define(
+  "Categoria",
+  CategoriaModel,
+  CategoriaConfig
 );
 
 //USUARIO y ROL
@@ -220,6 +226,15 @@ Coreografia.belongsTo(SubTorneo, {
   foreignKey: "subTorneo"
 });
 
+Categoria.hasOne(SubTorneo, {
+  as: "CategoriaSubTorneo",
+  foreignKey: "categoria"
+});
+SubTorneo.belongsTo(Categoria, {
+  as: "CategoriaSubTorneo",
+  foreignKey: "categoria"
+});
+
 //TORNEO
 Torneo.hasMany(SubTorneo, {
   as: "SubTorneos",
@@ -265,7 +280,8 @@ const models = {
   Torneo,
   Pais,
   Contacto,
-  Representante
+  Representante,
+  Categoria
 };
 
 export default models;

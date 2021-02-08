@@ -17,7 +17,6 @@ import { invitacionParticipante } from "../templates/invitacion";
 import { enviarCorreo } from "../utils/nodemailer";
 import moment from "moment";
 import { validarSubTorneo } from "./subTorneo";
-import { categorias } from "../constants/categorias";
 import { errorStatusHandle } from "../utils/error";
 
 export const validarIDGrupo = async (id) => {
@@ -284,7 +283,7 @@ export const buscarPorId = async (req, res) => {
         facebook,
         email,
         esDirector: _.includes(
-        [rolGrupo.DIRECTOR, rolGrupo.LIDER],
+          [rolGrupo.DIRECTOR, rolGrupo.LIDER],
           esMiembroToken.rol
         ),
         miembros: {
@@ -386,7 +385,6 @@ export const validarMiembroGrupo = async (req, res) => {
   return res.status(200).send({
     Participantes: _.compact(ParticipantesValidos),
     Modalidad,
-    SubTorneo: subTorneo,
-    categorias
+    SubTorneo: subTorneo
   });
 };

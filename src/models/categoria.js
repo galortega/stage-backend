@@ -1,29 +1,25 @@
 import { DataTypes, Sequelize } from "sequelize";
-import { estado, niveles } from "../constants/index";
+import { estado, categorias } from "../constants/index";
 
-export const SubTorneoModel = {
+export const CategoriaModel = {
   id: {
     type: DataTypes.UUID,
     primaryKey: true
   },
-  torneo: {
-    type: DataTypes.UUID,
+  minimo: {
+    type: DataTypes.INTEGER,
     allowNull: false
   },
-  division: {
-    type: DataTypes.UUID,
+  maximo: {
+    type: DataTypes.INTEGER,
     allowNull: false
   },
-  modalidad: {
-    type: DataTypes.UUID,
+  tiempo: {
+    type: DataTypes.FLOAT,
     allowNull: false
   },
-  categoria: {
-    type: DataTypes.UUID,
-    allowNull: false
-  },
-  nivel: {
-    type: Sequelize.ENUM(niveles.values),
+  nombre: {
+    type: Sequelize.ENUM(categorias.values),
     allowNull: false
   },
   fecha_creacion: {
@@ -39,9 +35,9 @@ export const SubTorneoModel = {
   }
 };
 
-export const SubTorneoConfig = {
+export const CategoriaConfig = {
   freezeTableName: true,
-  tableName: "subtorneo",
+  tableName: "categoria",
   timestamps: true,
   createdAt: "fecha_creacion",
   updatedAt: "fecha_actualizacion"

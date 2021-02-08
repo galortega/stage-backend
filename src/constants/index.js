@@ -6,12 +6,29 @@ export const estado = {
   values: ["A", "I"]
 };
 
+export const categorias = {
+  SOLO: "Solo",
+  DUO: "Duo",
+  TRIO: "Trio",
+  GRUPO_PEQUENO: "Grupo pequeño",
+  GRUPO_GRANDE: "Grupo grande",
+  GRUPO_XL: "Grupo XL",
+  values: ["Solo", "Duo", "Trio", "Grupo pequeño", "Grupo grande", "Grupo XL"]
+};
+
 export const niveles = {
   BEGGINER: "B",
   ADVANCED: "A",
   PROFESIONAL: "P",
   values: ["B", "A", "P"]
 };
+
+export const nivelesNombres = {
+  B: "BEGGINER",
+  A: "ADVANCED",
+  P: "PROFESIONAL",
+  values: ["B", "A", "P"]
+}
 
 export const nivelesTrayectoria = {
   BEGGINER: 3,
