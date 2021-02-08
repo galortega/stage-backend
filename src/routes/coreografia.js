@@ -4,7 +4,8 @@ import {
   crearCoreografias,
   buscarTodos,
   buscarPorGrupo,
-  buscarPorId
+  buscarPorId,
+  remplazarMiembros
 } from "../controllers/coreografia";
 import auth from "../utils/auth";
 import { allowedMethods, asyncWrapper, checkParameters } from "../utils/error";
@@ -34,12 +35,22 @@ router.get(
   buscarPorGrupo
 );
 
+router.use(
+  `${routes.grupos.coreografias}/remplazarMiembros$`,
+  auth,
+  allowedMethods(["PUT"])
+);
+router.put(
+  `${routes.grupos.coreografias}/remplazarMiembros$`,
+  auth,
+  remplazarMiembros
+);
+
 router.use(`${routes.grupos.coreografias}/:id$`, auth, allowedMethods(["GET"]));
 router.get(
   `${routes.grupos.coreografias}/:id`,
   auth,
   asyncWrapper(buscarPorId)
 );
-
 
 export default router;

@@ -5,6 +5,7 @@ export const routes = {
   rol: `${baseRoute}/roles`,
   auth: `${baseRoute}/auth`,
   gruposRoot: `${baseRoute}/grupos`,
+  coreografias: `${baseRoute}/coreografias`,
   grupos: {
     coreografias: "/:grupo/coreografias"
   },

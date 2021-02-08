@@ -320,3 +320,21 @@ export const actualizarCoreografia = (req, res) => {
 
 };
 */
+
+export const remplazarMiembros = async (req, res) => {
+  const { grupoCoreografia, miembros } = req.body;
+
+  const GrupoCoreografia = await Promise.all(
+    _.map(miembros, async (miembro) => {
+      const { nuevo, viejo } = miembro;
+      return await models.GrupoCoreografia.update(
+        {
+          usuarioGrupo: nuevo
+        },
+        { where: [{ id: grupoCoreografia, usuarioGrupo: viejo }] }
+      );
+    })
+  );
+
+  return res.status(200).send(GrupoCoreografia);
+};
