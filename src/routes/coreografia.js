@@ -12,6 +12,9 @@ import { allowedMethods, asyncWrapper, checkParameters } from "../utils/error";
 
 const router = express.Router();
 
+router.use("/remplazarMiembros$", auth, allowedMethods(["PUT"]));
+router.put("/remplazarMiembros", auth, remplazarMiembros);
+
 router.use(
   `${routes.grupos.coreografias}/$`,
   auth,
@@ -33,17 +36,6 @@ router.get(
   `${routes.grupos.coreografias}/buscarPorGrupo$`,
   auth,
   buscarPorGrupo
-);
-
-router.use(
-  `${routes.grupos.coreografias}/remplazarMiembros$`,
-  auth,
-  allowedMethods(["PUT"])
-);
-router.put(
-  `${routes.grupos.coreografias}/remplazarMiembros$`,
-  auth,
-  remplazarMiembros
 );
 
 router.use(`${routes.grupos.coreografias}/:id$`, auth, allowedMethods(["GET"]));
