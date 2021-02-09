@@ -58,7 +58,9 @@ export const validarAtributos = async (atributos) => {
     });
 };
 
+// Query params: rol
 export const buscarTodos = async (req, res) => {
+  const { rol } = req.query;
   const Usuarios = await models.Usuario.findAll({
     where: {
       estado: estado.ACTIVO
@@ -67,6 +69,7 @@ export const buscarTodos = async (req, res) => {
       {
         model: models.UsuarioRol,
         as: "UsuarioRol",
+        where: rol ? { rol } : null,
         include: [
           {
             model: models.Atributos,
@@ -154,7 +157,7 @@ export const crearUsuario = async (req, res) => {
   const idUsuarioRol = uuid();
   const idRepresentante = uuid();
 
-  const { trayectoria, esProfesional } = atributos;
+  const { trayectoria, esProfesional } = atributos; //
   atributos.nivel =
     _.isEmpty(trayectoria) || _.isEmpty(esProfesional)
       ? null
@@ -303,9 +306,13 @@ const actualizarAtributos = async (atributos, usuario, idUsuarioRol) => {
   return AtributosUsuario;
 };
 
+// Agregar el resto de campos
 export const actualizarUsuario = async (req, res) => {
   const { id } = req.params;
-  const { rol, atributos } = req.body;
+  const {
+    rol,
+    atributos,
+  } = req.body;
 
   let idUsuarioRol;
   if (!_.isEmpty(rol))
