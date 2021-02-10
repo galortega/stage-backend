@@ -153,6 +153,7 @@ export const buscarPorId = async (req, res) => {
     });
     return {
       id,
+      grupoCoreografia: CoreografiaParticipantes.id,
       torneo,
       subTorneo,
       grupo,
@@ -327,6 +328,20 @@ export const remplazarMiembros = async (req, res) => {
   const GrupoCoreografia = await Promise.all(
     _.map(miembros, async (miembro) => {
       const { nuevo, viejo } = miembro;
+      console.log({ nuevo, viejo });
+      const Viejo = await models.UsuarioGrupo.findOne({
+        where: { id: viejo }
+      }).then((u) => u && u.toJSON());
+      const Nuevo = await models.UsuarioGrupo.findOne({
+        where: { id: nuevo }
+      }).then((u) => u && u.toJSON());
+      const GrupoCoreografia = await models.GrupoCoreografia.findOne({
+        where: [{ id: grupoCoreografia, usuarioGrupo: viejo }]
+      }).then((u) => u && u.toJSON());
+      console.log({ Viejo, Nuevo });
+      console.log({
+        GrupoCoreografia
+      });
       return await models.GrupoCoreografia.update(
         {
           usuarioGrupo: nuevo
