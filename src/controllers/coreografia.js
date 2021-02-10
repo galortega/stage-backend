@@ -142,7 +142,7 @@ export const buscarPorId = async (req, res) => {
         MiembroUsuario
       } = CoreografiaParticipante;
       return {
-        usuarioCoreografia: id,
+        grupoCoreografia: id,
         usuarioGrupo,
         rol,
         usuario,
@@ -153,7 +153,6 @@ export const buscarPorId = async (req, res) => {
     });
     return {
       id,
-      grupoCoreografia: CoreografiaParticipantes.id,
       torneo,
       subTorneo,
       grupo,
