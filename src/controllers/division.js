@@ -33,6 +33,37 @@ export const crearDivision = async (req, res) => {
   });
 };
 
+export const actualizarDivision = async (req, res) => {
+  const { id } = req.params;
+
+  const Division = await models.Division.update(req.body, { where: { id } });
+
+  return res.status(Division === 0 ? 409 : 200).send({
+    Division,
+    msj:
+      Division === 0
+        ? "Error al actualizar"
+        : "Division actualizada correctamente."
+  });
+};
+
+export const eliminarDivision = async (req, res) => {
+  const { id } = req.params;
+
+  const Division = await models.Division.update(
+    { estado: estado.INACTIVO },
+    { where: { id } }
+  );
+
+  return res.status(Division === 0 ? 409 : 200).send({
+    Division,
+    msj:
+      Division === 0
+        ? "Error al actualizar"
+        : "Division actualizada correctamente."
+  });
+};
+
 export const getDivisiones = async (req, res) => {
   const Divisiones = await models.Division.findAll({
     where: { estado: estado.ACTIVO },

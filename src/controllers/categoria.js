@@ -32,3 +32,34 @@ export const getCategorias = async (req, res) => {
 
   return res.status(200).send(Categorias);
 };
+
+export const actualizarCategoria = async (req, res) => {
+  const { id } = req.params;
+
+  const Categoria = await models.Categoria.update(req.body, { where: { id } });
+
+  return res.status(Categoria === 0 ? 409 : 200).send({
+    Categoria,
+    msj:
+      Categoria === 0
+        ? "Error al actualizar"
+        : "Categoria actualizada correctamente."
+  });
+};
+
+export const eliminarCategoria = async (req, res) => {
+  const { id } = req.params;
+
+  const Categoria = await models.Categoria.update(
+    { estado: estado.INACTIVO },
+    { where: { id } }
+  );
+
+  return res.status(Categoria === 0 ? 409 : 200).send({
+    Categoria,
+    msj:
+      Categoria === 0
+        ? "Error al actualizar"
+        : "Categoria actualizada correctamente."
+  });
+};

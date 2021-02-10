@@ -32,6 +32,23 @@ export const actualizarModalidad = async (req, res) => {
     { where: { id } }
   );
 
+  return res.status(Modalidad === 0 ? 409 : 200).send({
+    Modalidad,
+    msj:
+      Modalidad === 0
+        ? "Error al actualizar"
+        : "Modalidad actualizada correctamente."
+  });
+};
+
+export const eliminarModalidad = async (req, res) => {
+  const { id } = req.params;
+
+  const Modalidad = await models.Modalidad.update(
+    { estado: estado.INACTIVO },
+    { where: { id } }
+  );
+
   return res.status(200).send({
     Modalidad,
     msj:
