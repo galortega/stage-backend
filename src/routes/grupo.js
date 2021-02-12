@@ -42,6 +42,12 @@ router.get("/obtenerGrupos", auth, asyncWrapper(getGrupos));
 router.use("/obtenerGruposLider$", allowedMethods(["GET"]));
 router.get("/obtenerGruposLider", auth, asyncWrapper(getGruposLider));
 
+router.use("/coreografiasPorModalidad/$", allowedMethods(["GET"]));
+router.get(
+  "/coreografiasPorModalidad/",
+  asyncWrapper(coreografiasPorModalidadGrupo)
+);
+
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
 router.get("/:id", auth, asyncWrapper(buscarPorId));
 
@@ -67,12 +73,6 @@ router.get(
   "/:grupo/validarParticipantes",
   checkParameters(checkValidarParticipantes),
   asyncWrapper(validarMiembroGrupo)
-);
-
-router.use("/:grupo/coreografiasPorModalidad$", allowedMethods(["GET"]));
-router.get(
-  "/:grupo/coreografiasPorModalidad",
-  asyncWrapper(coreografiasPorModalidadGrupo)
 );
 
 router.use(coreografiasRouter);

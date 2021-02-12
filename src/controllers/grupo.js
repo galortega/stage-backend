@@ -390,10 +390,10 @@ export const validarMiembroGrupo = async (req, res) => {
 };
 
 export const coreografiasPorModalidadGrupo = async (req, res) => {
-  const { grupo } = req.params;
+  const { grupo } = req.query;
 
   const Coreografias = await models.Coreografia.findAll({
-    where: [{ estado: estado.ACTIVO }],
+    where: [{ estado: estado.ACTIVO }, grupo ? { grupo } : null],
     attributes: { exclude: atributosExclude },
     include: [
       {
@@ -418,6 +418,7 @@ export const coreografiasPorModalidadGrupo = async (req, res) => {
     )
       .toPairs()
       .forEach((c) => {
+        c[0] = _.startCase(_.loLower(c[0]));
         if (c[1].length > 0) c[1] = c[1].length;
       })
       .fromPairs()

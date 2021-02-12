@@ -93,24 +93,31 @@ export const crearTorneo = async (req, res) => {
 };
 
 export const buscarTodos = async (req, res) => {
+  let { subTorneos } = req.query;
+
+  if (_.isEmpty(subTorneos)) subTorneos = true;
+  else subTorneos = subTorneos === "true";
+
   const Torneos = await models.Torneo.findAll({
-    include: [
-      { model: models.Pais, as: "Pais", attributes: ["pais"] },
-      {
-        model: models.SubTorneo,
-        as: "SubTorneos",
-        attributes: {
-          exclude: atributosExclude
-        }
-      }
-    ],
+    include: _.compact([
+      !subTorneos
+        ? null
+        : {
+            model: models.SubTorneo,
+            as: "SubTorneos",
+            attributes: {
+              exclude: atributosExclude
+            }
+          },
+      { model: models.Pais, as: "Pais", attributes: ["pais"] }
+    ]),
     where: { estado: estado.ACTIVO },
     attributes: {
       exclude: atributosExclude
     },
     order: [["inicioTorneo", "DESC"]]
   }).then((torneos) => {
-    return _.groupBy(torneos, "Pais.pais");
+    return subTorneos ? _.groupBy(torneos, "Pais.pais") : torneos;
   });
 
   return res.status(200).send(Torneos);
