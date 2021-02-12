@@ -427,3 +427,46 @@ export const coreografiasPorModalidadGrupo = async (req, res) => {
 
   return res.status(200).send(Coreografias);
 };
+
+export const totalesGrupo = async (req, res) => {
+  const { id } = req.params;
+
+  const Totales = await models.Grupo.findOne({
+    where: { id },
+    attributes: ["id", "nombre"],
+    include: [
+      {
+        model: models.Usuario,
+        attributes: ["id"]
+      },
+      {
+        model: models.Coreografia,
+        as: "CoreografiaGrupo",
+        attributes: ["id", "puntaje", "puesto"],
+        include: [
+          {
+            model: models.SubTorneo,
+            as: "CoreografiaSubTorneo",
+            attributes: ["torneo"]
+          }
+        ]
+      }
+    ]
+  }).then((res) => {
+    res = res.toJSON();
+    const { Usuarios, CoreografiaGrupo } = res;
+    const miembros = Usuarios ? Usuarios.length : 0;
+    const torneos = _.union(
+      _.map(CoreografiaGrupo, (c) => c.CoreografiaSubTorneo.torneo),
+      []
+    ).length;
+    const coreografias = CoreografiaGrupo.length;
+    const primerosLugares = _.compact(
+      _.map(CoreografiaGrupo, (c) => (c.puesto === 1 ? c : null))
+    ).length;
+
+    return { miembros, torneos, coreografias, primerosLugares };
+  });
+
+  return res.status(200).send(Totales);
+};

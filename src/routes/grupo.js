@@ -7,7 +7,8 @@ import {
   eliminarGrupo,
   obtenerNombreGrupo,
   validarMiembroGrupo,
-  coreografiasPorModalidadGrupo
+  coreografiasPorModalidadGrupo,
+  totalesGrupo
 } from "../controllers/grupo";
 import { allowedMethods, asyncWrapper, checkParameters } from "../utils/error";
 import auth from "../utils/auth";
@@ -67,6 +68,9 @@ router.put("/:id/confirmarParticipante", asyncWrapper(confirmarMiembro));
 
 router.use("/:id/obtenerNombre$", allowedMethods(["GET"]));
 router.get("/:id/obtenerNombre", asyncWrapper(obtenerNombreGrupo));
+
+router.use("/:id/totales$", allowedMethods(["GET"]));
+router.get("/:id/totales", asyncWrapper(totalesGrupo));
 
 router.use("/:grupo/validarParticipantes$", allowedMethods(["GET"]));
 router.get(

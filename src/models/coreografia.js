@@ -20,6 +20,12 @@ export const CoreografiaModel = {
   resultado: {
     type: Sequelize.STRING(10)
   },
+  puntaje: {
+    type: DataTypes.FLOAT
+  },
+  puesto: {
+    type: DataTypes.INTEGER
+  },
   precio: {
     type: Sequelize.FLOAT,
     allowNull: false
