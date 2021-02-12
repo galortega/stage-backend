@@ -418,7 +418,7 @@ export const coreografiasPorModalidadGrupo = async (req, res) => {
     )
       .toPairs()
       .forEach((c) => {
-        c[0] = _.startCase(_.loLower(c[0]));
+        c[0] = _.startCase(_.toLower(c[0]));
         if (c[1].length > 0) c[1] = c[1].length;
       })
       .fromPairs()
