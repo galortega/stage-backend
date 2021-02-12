@@ -19,7 +19,7 @@ export const CategoriaModel = {
     allowNull: false
   },
   nombre: {
-    type: Sequelize.ENUM(categorias.values),
+    type: DataTypes.STRING,
     allowNull: false
   },
   fecha_creacion: {

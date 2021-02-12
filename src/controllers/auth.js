@@ -5,8 +5,8 @@ import models from "../models/index";
 import { Op } from "sequelize";
 import { atributosExclude, estado, rolesId } from "../constants/index";
 
-export const autenticarParticipante = async (req, res) => {
-  let { email, contrasena } = req.body;
+export const login = async (req, res) => {
+  let { email, contrasena, rol } = req.body;
   email = _.trim(_.toLower(email));
   const Usuario = await models.Usuario.findOne({
     where: [{ email }, { estado: estado.ACTIVO }],
@@ -14,6 +14,7 @@ export const autenticarParticipante = async (req, res) => {
       {
         model: models.UsuarioRol,
         as: "UsuarioRol",
+        where: { rol },
         attributes: ["rol"],
         include: [
           {
@@ -35,10 +36,12 @@ export const autenticarParticipante = async (req, res) => {
     email: Usuario.email,
     rol: Usuario.UsuarioRol[0].rol,
     atributos: _.map(Usuario.UsuarioRol[0].AtributosUsuario, (atributo) => {
-      const { clave, valor } = atributo;
-      const object = {};
-      object[clave] = valor;
-      return object;
+      if (atributo) {
+        const { clave, valor } = atributo;
+        const object = {};
+        object[clave] = valor;
+        return object;
+      }
     })
   };
 

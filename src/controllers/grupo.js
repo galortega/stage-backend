@@ -388,3 +388,41 @@ export const validarMiembroGrupo = async (req, res) => {
     SubTorneo: subTorneo
   });
 };
+
+export const coreografiasPorModalidadGrupo = async (req, res) => {
+  const { grupo } = req.params;
+
+  const Coreografias = await models.Coreografia.findAll({
+    where: [{ estado: estado.ACTIVO }],
+    attributes: { exclude: atributosExclude },
+    include: [
+      {
+        model: models.SubTorneo,
+        as: "CoreografiaSubTorneo",
+        attributes: ["id"],
+        include: [
+          {
+            model: models.Modalidad,
+            as: "ModalidadSubTorneo",
+            attributes: ["nombre"]
+          }
+        ]
+      }
+    ]
+  }).then((coreografias) => {
+    return _.chain(
+      _.groupBy(
+        coreografias,
+        (c) => c.CoreografiaSubTorneo.ModalidadSubTorneo.nombre
+      )
+    )
+      .toPairs()
+      .forEach((c) => {
+        if (c[1].length > 0) c[1] = c[1].length;
+      })
+      .fromPairs()
+      .value();
+  });
+
+  return res.status(200).send(Coreografias);
+};

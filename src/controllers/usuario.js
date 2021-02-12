@@ -22,6 +22,24 @@ export const validarIDUsuario = async (id) => {
   });
 };
 
+export const validarUsuarioRol = async (email, rol) => {
+  return await models.Usuario.findOne({
+    where: { [Op.and]: [{ email }, { estado: estado.ACTIVO }] },
+    include: [
+      {
+        model: models.UsuarioRol,
+        as: "UsuarioRol",
+        where: { rol },
+        attributes: ["rol"]
+      }
+    ]
+  }).then((usuario) => {
+    if (_.isEmpty(usuario.UsuarioRol)) {
+      return Promise.reject(new Error("El usuario no posee el rol ingresado."));
+    } else return Promise.resolve();
+  });
+};
+
 export const validarEmailUsuario = async (email) => {
   return await models.Usuario.findOne({
     where: { [Op.and]: [{ email }, { estado: estado.ACTIVO }] }
@@ -309,10 +327,7 @@ const actualizarAtributos = async (atributos, usuario, idUsuarioRol) => {
 // Agregar el resto de campos
 export const actualizarUsuario = async (req, res) => {
   const { id } = req.params;
-  const {
-    rol,
-    atributos,
-  } = req.body;
+  const { rol, atributos } = req.body;
 
   let idUsuarioRol;
   if (!_.isEmpty(rol))

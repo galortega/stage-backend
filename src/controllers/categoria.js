@@ -8,6 +8,7 @@ export const crearCategoria = async (req, res) => {
 
   const datos = _.map(categorias, (m) => {
     const { nombre, maximo, minimo, tiempo } = m;
+    console.log({ m });
     return {
       id: uuid(),
       nombre,
@@ -38,10 +39,10 @@ export const actualizarCategoria = async (req, res) => {
 
   const Categoria = await models.Categoria.update(req.body, { where: { id } });
 
-  return res.status(Categoria === 0 ? 409 : 200).send({
+  return res.status(Categoria[0] === 0 ? 409 : 200).send({
     Categoria,
     msj:
-      Categoria === 0
+      Categoria[0] === 0
         ? "Error al actualizar"
         : "Categoria actualizada correctamente."
   });
@@ -54,11 +55,10 @@ export const eliminarCategoria = async (req, res) => {
     { estado: estado.INACTIVO },
     { where: { id } }
   );
-
-  return res.status(Categoria === 0 ? 409 : 200).send({
+  return res.status(Categoria[0] === 0 ? 409 : 200).send({
     Categoria,
     msj:
-      Categoria === 0
+      Categoria[0] === 0
         ? "Error al actualizar"
         : "Categoria actualizada correctamente."
   });
