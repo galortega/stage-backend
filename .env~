@@ -1,0 +1,16 @@
+PORT=8080
+<<<<<<< HEAD
+HOST=34.123.218.245
+=======
+HOST=db.stagedanceinternational.com
+DBPORT=3900
+>>>>>>> develop
+LOCALHOST=http://localhost:
+USER=galo
+PASSWORD=Galo-2020-stage
+DIALECT=mysql
+DB=StageDev
+SECRETA=palabrasecreta
+KEY=palabrasecreta
+correo_emisor=stagedanzas@gmail.com
+correo_pass=stage2020

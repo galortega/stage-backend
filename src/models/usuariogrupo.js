@@ -1,4 +1,4 @@
-import { DataTypes, Sequelize } from "Sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { estado, estadoAprobado, rolGrupo } from "../constants/index";
 
 export const UsuarioGrupoModel = {
@@ -7,8 +7,7 @@ export const UsuarioGrupoModel = {
     primaryKey: true
   },
   usuario: {
-    type: DataTypes.UUID,
-    allowNull: false
+    type: DataTypes.UUID
   },
   grupo: {
     type: DataTypes.UUID,

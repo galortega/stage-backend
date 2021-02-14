@@ -1,4 +1,4 @@
-import { DataTypes, Sequelize } from "Sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { estado } from "../constants/index";
 
 export const CoreografiaModel = {
@@ -14,8 +14,20 @@ export const CoreografiaModel = {
     type: DataTypes.UUID,
     allowNull: false
   },
+  nombre: {
+    type: Sequelize.STRING(45)
+  },
   resultado: {
-    type: Sequelize.STRING(10),
+    type: Sequelize.STRING(10)
+  },
+  puntaje: {
+    type: DataTypes.FLOAT
+  },
+  puesto: {
+    type: DataTypes.INTEGER
+  },
+  precio: {
+    type: Sequelize.FLOAT,
     allowNull: false
   },
   fecha_creacion: {

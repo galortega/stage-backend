@@ -1,5 +1,5 @@
 import { DataTypes, Sequelize } from "sequelize";
-import { estado } from "../constants/index";
+import { estado, niveles } from "../constants/index";
 
 export const SubTorneoModel = {
   id: {
@@ -16,6 +16,14 @@ export const SubTorneoModel = {
   },
   modalidad: {
     type: DataTypes.UUID,
+    allowNull: false
+  },
+  categoria: {
+    type: DataTypes.UUID,
+    allowNull: false
+  },
+  nivel: {
+    type: Sequelize.ENUM(niveles.values),
     allowNull: false
   },
   fecha_creacion: {

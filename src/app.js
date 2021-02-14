@@ -15,6 +15,15 @@ import usuariosRouter from "./routes/usuario";
 import rolesRouter from "./routes/rol";
 import authRouter from "./routes/auth";
 import gruposRouter from "./routes/grupo";
+import divisionesRouter from "./routes/division";
+import modalidadesRouter from "./routes/modalidad";
+import torneosRouter from "./routes/torneo";
+import paisesRouter from "./routes/pais";
+import contactosRouter from "./routes/contacto";
+import categoriasRouter from "./routes/categoria";
+import subTorneosRouter from "./routes/subTorneo";
+import coreografiasRouter from "./routes/coreografia";
+
 const app = express();
 
 app.use(cors());
@@ -30,20 +39,28 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: "10mb", extended: true }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../public")));
 
 // Routes
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: "10mb", extended: true }));
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 
 app.use("/", indexRouter);
-app.use(routes.usuarioRaiz, usuariosRouter);
+app.use(routes.usuario, usuariosRouter);
 app.use(routes.rol, rolesRouter);
 app.use(routes.auth, authRouter);
-app.use(routes.grupos, gruposRouter);
+app.use(routes.gruposRoot, gruposRouter);
+app.use(routes.divisiones, divisionesRouter);
+app.use(routes.modalidades, modalidadesRouter);
+app.use(routes.torneos, torneosRouter);
+app.use(routes.paises, paisesRouter);
+app.use(routes.contactos, contactosRouter);
+app.use(routes.categorias, categoriasRouter);
+app.use(routes.subTorneos, subTorneosRouter);
+app.use(routes.coreografias, coreografiasRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -63,6 +80,9 @@ app.use(function (err, req, res) {
 
 // Mount uploads
 app.use("./public", express.static(path.join(__dirname, "./public")));
+<<<<<<< HEAD
 app.set('trust proxy', true);
+=======
+>>>>>>> develop
 
 export default app;

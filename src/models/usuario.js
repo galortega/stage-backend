@@ -1,10 +1,16 @@
-import { DataTypes, Sequelize } from "Sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { estado } from "../constants/index";
 
 export const UsuarioModel = {
   id: {
     type: DataTypes.UUID,
     primaryKey: true
+  },
+  pais: {
+    type: DataTypes.UUID
+  },
+  representante: {
+    type: DataTypes.UUID
   },
   nombre: {
     type: Sequelize.STRING(45),
@@ -21,6 +27,10 @@ export const UsuarioModel = {
   },
   telefono: {
     type: Sequelize.STRING(45)
+  },
+  fechaNacimiento: {
+    type: Sequelize.DATE,
+    field: "fecha_nacimiento"
   },
   fecha_creacion: {
     type: Sequelize.DATE,

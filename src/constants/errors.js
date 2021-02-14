@@ -43,8 +43,8 @@ const errors = {
   },
   USUARIO_INEXISTENTE: {
     title: "Usuario no existe",
-    status: 400,
-    detail: "Información ingresada no le pertenece a un usuario."
+    status: 401,
+    detail: "Usuario o contraseña incorrecta."
   },
   PRODUCTO_EXISTENTE: {
     title: "Producto ya existe",
@@ -63,17 +63,17 @@ const errors = {
   },
   TOKEN_EXPIRADO: {
     title: "Token expirado",
-    status: 405,
+    status: 403,
     detail: "El token de la sesión se encuentra expirado."
   },
   TOKEN_ERROR: {
     title: "Token error",
-    status: 405,
+    status: 403,
     detail: "El token de la sesión está malformado o es inválido."
   },
   TOKEN_INACTIVO: {
     title: "Token inactivo",
-    status: 405,
+    status: 403,
     detail: "El token de la sesión no se encuentra activo."
   }
 };

@@ -1,4 +1,4 @@
-import { DataTypes, Sequelize } from "Sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { estado, rolGrupo } from "../constants/index";
 
 export const GrupoCoreografiaModel = {
@@ -12,6 +12,10 @@ export const GrupoCoreografiaModel = {
     field: "usuariogrupo"
   },
   coreografia: {
+    type: DataTypes.UUID,
+    allowNull: false
+  },
+  subTorneo: {
     type: DataTypes.UUID,
     allowNull: false
   },

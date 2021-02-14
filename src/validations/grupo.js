@@ -1,23 +1,23 @@
 import { check, param } from "express-validator";
-import { validarAtributos, validarEmailUsuario } from "../controllers/usuario";
 import _ from "lodash";
-import { validarIDRol } from "../controllers/rol";
 import {
   validarEmailGrupo,
   validarMiembros,
   validarNombreGrupo,
   validarIDGrupo
 } from "../controllers/grupo";
-import { tipoGrupo } from "../constants";
+import { niveles, tipoGrupo } from "../constants";
+import { validarIDDivision } from "../controllers/division";
+import { validarIDTorneo } from "../controllers/torneo";
 
 export const checkCrearGrupo = [
   check(
     "nombre",
-    "Nombre inválido. La longitud mínima es 5 y máximo 30 caracteres"
+    "Nombre inválido. La longitud mínima es 1 y máximo 30 caracteres"
   )
     .notEmpty()
     .isString()
-    .isLength({ min: 7 }, { max: 30 })
+    .isLength({ min: 1 }, { max: 30 })
     .custom(validarNombreGrupo),
   check(
     "email",
@@ -27,21 +27,19 @@ export const checkCrearGrupo = [
     .isEmail()
     .isLength({ min: 5 }, { max: 30 })
     .custom(validarEmailGrupo),
-  check("pais", "País inválido. La longitud mínima es 5 y máximo 30 caracteres")
+  check(
+    "pais",
+    "Grupo inválido. La longitud mínima es 5 y máximo 30 caracteres"
+  )
     .notEmpty()
-    .isString()
-    .isLength({ min: 5 }, { max: 30 }),
+    .isUUID(),
   check(
     "direccion",
-    "País inválido. La longitud mínima es 5 y máximo 30 caracteres"
+    "Dirección inválida. La longitud mínima es 5 y máximo 30 caracteres"
   )
     .notEmpty()
     .isString()
-    .isLength({ min: 5 }, { max: 30 }),
-  check("logo", "País inválido. La longitud mínima es 5 y máximo 30 caracteres")
-    .notEmpty()
-    .isString()
-    .isLength({ min: 5 }, { max: 30 }),
+    .isLength({ min: 5 }, { max: 80 }),
   check(
     "instagram",
     "Usuario de Instagram inválido. La longitud mínima es 2 y máximo 30 caracteres"
@@ -50,11 +48,11 @@ export const checkCrearGrupo = [
     .isLength({ min: 2 }, { max: 30 }),
   check(
     "facebook",
-    "Usuario de Faceboook inválido. La longitud mínima es 5 y máximo 30 caracteres"
+    "Usuario de Faceboook inválido. La longitud mínima es 2 y máximo 30 caracteres"
   )
     .optional()
     .isString()
-    .isLength({ min: 5 }, { max: 30 }),
+    .isLength({ min: 2 }, { max: 30 }),
   check("tipo", `Tipo de grupo: ${tipoGrupo.values}`)
     .notEmpty()
     .isIn(tipoGrupo.values),
@@ -64,4 +62,11 @@ export const checkCrearGrupo = [
 export const checkAgregarMiembros = [
   param("id").notEmpty().isUUID().custom(validarIDGrupo),
   check("miembros").notEmpty().custom(validarMiembros)
+];
+
+export const checkValidarParticipantes = [
+  param("grupo").notEmpty().isUUID().custom(validarIDGrupo),
+  check("nivel").notEmpty().isIn(niveles.values),
+  check("division").notEmpty().custom(validarIDDivision),
+  check("torneo").notEmpty().custom(validarIDTorneo)
 ];

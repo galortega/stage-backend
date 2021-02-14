@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 
 export const enviarCorreo = (correoReceptor, asunto, html, dataCorreo) => {
   const mailOptions = {
-    from: `PshyhoBooking <${process.env.correo_emisor}>`,
+    from: `Stage <${process.env.correo_emisor}>`,
     to: correoReceptor,
     subject: asunto,
     html,

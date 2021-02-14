@@ -15,6 +15,10 @@ import { SubTorneoModel, SubTorneoConfig } from "./subTorneo";
 import { TorneoModel, TorneoConfig } from "./torneo";
 import { DivisionModel, DivisionConfig } from "./division";
 import { ModalidadModel, ModalidadConfig } from "./modalidad";
+import { PaisModel, PaisConfig } from "./pais";
+import { ContactoModel, ContactoConfig } from "./contacto";
+import { RepresentanteModel, RepresentanteConfig } from "./representante";
+import { CategoriaModel, CategoriaConfig } from "./categoria";
 
 const Usuario = db.sequelize.define("Usuario", UsuarioModel, UsuarioConfig);
 const UsuarioRol = db.sequelize.define(
@@ -56,6 +60,18 @@ const Modalidad = db.sequelize.define(
   ModalidadModel,
   ModalidadConfig
 );
+const Pais = db.sequelize.define("Pais", PaisModel, PaisConfig);
+const Contacto = db.sequelize.define("Contacto", ContactoModel, ContactoConfig);
+const Representante = db.sequelize.define(
+  "Representante",
+  RepresentanteModel,
+  RepresentanteConfig
+);
+const Categoria = db.sequelize.define(
+  "Categoria",
+  CategoriaModel,
+  CategoriaConfig
+);
 
 //USUARIO y ROL
 Usuario.belongsToMany(Rol, {
@@ -76,6 +92,15 @@ UsuarioRol.belongsTo(Usuario, {
   foreignKey: "usuario"
 });
 
+Representante.hasMany(UsuarioRol, {
+  as: "UsuarioRolRepresentante",
+  foreignKey: "usuario"
+});
+UsuarioRol.belongsTo(Representante, {
+  as: "UsuarioRolRepresentante",
+  foreignKey: "usuario"
+});
+
 Usuario.belongsToMany(Grupo, {
   through: UsuarioGrupo,
   foreignKey: "usuario"
@@ -92,6 +117,25 @@ Usuario.hasMany(UsuarioGrupo, {
 UsuarioGrupo.belongsTo(Usuario, {
   as: "MiembroUsuario",
   foreignKey: "usuario"
+});
+
+Usuario.hasOne(Representante, {
+  as: "Representante",
+  foreignKey: "representante"
+});
+Representante.belongsTo(Usuario, {
+  as: "Representante",
+  foreignKey: "representante"
+});
+
+//USUARIO Y PAIS
+Pais.hasOne(Usuario, {
+  as: "UsuarioPais",
+  foreignKey: "pais"
+});
+Usuario.belongsTo(Pais, {
+  as: "UsuarioPais",
+  foreignKey: "pais"
 });
 
 //USUARIOROL
@@ -123,6 +167,15 @@ UsuarioGrupo.hasMany(GrupoCoreografia, {
 GrupoCoreografia.belongsTo(UsuarioGrupo, {
   as: "CoreografiaParticipante",
   foreignKey: "usuarioGrupo"
+});
+
+Coreografia.hasMany(GrupoCoreografia, {
+  as: "CoreografiaParticipantes",
+  foreignKey: "coreografia"
+});
+GrupoCoreografia.belongsTo(Coreografia, {
+  as: "CoreografiaParticipantes",
+  foreignKey: "coreografia"
 });
 
 //GRUPO
@@ -173,14 +226,42 @@ Coreografia.belongsTo(SubTorneo, {
   foreignKey: "subTorneo"
 });
 
+Categoria.hasOne(SubTorneo, {
+  as: "CategoriaSubTorneo",
+  foreignKey: "categoria"
+});
+SubTorneo.belongsTo(Categoria, {
+  as: "CategoriaSubTorneo",
+  foreignKey: "categoria"
+});
+
 //TORNEO
 Torneo.hasMany(SubTorneo, {
-  as: "SubTorneo",
+  as: "SubTorneos",
   foreignKey: "torneo"
 });
 SubTorneo.belongsTo(Torneo, {
-  as: "SubTorneo",
+  as: "SubTorneos",
   foreignKey: "torneo"
+});
+
+Pais.hasOne(Torneo, {
+  as: "Pais",
+  foreignKey: "pais"
+});
+Torneo.belongsTo(Pais, {
+  as: "Pais",
+  foreignKey: "pais"
+});
+
+// CONTACTO
+Pais.hasOne(Contacto, {
+  as: "ContactoPais",
+  foreignKey: "pais"
+});
+Contacto.belongsTo(Pais, {
+  as: "ContactoPais",
+  foreignKey: "pais"
 });
 
 const models = {
@@ -196,7 +277,11 @@ const models = {
   SubTorneo,
   Modalidad,
   Division,
-  Torneo
+  Torneo,
+  Pais,
+  Contacto,
+  Representante,
+  Categoria
 };
 
 export default models;

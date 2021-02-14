@@ -28,7 +28,7 @@ const selectPort = (nodeEnv) => {
   }
 };
 
-const port = selectPort(process.env.NODE_ENV) || "3000";
+const port = selectPort(process.env.NODE_ENV) || "8080";
 
 /**
  * Create HTTP server.
