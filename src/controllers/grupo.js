@@ -465,7 +465,7 @@ export const totalesGrupo = async (req, res) => {
       _.map(CoreografiaGrupo, (c) => (c.puesto === 1 ? c : null))
     ).length;
 
-    return { miembros, torneos, coreografias, primerosLugares };
+    return { miembros, torneos, coreografias, primerosLugares, res };
   });
 
   return res.status(200).send(Totales);

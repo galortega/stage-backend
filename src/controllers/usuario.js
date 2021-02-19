@@ -6,7 +6,8 @@ import {
   atributosExclude,
   estadoAprobado,
   niveles,
-  nivelesTrayectoria
+  nivelesTrayectoria,
+  rolesId
 } from "../constants/index";
 import _ from "lodash";
 import { errorStatusHandle } from "../utils/error";
@@ -376,4 +377,129 @@ export const eliminarUsuario = async (req, res) => {
   return res.status(200).send({
     Usuario
   });
+};
+
+export const totalesUsuario = async (req, res) => {
+  const { id } = req.params;
+  const { usuario, rol } = req.token;
+
+  const Totales =
+    (usuario === id || rol === rolesId.ADMINISTRADOR) &&
+    (await models.Coreografia.findAll({
+      include: [
+        {
+          model: models.UsuarioGrupo,
+          as: "ParticipantesCoreografia",
+          include: [
+            { model: models.Usuario, as: "MiembroUsuario", where: [{ id }] }
+          ]
+        },
+        {
+          model: models.SubTorneo,
+          as: "CoreografiaSubTorneo",
+          attributes: ["torneo"],
+          include: [
+            {
+              model: models.Modalidad,
+              as: "ModalidadSubTorneo",
+              attributes: ["nombre"]
+            },
+            {
+              model: models.Categoria,
+              as: "CategoriaSubTorneo",
+              attributes: ["nombre"]
+            }
+          ]
+        }
+      ]
+    }).then((coreografias) => {
+      coreografias = _.filter(
+        coreografias,
+        (c) => !_.isEmpty(c.ParticipantesCoreografia)
+      );
+      const torneos = _.union(
+        _.map(coreografias, (c) => c.CoreografiaSubTorneo.torneo),
+        []
+      ).length;
+      const primerosLugares = _.compact(
+        _.map(coreografias, (c) => (c.puesto === 1 ? c : null))
+      ).length;
+      const porModalidad = _.chain(
+        _.groupBy(
+          coreografias,
+          (c) => c.CoreografiaSubTorneo.ModalidadSubTorneo.nombre
+        )
+      )
+        .toPairs()
+        .forEach((c) => {
+          c[0] = _.startCase(_.toLower(c[0]));
+          if (c[1].length > 0) c[1] = c[1].length;
+        })
+        .fromPairs()
+        .value();
+      const porCategoria = _.chain(
+        _.groupBy(
+          coreografias,
+          (c) => c.CoreografiaSubTorneo.CategoriaSubTorneo.nombre
+        )
+      )
+        .toPairs()
+        .forEach((c) => {
+          c[0] = _.startCase(_.toLower(c[0]));
+          if (c[1].length > 0) c[1] = c[1].length;
+        })
+        .fromPairs()
+        .value();
+      coreografias = coreografias.length;
+
+      return {
+        coreografias,
+        porCategoria,
+        porModalidad,
+        torneos,
+        primerosLugares
+      };
+    }));
+  if (!Totales) return errorStatusHandle(res, "UNAUTHORIZED");
+
+  return res.status(200).send(Totales);
+};
+
+export const coreografiasPorModalidadUsuario = async (req, res) => {
+  const { grupo } = req.query;
+
+  const Coreografias = await models.Coreografia.findAll({
+    where: [{ estado: estado.ACTIVO }, grupo ? { grupo } : null],
+    attributes: { exclude: atributosExclude },
+    include: [
+      {
+        model: models.SubTorneo,
+        as: "CoreografiaSubTorneo",
+        attributes: ["id"],
+        include: [
+          {
+            model: models.Modalidad,
+            as: "ModalidadSubTorneo",
+            attributes: ["nombre"]
+          }
+        ]
+      }
+    ]
+  }).then((coreografias) => {
+    return _.chain(
+      _.groupBy(
+        coreografias,
+        (c) => c.CoreografiaSubTorneo.ModalidadSubTorneo.nombre
+      )
+    )
+      .toPairs()
+      .forEach((c) => {
+        c[0] = _.startCase(_.toLower(c[0]));
+        if (c[1].length > 0) c[1] = c[1].length;
+      })
+      .fromPairs()
+      .value();
+  });
+
+  return res.status(200).send(Coreografias);
 };

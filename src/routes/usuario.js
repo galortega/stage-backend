@@ -5,7 +5,8 @@ import {
   crearUsuario,
   actualizarUsuario,
   eliminarUsuario,
-  buscarPorCorreo
+  buscarPorCorreo,
+  totalesUsuario
 } from "../controllers/usuario";
 import { checkCrearUsuario } from "../validations/usuario";
 import { allowedMethods, asyncWrapper, checkParameters } from "../utils/error";
@@ -24,9 +25,13 @@ router.post(
 router.use("/buscarPorCorreo$", allowedMethods(["GET"]));
 router.get("/buscarPorCorreo", asyncWrapper(buscarPorCorreo));
 
+router.use("/totales/:id$", allowedMethods(["GET"]));
+router.get("/totales/:id", auth, asyncWrapper(totalesUsuario));
+
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
 router.get("/:id", asyncWrapper(buscarPorId));
 router.put("/:id", asyncWrapper(actualizarUsuario));
 router.delete("/:id", asyncWrapper(eliminarUsuario));
+
 
 export default router;
