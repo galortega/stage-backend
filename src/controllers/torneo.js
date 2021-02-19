@@ -46,6 +46,11 @@ export const buscarPorId = async (req, res) => {
                 model: models.Modalidad,
                 as: "ModalidadSubTorneo",
                 attributes: ["nombre"]
+              },
+              {
+                model: models.Categoria,
+                as: "CategoriaSubTorneo",
+                attributes: ["nombre"]
               }
             ]
           }
@@ -54,10 +59,24 @@ export const buscarPorId = async (req, res) => {
       exclude: atributosExclude
     }
   }).then((res) => {
-    res.SubTorneos = _.forEach(res.SubTorneos, (subTorneo) => {
-      subTorneo.modalidad = subTorneo.ModalidadSubTorneo.nombre;
-      subTorneo.division = subTorneo.DivisionSubTorneo.nombre;
-    });
+    res = res.SubTorneos
+      ? _.map(res.SubTorneos, (subTorneo) => {
+          const {
+            id,
+            DivisionSubTorneo,
+            ModalidadSubTorneo,
+            CategoriaSubTorneo,
+            nivel
+          } = subTorneo;
+          return {
+            id,
+            modalidad: ModalidadSubTorneo.nombre,
+            division: DivisionSubTorneo.nombre,
+            categoria: CategoriaSubTorneo.nombre,
+            nivel
+          };
+        })
+      : res;
     return res;
   });
   return res.status(200).send({
