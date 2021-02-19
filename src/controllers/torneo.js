@@ -18,22 +18,47 @@ export const validarIDTorneo = async (id) => {
 
 export const buscarPorId = async (req, res) => {
   const id = req.params.id;
+  let { subTorneos } = req.query;
+
+  if (_.isEmpty(subTorneos)) subTorneos = true;
+  else subTorneos = subTorneos === "true";
+
   const Torneo = await models.Torneo.findOne({
     where: {
       [Op.and]: [{ id }, { estado: estado.ACTIVO }]
     },
-    include: [
-      {
-        model: models.SubTorneo,
-        as: "SubTorneos",
-        attributes: {
-          exclude: atributosExclude
-        }
-      }
-    ],
+    include: !subTorneos
+      ? null
+      : [
+          {
+            model: models.SubTorneo,
+            as: "SubTorneos",
+            attributes: {
+              exclude: atributosExclude
+            },
+            include: [
+              {
+                model: models.Division,
+                as: "DivisionSubTorneo",
+                attributes: ["nombre"]
+              },
+              {
+                model: models.Modalidad,
+                as: "ModalidadSubTorneo",
+                attributes: ["nombre"]
+              }
+            ]
+          }
+        ],
     attributes: {
       exclude: atributosExclude
     }
+  }).then((res) => {
+    res.SubTorneos = _.forEach(res.SubTorneos, (subTorneo) => {
+      subTorneo.modalidad = subTorneo.ModalidadSubTorneo.nombre;
+      subTorneo.division = subTorneo.DivisionSubTorneo.nombre;
+    });
+    return res;
   });
   return res.status(200).send({
     Torneo: Torneo || []
