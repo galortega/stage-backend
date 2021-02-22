@@ -3,7 +3,12 @@ import _ from "lodash";
 import jwt from "jsonwebtoken";
 import models from "../models/index";
 import { Op } from "sequelize";
-import { atributosExclude, estado, rolesId } from "../constants/index";
+import {
+  atributosExclude,
+  estado,
+  rolesId,
+  rolIDNombre
+} from "../constants/index";
 
 export const login = async (req, res) => {
   let { email, contrasena, rol } = req.body;
@@ -29,12 +34,12 @@ export const login = async (req, res) => {
   if (_.isEmpty(Usuario)) return errorStatusHandle(res, "USUARIO_INEXISTENTE");
   else if (contrasena !== Usuario.contrasena)
     return errorStatusHandle(res, "CONTRASENA_INCORRECTA");
-
   const payload = {
     usuario: Usuario.id,
     nombre: Usuario.nombre,
     email: Usuario.email,
-    rol: Usuario.UsuarioRol[0].rol,
+    rol,
+    nombreRol: rolIDNombre[rol],
     atributos: _.map(Usuario.UsuarioRol[0].AtributosUsuario, (atributo) => {
       if (atributo) {
         const { clave, valor } = atributo;

@@ -73,6 +73,27 @@ export const validarEmailGrupo = async (email) => {
   });
 };
 
+export const validarEsDirector = async (usuario, grupo, rol) => {
+  return await models.UsuarioGrupo.findOne({
+    where: {
+      [Op.and]: [
+        { usuario },
+        { grupo },
+        { estado: estado.ACTIVO },
+        { rol: { [Op.in]: [rolGrupo.LIDER, rolGrupo.DIRECTOR] } }
+      ]
+    }
+  }).then((Grupo) => {
+    if (!Grupo || rol !== rolesId.ADMINISTRADOR) {
+      return Promise.reject(
+        new Error(
+          "El usuario no posee permisos para realizar esta transacción."
+        )
+      );
+    } else return Promise.resolve();
+  });
+};
+
 export const crearGrupo = async (req, res) => {
   const emailLider = req.token.email;
   const lider = req.token.usuario;
@@ -469,4 +490,25 @@ export const totalesGrupo = async (req, res) => {
   });
 
   return res.status(200).send(Totales);
+};
+
+export const actualizarGrupo = async (req, res) => {
+  const { id } = req.params;
+
+  const Grupo = await models.Grupo.update(req.body, { where: { id } });
+
+  return res.status(Grupo[0] === 1 ? 200 : 204).send(Grupo);
+};
+
+export const eliminarGrupo = async (req, res) => {
+  const { id } = req.params;
+  const Grupo = await models.Grupo.update(
+    { estado: estado.INACTIVO },
+    { where: { id } }
+  );
+  const Participantes = await models.UsuarioGrupo.update(
+    { estado: estado.INACTIVO },
+    { where: { grupo: id } }
+  );
+  return res.status(Grupo[0] === 1 ? 200 : 204).send({ Grupo, Participantes });
 };

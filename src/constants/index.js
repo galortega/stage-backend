@@ -99,6 +99,11 @@ export const rolesId = {
   SUPER: "6d8bac76-374b-431e-bbb6-3e16e73be854"
 };
 
+export const rolIDNombre = {
+  "b4c884b9-dc81-44ea-9378-cfa6ca2dd54f": "PARTICIPANTE",
+  "f1826bff-655d-474f-a3ed-d2599de2b101": "ADMINISTRADOR",
+  "6d8bac76-374b-431e-bbb6-3e16e73be854": "SUPER"
+};
 export const atributosExclude = [
   "fecha_creacion",
   "estado",

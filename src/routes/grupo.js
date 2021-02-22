@@ -22,7 +22,9 @@ import {
 import {
   checkAgregarMiembros,
   checkCrearGrupo,
-  checkValidarParticipantes
+  checkValidarParticipantes,
+  checkActualizarGrupo,
+  checkEliminarGrupo
 } from "../validations/grupo";
 import coreografiasRouter from "./coreografia";
 
@@ -51,6 +53,18 @@ router.get(
 
 router.use("/:id$", allowedMethods(["GET", "PUT", "DELETE"]));
 router.get("/:id", auth, asyncWrapper(buscarPorId));
+router.put(
+  "/:id",
+  auth,
+  checkParameters(checkActualizarGrupo),
+  asyncWrapper(actualizarGrupo)
+);
+router.delete(
+  "/:id",
+  auth,
+  checkParameters(checkEliminarGrupo),
+  asyncWrapper(eliminarGrupo)
+);
 
 router.use("/:id/invitarParticipantes$", allowedMethods(["POST"]));
 router.post(

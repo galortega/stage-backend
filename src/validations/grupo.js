@@ -4,7 +4,8 @@ import {
   validarEmailGrupo,
   validarMiembros,
   validarNombreGrupo,
-  validarIDGrupo
+  validarIDGrupo,
+  validarEsDirector
 } from "../controllers/grupo";
 import { niveles, tipoGrupo } from "../constants";
 import { validarIDDivision } from "../controllers/division";
@@ -59,6 +60,60 @@ export const checkCrearGrupo = [
   check("miembros").optional().custom(validarMiembros)
 ];
 
+export const checkActualizarGrupo = [
+  param("id")
+    .custom(validarIDGrupo)
+    .custom(async (id, { req }) => {
+      const { usuario, rol } = req.token;
+      return await validarEsDirector(usuario, id, rol);
+    }),
+  check(
+    "nombre",
+    "Nombre inválido. La longitud mínima es 1 y máximo 30 caracteres"
+  )
+    .optional()
+    .isString()
+    .isLength({ min: 1 }, { max: 30 })
+    .custom(validarNombreGrupo),
+  check(
+    "email",
+    "Email inválido. La longitud mínima es 5 y máximo 30 caracteres"
+  )
+    .optional()
+    .isEmail()
+    .isLength({ min: 5 }, { max: 30 })
+    .custom(validarEmailGrupo),
+  check(
+    "pais",
+    "Grupo inválido. La longitud mínima es 5 y máximo 30 caracteres"
+  )
+    .optional()
+    .isUUID(),
+  check(
+    "direccion",
+    "Dirección inválida. La longitud mínima es 5 y máximo 30 caracteres"
+  )
+    .optional()
+    .isString()
+    .isLength({ min: 5 }, { max: 80 }),
+  check(
+    "instagram",
+    "Usuario de Instagram inválido. La longitud mínima es 2 y máximo 30 caracteres"
+  )
+    .optional()
+    .isLength({ min: 2 }, { max: 30 }),
+  check(
+    "facebook",
+    "Usuario de Faceboook inválido. La longitud mínima es 2 y máximo 30 caracteres"
+  )
+    .optional()
+    .isString()
+    .isLength({ min: 2 }, { max: 30 }),
+  check("tipo", `Tipo de grupo: ${tipoGrupo.values}`)
+    .optional()
+    .isIn(tipoGrupo.values)
+];
+
 export const checkAgregarMiembros = [
   param("id").notEmpty().isUUID().custom(validarIDGrupo),
   check("miembros").notEmpty().custom(validarMiembros)
@@ -69,4 +124,13 @@ export const checkValidarParticipantes = [
   check("nivel").notEmpty().isIn(niveles.values),
   check("division").notEmpty().custom(validarIDDivision),
   check("torneo").notEmpty().custom(validarIDTorneo)
+];
+
+export const checkEliminarGrupo = [
+  param("id")
+    .custom(validarIDGrupo)
+    .custom(async (id, { req }) => {
+      const { usuario, rol } = req.token;
+      return await validarEsDirector(usuario, id, rol);
+    })
 ];
