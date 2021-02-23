@@ -20,8 +20,7 @@ export const buscarPorId = async (req, res) => {
   const id = req.params.id;
   let { subTorneos } = req.query;
 
-  if (_.isEmpty(subTorneos)) subTorneos = true;
-  else subTorneos = subTorneos === "true";
+ subTorneos = subTorneos === "true";
 
   const Torneo = await models.Torneo.findOne({
     where: {
