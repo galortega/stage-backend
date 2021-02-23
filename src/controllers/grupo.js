@@ -294,7 +294,7 @@ export const buscarPorId = async (req, res) => {
         else pendientes.push(datos);
       });
       return {
-        usuario,
+        id,
         nombre,
         tipo,
         pais,
