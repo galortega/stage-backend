@@ -47,3 +47,19 @@ export const actualizarSubTorneos = async (req, res) => {
   );
   return res.status(200).send(subTorneos);
 };
+
+export const coreografiasPorSubTorneo = async (req, res) => {
+  const { id } = req.params;
+  const Coreografias = await models.SubTorneo.findOne({
+    where: [{ id }, { estado: estado.ACTIVO }],
+    attributes: ["id"],
+    include: [
+      {
+        model: models.Coreografia,
+        as: "CoreografiaSubTorneo",
+        attributes: { exclude: atributosExclude }
+      }
+    ]
+  }).then((res) => res.CoreografiaSubTorneo);
+  return res.status(200).send(Coreografias);
+};

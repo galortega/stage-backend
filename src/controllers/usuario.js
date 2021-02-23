@@ -384,8 +384,8 @@ export const totalesUsuario = async (req, res) => {
   const { usuario, rol } = req.token;
 
   const Totales =
-    (usuario === id || rol === rolesId.ADMINISTRADOR) &&
-    (await models.Coreografia.findAll({
+    /* (usuario === id || rol === rolesId.ADMINISTRADOR) && */
+    await models.Coreografia.findAll({
       include: [
         {
           model: models.UsuarioGrupo,
@@ -459,8 +459,8 @@ export const totalesUsuario = async (req, res) => {
         torneos,
         primerosLugares
       };
-    }));
-  if (!Totales) return errorStatusHandle(res, "UNAUTHORIZED");
+    });
+  // if (!Totales) return errorStatusHandle(res, "UNAUTHORIZED");
 
   return res.status(200).send(Totales);
 };
