@@ -281,7 +281,7 @@ export const buscarPorId = async (req, res) => {
           MiembroUsuario
         } = miembro;
         const datos = {
-          id: usuario,
+          usuario,
           usuarioGrupo: id,
           nombre: !MiembroUsuario ? null : MiembroUsuario.nombre,
           correo: email,
@@ -294,7 +294,7 @@ export const buscarPorId = async (req, res) => {
         else pendientes.push(datos);
       });
       return {
-        id,
+        usuario,
         nombre,
         tipo,
         pais,
