@@ -23,6 +23,7 @@ import contactosRouter from "./routes/contacto";
 import categoriasRouter from "./routes/categoria";
 import subTorneosRouter from "./routes/subTorneo";
 import coreografiasRouter from "./routes/coreografia";
+import paquetesRouter from "./routes/paquete";
 
 const app = express();
 
@@ -61,6 +62,7 @@ app.use(routes.contactos, contactosRouter);
 app.use(routes.categorias, categoriasRouter);
 app.use(routes.subTorneos, subTorneosRouter);
 app.use(routes.coreografias, coreografiasRouter);
+app.use(routes.paquetes, paquetesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

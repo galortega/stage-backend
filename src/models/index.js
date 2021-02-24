@@ -19,6 +19,7 @@ import { PaisModel, PaisConfig } from "./pais";
 import { ContactoModel, ContactoConfig } from "./contacto";
 import { RepresentanteModel, RepresentanteConfig } from "./representante";
 import { CategoriaModel, CategoriaConfig } from "./categoria";
+import { PaqueteModel, PaqueteConfig } from "./paquete";
 
 const Usuario = db.sequelize.define("Usuario", UsuarioModel, UsuarioConfig);
 const UsuarioRol = db.sequelize.define(
@@ -72,6 +73,7 @@ const Categoria = db.sequelize.define(
   CategoriaModel,
   CategoriaConfig
 );
+const Paquete = db.sequelize.define("Paquete", PaqueteModel, PaqueteConfig);
 
 //USUARIO y ROL
 Usuario.belongsToMany(Rol, {
@@ -264,6 +266,32 @@ Contacto.belongsTo(Pais, {
   foreignKey: "pais"
 });
 
+//PAQUETE
+Categoria.hasOne(Paquete, {
+  as: "CategoriaPaquete",
+  foreignKey: "categoria"
+});
+Paquete.belongsTo(Categoria, {
+  as: "CategoriaPaquete",
+  foreignKey: "categoria"
+});
+Division.hasOne(Paquete, {
+  as: "DivisionPaquete",
+  foreignKey: "division"
+});
+Paquete.belongsTo(Division, {
+  as: "DivisionPaquete",
+  foreignKey: "division"
+});
+Modalidad.hasOne(Paquete, {
+  as: "ModalidadPaquete",
+  foreignKey: "modalidad"
+});
+Paquete.belongsTo(Modalidad, {
+  as: "ModalidadPaquete",
+  foreignKey: "modalidad"
+});
+
 const models = {
   db,
   Usuario,
@@ -281,7 +309,8 @@ const models = {
   Pais,
   Contacto,
   Representante,
-  Categoria
+  Categoria,
+  Paquete
 };
 
 export default models;

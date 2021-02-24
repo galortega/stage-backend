@@ -15,5 +15,6 @@ export const routes = {
   paises: `${baseRoute}/paises`,
   contactos: `${baseRoute}/contactos`,
   categorias: `${baseRoute}/categorias`,
-  subTorneos: `${baseRoute}/subTorneos`
+  subTorneos: `${baseRoute}/subTorneos`,
+  paquetes: `${baseRoute}/paquetes`
 };

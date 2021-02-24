@@ -18,9 +18,9 @@ export const validarIDTorneo = async (id) => {
 
 export const buscarPorId = async (req, res) => {
   const id = req.params.id;
-  let { subTorneos } = req.query;
+  let { subTorneos, paquete } = req.query;
 
- subTorneos = subTorneos === "true";
+  subTorneos = subTorneos === "true";
 
   const Torneo = await models.Torneo.findOne({
     where: {
@@ -78,8 +78,14 @@ export const buscarPorId = async (req, res) => {
       : res;
     return res;
   });
+  let Paquetes;
+  if (paquete)
+    Paquetes = await models.Paquete.findAll({
+      where: { estado: estado.ACTIVO }
+    });
   return res.status(200).send({
-    Torneo: Torneo || []
+    Torneo: Torneo || [],
+    Paquetes: Paquetes || []
   });
 };
 
