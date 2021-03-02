@@ -27,7 +27,7 @@ export const buscarPorId = async (req, res) => {
       [Op.and]: [{ id }, { estado: estado.ACTIVO }]
     },
     include: !subTorneos
-      ? null
+      ? { model: models.Pais, as: "Pais" }
       : [
           {
             model: models.SubTorneo,
@@ -75,7 +75,7 @@ export const buscarPorId = async (req, res) => {
             nivel
           };
         })
-      : res;
+      : _.assign(res, { Pais: Pais.pais });
     return res;
   });
   let Paquetes;
