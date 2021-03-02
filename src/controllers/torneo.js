@@ -94,6 +94,8 @@ export const buscarPorId = async (req, res) => {
 };
 
 export const crearTorneo = async (req, res) => {
+  const t = await models.db.sequelize.transaction();
+
   const {
     inicioInscripcion,
     finInscripcion,
@@ -102,7 +104,8 @@ export const crearTorneo = async (req, res) => {
     nombre,
     pais,
     ciudad,
-    subTorneos
+    subTorneos,
+    paquetes
   } = req.body;
   const id = uuid();
 
@@ -119,30 +122,50 @@ export const crearTorneo = async (req, res) => {
   };
 
   _.map(subTorneos, (subTorneo) => {
-    const { division, modalidad, nivel } = subTorneo;
+    const { division, modalidad, nivel, categoria } = subTorneo;
 
     datos.SubTorneos.push({
       id: uuid(),
       torneo: id,
       division,
       modalidad,
+      categoria,
       nivel
     });
   });
+  const datosPaqueteTorneo =
+    !_.isEmpty(paquetes) &&
+    _.map(paquetes, (paquete) => {
+      return { id: uuid(), torneo: id, paquete };
+    });
+  try {
+    const Torneo = await models.Torneo.create(datos, {
+      include: [
+        {
+          model: models.SubTorneo,
+          as: "SubTorneos"
+        }
+      ],
+      transaction: t
+    });
 
-  const Torneo = await models.Torneo.create(datos, {
-    include: [
-      {
-        model: models.SubTorneo,
-        as: "SubTorneos"
-      }
-    ]
-  });
+    const Paquetes =
+      !_.isEmpty(datosPaqueteTorneo) &&
+      (await models.PaqueteTorneo.bulkCreate(datosPaqueteTorneo, {
+        transaction: t
+      }));
+    await t.commit();
 
-  return res.status(200).send({
-    Torneo,
-    msj: "Torneo ingresado correctamente."
-  });
+    return res.status(200).send({
+      Torneo,
+      Paquetes,
+      msj: "Torneo ingresado correctamente."
+    });
+  } catch (error) {
+    console.log(error);
+    await t.rollback();
+    return errorStatusHandle(res, "TRANSACCION_FALLIDA");
+  }
 };
 
 export const buscarTodos = async (req, res) => {
