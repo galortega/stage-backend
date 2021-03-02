@@ -19,6 +19,9 @@ export const ContactoModel = {
     type: Sequelize.STRING(45),
     allowNull: false,
   },
+  descripcion: {
+    type: Sequelize.STRING(500),
+  },
   fecha_creacion: {
     type: Sequelize.DATE,
     allowNull: false

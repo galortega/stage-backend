@@ -4,7 +4,6 @@ import { uuid } from "uuidv4";
 import { Op } from "sequelize";
 import { estado } from "../constants";
 
-
 export const validarEmailContacto = async (email) => {
   return await models.Contacto.findOne({
     where: { [Op.and]: [{ email }, { estado: estado.ACTIVO }] }
@@ -32,4 +31,12 @@ export const crearContacto = async (req, res) => {
     Contacto,
     msj: "Contacto ingresada correctamente."
   });
+};
+
+export const getContactos = async (req, res) => {
+  const Contactos = await models.Contacto.findAll({
+    where: { estado: estado.ACTIVO }
+  });
+
+  return res.status(200).send(Contactos);
 };
