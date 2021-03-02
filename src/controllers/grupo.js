@@ -267,8 +267,8 @@ export const buscarPorId = async (req, res) => {
         facebook,
         email
       } = grupo;
-      const esMiembroToken = _.find(MiembrosGrupo, { usuario });
-      if (!esMiembroToken && rol !== rolesId.ADMINISTRADOR) return false;
+      /* const esMiembroToken = _.find(MiembrosGrupo, { usuario });
+      if (!esMiembroToken && rol !== rolesId.ADMINISTRADOR) return false; */
       _.forEach(MiembrosGrupo, (miembro) => {
         miembro = miembro.toJSON();
         const {
@@ -314,14 +314,14 @@ export const buscarPorId = async (req, res) => {
       };
     }
   });
-  if (!Grupo)
+  /* if (!Grupo)
     return res.status(400).send({
       msj: "Usuario no pertenece al grupo."
     });
-  else
-    return res.status(200).send({
-      Grupo: Grupo || []
-    });
+  else */
+  return res.status(200).send({
+    Grupo: Grupo || []
+  });
 };
 
 export const obtenerNombreGrupo = async (req, res) => {
