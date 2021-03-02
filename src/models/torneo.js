@@ -6,6 +6,10 @@ export const TorneoModel = {
     type: DataTypes.UUID,
     primaryKey: true
   },
+  nombre: {
+    type: Sequelize.STRING(45),
+    allowNull: false
+  },
   pais: {
     type: Sequelize.UUID,
     allowNull: false
@@ -34,9 +38,8 @@ export const TorneoModel = {
     allowNull: false,
     field: "fin_torneo"
   },
-  nombre: {
-    type: Sequelize.STRING(45),
-    allowNull: false
+  imagen: {
+    type: Sequelize.STRING(45)
   },
   fecha_creacion: {
     type: Sequelize.DATE,

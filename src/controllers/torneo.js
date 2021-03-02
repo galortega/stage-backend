@@ -104,6 +104,7 @@ export const crearTorneo = async (req, res) => {
     nombre,
     pais,
     ciudad,
+    imagen,
     subTorneos,
     paquetes
   } = req.body;
@@ -118,6 +119,7 @@ export const crearTorneo = async (req, res) => {
     nombre,
     pais,
     ciudad,
+    imagen,
     SubTorneos: []
   };
 
@@ -197,4 +199,51 @@ export const buscarTodos = async (req, res) => {
   });
 
   return res.status(200).send(Torneos);
+};
+
+export const actualizarTorneo = async (req, res) => {
+  const { id } = req.params;
+
+  const {
+    inicioInscripcion,
+    finInscripcion,
+    inicioTorneo,
+    finTorneo,
+    nombre,
+    pais,
+    ciudad,
+    imagen
+  } = req.body;
+
+  const Torneo = await models.Torneo.update(
+    {
+      inicioInscripcion,
+      finInscripcion,
+      inicioTorneo,
+      finTorneo,
+      nombre,
+      pais,
+      ciudad,
+      imagen
+    },
+    { where: { id } }
+  );
+
+  return res.status(Torneo[0] === 1 ? 200 : 204).send(Torneo);
+};
+
+export const eliminarTorneo = async (req, res) => {
+  const { id } = req.params;
+  const datos = {
+    estado: estado.INACTIVO
+  };
+  const Torneo = await models.Torneo.update(datos, { where: { id } });
+
+  const PaqueteTorneo = await models.PaqueteTorneo.update(datos, {
+    where: { torneo: id }
+  });
+
+  return res
+    .status(Torneo[0] === 1 ? 200 : 204)
+    .send({ Torneo, PaqueteTorneo });
 };
