@@ -23,7 +23,8 @@ export const crearContacto = async (req, res) => {
     id: uuid(),
     nombre,
     email,
-    pais
+    pais,
+    descripcion
   };
   const Contacto = await models.Contacto.create(datos);
 

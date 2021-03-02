@@ -1,7 +1,7 @@
 import express from "express";
 import { login } from "../controllers/auth";
 import { allowedMethods, asyncWrapper, checkParameters } from "../utils/error";
-import { checkLogin } from "../validations/checkAuth";
+import { checkLogin } from "../validations/auth";
 
 const router = express.Router();
 

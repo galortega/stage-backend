@@ -7,7 +7,6 @@ export const checkLogin = [
     .isEmail()
     .custom(async (email, { req }) => {
       const { rol } = req.body;
-      console.log({ body: req.body });
       if (rol) await validarUsuarioRol(email, rol);
       else return false;
     })

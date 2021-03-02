@@ -17,7 +17,7 @@ export const validarIDTorneo = async (id) => {
 };
 
 export const buscarPorId = async (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
   let { subTorneos, paquete } = req.query;
 
   subTorneos = subTorneos === "true";
@@ -58,6 +58,7 @@ export const buscarPorId = async (req, res) => {
       exclude: atributosExclude
     }
   }).then((res) => {
+    res = res.toJSON();
     res = res.SubTorneos
       ? _.map(res.SubTorneos, (subTorneo) => {
           const {
@@ -75,14 +76,17 @@ export const buscarPorId = async (req, res) => {
             nivel
           };
         })
-      : _.assign(res, { Pais: Pais.pais });
+      : _(res).defaults({ nombrePais: res.Pais.pais }).omit(["Pais"]);
     return res;
   });
   let Paquetes;
   if (paquete)
-    Paquetes = await models.Paquete.findAll({
-      where: { estado: estado.ACTIVO }
-    });
+    Paquetes = await models.PaqueteTorneo.findAll({
+      where: [{ estado: estado.ACTIVO }, { torneo: id }],
+      include: [
+        { model: models.Paquete, attributes: { exclude: atributosExclude } }
+      ]
+    }).then((res) => _.map(res, (paqueteTorneo) => paqueteTorneo.Paquete));
   return res.status(200).send({
     Torneo: Torneo || [],
     Paquetes: Paquetes || []
