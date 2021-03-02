@@ -273,7 +273,7 @@ Contacto.belongsTo(Pais, {
 });
 
 //PAQUETE
-Usuario.belongsToMany(Paquete, {
+Torneo.belongsToMany(Paquete, {
   through: PaqueteTorneo,
   foreignKey: "torneo"
 });

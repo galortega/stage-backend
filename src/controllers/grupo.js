@@ -223,7 +223,7 @@ export const buscarTodos = async (req, res) => {
 
 export const buscarPorId = async (req, res) => {
   const id = req.params.id;
-  const { usuario } = req.token;
+  const { usuario, rol } = req.token;
 
   const aprobados = [];
   const pendientes = [];
@@ -268,7 +268,7 @@ export const buscarPorId = async (req, res) => {
         email
       } = grupo;
       const esMiembroToken = _.find(MiembrosGrupo, { usuario });
-      if (!esMiembroToken) return false;
+      if (!esMiembroToken && rol !== rolesId.ADMINISTRADOR) return false;
       _.forEach(MiembrosGrupo, (miembro) => {
         miembro = miembro.toJSON();
         const {

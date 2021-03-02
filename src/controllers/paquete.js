@@ -4,18 +4,20 @@ import models from "../models";
 import _ from "lodash";
 
 export const validarEnlazarPaquete = async (paquete, torneo) => {
-  console.log({ paquete, torneo });
   return await models.PaqueteTorneo.findAll({
-    where: [{ torneo }, { paquete }, { estado: estado.ACTIVO }]
+    where: {
+      torneo,
+      paquete,
+      estado: estado.ACTIVO
+    }
   }).then((res) => {
-    console.log({ res });
     if (!_.isEmpty(res)) {
       return Promise.reject(
         new Error(
           "El torneo ingresado ya se encuentra enlazado al mismo paquete."
         )
       );
-    } else return Promise.resolve(".");
+    } else return Promise.resolve();
   });
 };
 

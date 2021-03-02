@@ -19,7 +19,7 @@ router.post("/", asyncWrapper(crearPaquete));
 router.get("/", asyncWrapper(getPaquetes));
 router.post(
   "/enlazarPaquete",
- /* checkParameters(checkEnlazarPaquete), */
+  checkParameters(checkEnlazarPaquete), 
   asyncWrapper(enlazarPaquete)
 );
 

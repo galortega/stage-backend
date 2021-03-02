@@ -19,6 +19,7 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
   host: config.HOST,
   port: config.PORT,
   dialect: config.dialect,
+  operatorsAliases: false,
   dialectOptions: {
     useUTC: false // for reading from database
   },
