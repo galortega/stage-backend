@@ -84,11 +84,25 @@ export const validarEsDirector = async (usuario, grupo, rol) => {
       ]
     }
   }).then((Grupo) => {
-    if (!Grupo || rol !== rolesId.ADMINISTRADOR) {
+    if (!Grupo && rol !== rolesId.ADMINISTRADOR) {
       return Promise.reject(
         new Error(
           "El usuario no posee permisos para realizar esta transacción."
         )
+      );
+    } else return Promise.resolve();
+  });
+};
+
+export const validarEsMiembro = async (usuario, grupo, rol) => {
+  return await models.UsuarioGrupo.findOne({
+    where: {
+      [Op.and]: [{ usuario }, { grupo }, { estado: estado.ACTIVO }]
+    }
+  }).then((Grupo) => {
+    if (!Grupo && rol !== rolesId.ADMINISTRADOR) {
+      return Promise.reject(
+        new Error("El usuario no posee para obtener esta información.")
       );
     } else return Promise.resolve();
   });
@@ -223,7 +237,7 @@ export const buscarTodos = async (req, res) => {
 
 export const buscarPorId = async (req, res) => {
   const id = req.params.id;
-  const { usuario, rol } = req.token;
+  const { usuario } = req.token;
 
   const aprobados = [];
   const pendientes = [];
@@ -268,7 +282,6 @@ export const buscarPorId = async (req, res) => {
         email
       } = grupo;
       const usuarioToken = _.find(MiembrosGrupo, { usuario });
-      if (!usuarioToken && rol !== rolesId.ADMINISTRADOR) return false;
       _.forEach(MiembrosGrupo, (miembro) => {
         miembro = miembro.toJSON();
         const {
@@ -299,12 +312,12 @@ export const buscarPorId = async (req, res) => {
         tipo,
         pais,
         direccion,
-        // imagen,
+        imagen,
         instagram,
         facebook,
         email,
         esDirector:
-          usuarioToken.rol &&
+          usuarioToken &&
           _.includes([rolGrupo.DIRECTOR, rolGrupo.LIDER], usuarioToken.rol),
         miembros: {
           aprobados,

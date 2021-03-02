@@ -5,7 +5,8 @@ import {
   validarMiembros,
   validarNombreGrupo,
   validarIDGrupo,
-  validarEsDirector
+  validarEsDirector,
+  validarEsMiembro
 } from "../controllers/grupo";
 import { niveles, tipoGrupo } from "../constants";
 import { validarIDDivision } from "../controllers/division";
@@ -132,5 +133,13 @@ export const checkEliminarGrupo = [
     .custom(async (id, { req }) => {
       const { usuario, rol } = req.token;
       return await validarEsDirector(usuario, id, rol);
+    })
+];
+
+export const checkGrupoPorID = [
+  param("id")
+    .custom(async (id, { req }) => {
+      const { usuario, rol } = req.token;
+      return await validarEsMiembro(usuario, id, rol);
     })
 ];
