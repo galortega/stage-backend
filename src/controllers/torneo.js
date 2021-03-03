@@ -212,9 +212,9 @@ export const actualizarTorneo = async (req, res) => {
     finTorneo,
     nombre,
     pais,
-    ciudad,
-    imagen
+    ciudad
   } = req.body;
+  const imagen = await subirImagen(req.body.imagen);
 
   const Torneo = await models.Torneo.update(
     {
@@ -229,8 +229,7 @@ export const actualizarTorneo = async (req, res) => {
     },
     { where: { id } }
   );
-  const Imagen = await subirImagen(imagen);
-  return res.status(Torneo[0] === 1 ? 200 : 204).send({ Torneo, Imagen });
+  return res.status(Torneo[0] === 1 ? 200 : 204).send(Torneo);
 };
 
 export const eliminarTorneo = async (req, res) => {
