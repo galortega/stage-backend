@@ -3,6 +3,7 @@ import models from "../models";
 import _ from "lodash";
 import { atributosExclude, estado } from "../constants";
 import { Op } from "sequelize";
+import { subirImagen } from "../utils/imagen";
 
 export const validarIDTorneo = async (id) => {
   return await models.Torneo.findOne({
@@ -228,8 +229,8 @@ export const actualizarTorneo = async (req, res) => {
     },
     { where: { id } }
   );
-
-  return res.status(Torneo[0] === 1 ? 200 : 204).send(Torneo);
+  const Imagen = await subirImagen(imagen);
+  return res.status(Torneo[0] === 1 ? 200 : 204).send({ Torneo, Imagen });
 };
 
 export const eliminarTorneo = async (req, res) => {
