@@ -42,7 +42,7 @@ export const TorneoModel = {
     type: Sequelize.STRING(45),
     get() {
       const nombre = this.getDataValue("imagen");
-      if (nombre) return `${urlImagen}{nombre}`;
+      if (nombre) return `${urlImagen}${nombre}`;
       else return null;
     }
   },

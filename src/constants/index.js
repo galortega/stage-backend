@@ -119,5 +119,7 @@ export const asuntos = {
 export const urlInvitarParticipante =
   "https://www.stagedanceinternational.com/#/authentication/login";
 
-export const urlImagen =
-  "https://images.stagedanceinternational.com/api/v1/upload/";
+export const urlImagen = "https://images.stagedanceinternational.com/public/";
+
+export const urlSubirImagen =
+  "https://images.stagedanceinternational.com/api/v1/upload";
