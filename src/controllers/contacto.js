@@ -17,7 +17,7 @@ export const validarEmailContacto = async (email) => {
 };
 
 export const crearContacto = async (req, res) => {
-  const { nombre, email, pais } = req.body;
+  const { nombre, email, pais, descripcion } = req.body;
   const datos = {
     id: uuid(),
     nombre,
@@ -35,8 +35,26 @@ export const crearContacto = async (req, res) => {
 
 export const getContactos = async (req, res) => {
   const Contactos = await models.Contacto.findAll({
-    where: { estado: estado.ACTIVO }
-  });
+    where: { estado: estado.ACTIVO },
+    include: [{ model: models.Pais, as: "ContactoPais", attributes: ["pais"] }]
+  }).then((res) =>
+    _.map(res, (r) => {
+      r = r.toJSON();
+      const pais = r.ContactoPais.pais;
+      r = _.omit(r, ["pais", "ContactoPais"]);
+      r.pais = pais;
+      return r;
+    })
+  );
 
   return res.status(200).send(Contactos);
+};
+
+export const eliminarContacto = async (req, res) => {
+  const { id } = req.params;
+  const Contacto = await models.Contacto.update(
+    { estado: estado.INACTIVO },
+    { where: { id } }
+  );
+  return res.status(200).send(Contacto);
 };
