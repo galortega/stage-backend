@@ -17,7 +17,7 @@ export const validarEmailContacto = async (email) => {
 };
 
 export const crearContacto = async (req, res) => {
-  const { nombre, email, pais } = req.body;
+  const { nombre, email, pais ,descripcion} = req.body;
   const datos = {
     id: uuid(),
     nombre,
