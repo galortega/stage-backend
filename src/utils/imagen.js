@@ -8,5 +8,5 @@ export const subirImagen = async (bytes) => {
   const res = await axios.post(urlSubirImagen, data, {
     "content-type": "application/json"
   });
-  if (res) return res.data.respuesta;
+  return res.data.error === "false" ? res.data.respuesta : null;
 };
