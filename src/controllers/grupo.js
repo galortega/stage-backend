@@ -123,6 +123,9 @@ export const crearGrupo = async (req, res) => {
     miembros
   } = req.body;
   const id = uuid();
+
+  imagen = imagen ? await subirImagen(imagen) : null;
+
   miembros.push({
     email: emailLider,
     rol: tipo === tipoGrupo.ACADEMIA ? rolGrupo.DIRECTOR : rolGrupo.LIDER
@@ -136,7 +139,7 @@ export const crearGrupo = async (req, res) => {
       tipo,
       pais,
       direccion,
-      // imagen,
+      imagen,
       instagram,
       facebook,
       email,
@@ -506,6 +509,9 @@ export const totalesGrupo = async (req, res) => {
 
 export const actualizarGrupo = async (req, res) => {
   const { id } = req.params;
+
+  const imagen = req.body.imagen;
+  req.body.imagen = imagen ? await subirImagen(imagen) : null;
 
   const Grupo = await models.Grupo.update(req.body, { where: { id } });
 

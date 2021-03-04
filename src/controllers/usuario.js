@@ -170,11 +170,14 @@ export const crearUsuario = async (req, res) => {
     pais,
     telefono,
     fechaNacimiento,
-    representante
+    representante,
+    imagen
   } = req.body;
   const id = uuid();
   const idUsuarioRol = uuid();
   const idRepresentante = uuid();
+
+  imagen = imagen ? await subirImagen(imagen) : null;
 
   const { trayectoria, esProfesional } = atributos; //
   atributos.nivel =
@@ -201,6 +204,7 @@ export const crearUsuario = async (req, res) => {
     telefono,
     representante: idRepresentante,
     fechaNacimiento,
+    imagen,
     UsuarioRol: {
       id: idUsuarioRol,
       usuario: id,
@@ -328,7 +332,9 @@ const actualizarAtributos = async (atributos, usuario, idUsuarioRol) => {
 // Agregar el resto de campos
 export const actualizarUsuario = async (req, res) => {
   const { id } = req.params;
-  const { rol, atributos } = req.body;
+  const { rol, atributos, imagen } = req.body;
+
+  req.body.imagen = imagen ? await subirImagen(imagen) : null;
 
   let idUsuarioRol;
   if (!_.isEmpty(rol))

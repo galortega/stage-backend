@@ -32,6 +32,14 @@ export const UsuarioModel = {
     type: Sequelize.DATE,
     field: "fecha_nacimiento"
   },
+  imagen: {
+    type: Sequelize.STRING(45),
+    get() {
+      const nombre = this.getDataValue("imagen");
+      if (nombre) return `${urlImagen}${nombre}`;
+      else return null;
+    }
+  },
   fecha_creacion: {
     type: Sequelize.DATE,
     allowNull: false

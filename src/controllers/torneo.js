@@ -97,7 +97,7 @@ export const buscarPorId = async (req, res) => {
 export const crearTorneo = async (req, res) => {
   const t = await models.db.sequelize.transaction();
 
-  const {
+  let {
     inicioInscripcion,
     finInscripcion,
     inicioTorneo,
@@ -110,6 +110,8 @@ export const crearTorneo = async (req, res) => {
     paquetes
   } = req.body;
   const id = uuid();
+
+  imagen = imagen ? await subirImagen(imagen) : null;
 
   const datos = {
     id,
@@ -205,7 +207,7 @@ export const buscarTodos = async (req, res) => {
 export const actualizarTorneo = async (req, res) => {
   const { id } = req.params;
 
-  const {
+  let {
     inicioInscripcion,
     finInscripcion,
     inicioTorneo,
@@ -214,22 +216,22 @@ export const actualizarTorneo = async (req, res) => {
     pais,
     ciudad
   } = req.body;
-  let Torneo;
-  await subirImagen(req.body.imagen).then(async (imagen) => {
-    Torneo = await models.Torneo.update(
-      {
-        inicioInscripcion,
-        finInscripcion,
-        inicioTorneo,
-        finTorneo,
-        nombre,
-        pais,
-        ciudad,
-        imagen
-      },
-      { where: { id } }
-    );
-  });
+
+  imagen = imagen ? await subirImagen(imagen) : null;
+
+  const Torneo = await models.Torneo.update(
+    {
+      inicioInscripcion,
+      finInscripcion,
+      inicioTorneo,
+      finTorneo,
+      nombre,
+      pais,
+      ciudad,
+      imagen
+    },
+    { where: { id } }
+  );
 
   return res.status(Torneo[0] === 1 ? 200 : 204).send(Torneo);
 };
