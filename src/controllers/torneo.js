@@ -40,17 +40,17 @@ export const buscarPorId = async (req, res) => {
               {
                 model: models.Division,
                 as: "DivisionSubTorneo",
-                attributes: ["nombre"]
+                attributes: ["nombre", "id"]
               },
               {
                 model: models.Modalidad,
                 as: "ModalidadSubTorneo",
-                attributes: ["nombre"]
+                attributes: ["nombre", "id"]
               },
               {
                 model: models.Categoria,
                 as: "CategoriaSubTorneo",
-                attributes: ["nombre"]
+                attributes: ["nombre", "id"]
               }
             ]
           }
@@ -74,6 +74,9 @@ export const buscarPorId = async (req, res) => {
             modalidad: ModalidadSubTorneo.nombre,
             division: DivisionSubTorneo.nombre,
             categoria: CategoriaSubTorneo.nombre,
+            _modalidad: ModalidadSubTorneo.id,
+            _division: DivisionSubTorneo.id,
+            _categoria: CategoriaSubTorneo.id,
             nivel
           };
         })
